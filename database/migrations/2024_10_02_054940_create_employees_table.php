@@ -19,6 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->string('bank_account');
             $table->decimal('salaire_brut', 10, 2);
             $table->decimal('taxe', 5, 2);
+            $table->string('num_CNSS');
             $table->date('date_de_prise_de_service');
             $table->date('date_de_fin_de_contrat')->nullable();
             $table->integer('nombre_heure_par_semaine');

@@ -263,8 +263,8 @@ table tbody td {
     /* margin-left: 250px; */
     background-color: var(--background-color);
     padding: 20px;
-    border-bottom: #d6f8ff 1px solid;
-    /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); */
+    /* border-bottom: #d6f8ff 1px solid; */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     position: fixed;
     z-index: 100;

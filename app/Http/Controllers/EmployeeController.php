@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
-use App\Models\{Employee, Memo, PaymentRequest, StaffApplication};
+use App\Models\{Employee, Salary, PaymentRequest, StaffApplication};
 
 class EmployeeController extends Controller
 {
@@ -28,34 +28,61 @@ class EmployeeController extends Controller
 
     public function create()
     {
-
         $user = Auth::user();
         return view('employees_create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request data
+        $validated = $request->validate([
             'full_name' => 'required|string|max:255',
-            'employee_id' => 'required|string|unique:employees',
+            'employee_id' => 'required|string|unique:employees,employee_id', // Ensure unique employee_id
             'naissances' => 'required|date', // Date of birth
             'poste' => 'required|string', // Position
-            'is_active' => 'required|integer', // Employment status (active/inactive)
+            'is_active' => 'required|boolean', // Employment status (active/inactive)
             'type_de_contrat' => 'required|string', // Type of contract (e.g., permanent, temporary)
             'salaire_brut' => 'required|numeric', // Gross salary
             'taxe' => 'required|numeric', // Tax rate
             'date_de_prise_de_service' => 'required|date', // Hire date
-            'date_de_fin_de_contrat' => 'required|date', // End date of the contract (nullable)
-            'nombre_heure_par_semaine' => 'required|numeric', // Number of hours per week
-            'bank_account' => 'required|string',
+            'date_de_fin_de_contrat' => 'nullable|date', // End date of the contract
+            'nombre_heure_par_semaine' => 'required|integer', // Number of hours per week
+            'bank_account' => 'required|string', // Bank account
         ]);
 
+        // try {
+        //     // Create the employee record
+        //     Employee::create($request->all());
+
+        //     // Return a success response
+        //     return response()->json(['success' => 'Employé ajouté avec succès.']);
+        // } catch (\Exception $e) {
+        //     // Handle exceptions and return an error response
+        //     return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout de l\'employé.'], 500);
+        // }
+
         try {
-            Employee::create($request->all());
-            return response()->json(['success' => 'Employé ajouté avec succès.']);
+            $employee = Employee::create($request->all());
+            Salary::create([
+                'id_employe' => $employee->id,
+                'mois' => now()->month,
+                'annee' => now()->year,
+                'sal_brute' => $validated['salaire_brut'],
+                'deduction' => 0,
+                'sal_net' => $validated['salaire_brut'],
+            ]);
+
+
+        // return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');
+
+            return redirect()
+                ->back()
+                ->with('success', 'Employé ajouté avec succès.');
         } catch (\Exception $e) {
-            return back()->withErrors(['email' => 'Une erreur est survenue lors de l\'ajout de l\'employé..'])->withInput();
-            // return response()->json(['error' => '']);
+            return redirect()
+                ->back()
+                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé.'+ $e)
+                ->withInput();
         }
     }
 
