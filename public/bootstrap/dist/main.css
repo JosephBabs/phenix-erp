@@ -86,13 +86,37 @@ table thead {
     font-weight: bold;
 }
 
+th.wrap-it{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+td.wrap-it{
+    white-space: nowrap;
+    width: 200px;
+    /* text-overflow: ellipsis; */
+    overflow: hidden;
+}
+
 table thead th {
     padding: 12px 16px;
-    text-align: left;
-    white-space: nowrap;
+    text-align: center;
+    /* font-size: x-small; */
+    /* white-space: nowrap; */
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    /* justify-self: center; */
+    /* max-width: 70px; */
+}
+
+table thead tr th{
+    text-align: center;
+    transition: background-color 0.3s;
 }
 
 table tbody tr {
+    /* text-align: center; */
     transition: background-color 0.3s;
 }
 
@@ -109,13 +133,14 @@ table tbody td {
     border-bottom: 1px solid #e0e0e0;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 70px;
+    max-width: 100px;
     overflow: hidden;
 }
 
 /* Scrollable Table Wrapper */
 .table-wrapper {
-    max-height: 300px;
+    max-height: 500px;
+    /* width: 500px; */
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-gutter: 20px;
@@ -238,6 +263,7 @@ table tbody td {
     /* margin-left: 250px; */
     background-color: var(--background-color);
     padding: 20px;
+    border-bottom: #d6f8ff 1px solid;
     /* box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); */
     display: flex;
     position: fixed;

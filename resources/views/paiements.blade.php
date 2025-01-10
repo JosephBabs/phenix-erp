@@ -13,8 +13,8 @@
                     <!-- <h2 class="text-dark pb-2 fw-bold">Employées</h2> -->
                 </div>
                 <div class="ml-md-auto py-2 py-md-0">
-                    <a href="{{ route('paiements')  }}" class="sidebar-link btn btn-outline-primary btn-border btn-round mr-2">Gérer les paiements</a>
-                    <a href="{{ route('employees.create')  }}" class="sidebar-link btn btn-secondary btn-round">Ajouter un employé</a>
+                    <a href="{{ route('paiements')  }}" class="sidebar-link btn btn-outline-primary btn-border btn-round mr-2">Gérer les bons de paiements</a>
+                    <a href="{{ route('employees.create')  }}" class="sidebar-link btn btn-secondary btn-round">Payer un employé</a>
                 </div>
             </div>
         </div>
@@ -49,26 +49,26 @@
                 <div class="card-header">
                     <h4 class="card-title">Paiement</h4>
                 </div>
-                <div class="table-wrappr card-body">
+                <div class="table-wrapper card-body">
 
                     <table class="table" id="paimentHistTable">
                         <thead>
                             <tr>
                                 <th>Numéro de Référence</th>
-                                <th>Employé</th>
+                                <th class="wrap-i">Nom de l'employé</th>
                                 <th>Date de prise de poste</th>
                                 <th>Date fin de contrat</th>
                                 <th>Nombre heure travaillé</th>
                                 <th>Salaire Net</th>
-                                <th>Date de Paiement</th>
-                                <th>Action</th>
+                                <th >Date de Paiement</th>
+                                <th class="wrap-it">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paiements as $paiement)
                             <tr>
                                 <td>{{ $paiement->id }}</td>
-                                <td>{{ $paiement->employee->full_name }}</td>
+                                <td class="wrap-it">{{ $paiement->employee->full_name }}</td>
                                 <td>{{ $paiement->temps_de_travail_a_payer_debut }}</td>
                                 <td>{{ $paiement->temps_de_travail_a_payer_fin }}</td>
                                 <td>{{ $paiement->nombre_heure_travaillée }}</td>
