@@ -50,16 +50,6 @@ class EmployeeController extends Controller
             'bank_account' => 'required|string', // Bank account
         ]);
 
-        // try {
-        //     // Create the employee record
-        //     Employee::create($request->all());
-
-        //     // Return a success response
-        //     return response()->json(['success' => 'Employé ajouté avec succès.']);
-        // } catch (\Exception $e) {
-        //     // Handle exceptions and return an error response
-        //     return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout de l\'employé.'], 500);
-        // }
 
         try {
             $employee = Employee::create($request->all());
@@ -81,7 +71,7 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé.'+ $e)
+                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé. '. $e->getMessage())
                 ->withInput();
         }
     }

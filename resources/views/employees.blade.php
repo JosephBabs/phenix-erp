@@ -51,7 +51,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="employee_table">
+                        <table class="table table-bordered table-striped table-hover" id="employee_table">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
@@ -62,10 +62,11 @@
                                     <th>Heures par semaine</th>
                                     <th>Numero de Compte</th>
                                     <th>Salaire brut</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($employees as $employee)
+                                @foreach ($employees->reverse() as $employee)
                                 <tr>
                                     <td>{{ $employee->full_name }}</td>
                                     <td>{{ $employee->poste }}</td>
@@ -75,6 +76,7 @@
                                     <td>{{ $employee->nombre_heure_par_semaine }}</td>
                                     <td>{{ $employee->bank_account }}</td>
                                     <td>{{ $employee->salaire_brut }}</td>
+                                    <td>-</td>
                                 </tr>
                                 @endforeach
                             </tbody>

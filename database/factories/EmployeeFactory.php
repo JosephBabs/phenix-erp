@@ -24,6 +24,7 @@ class EmployeeFactory extends Factory
             'date_de_prise_de_service' => $this->faker->date(), // Hire date
             'date_de_fin_de_contrat' => $this->faker->optional()->date(), // End date of the contract (nullable)
             'nombre_heure_par_semaine' => $this->faker->numberBetween(20, 40), // Number of hours per week
+            'num_CNSS' => $this->faker->numberBetween(20, 40), // Number of hours per week
             'bank_account' => $this->faker->bankAccountNumber(), // Bank account
         ];
     }

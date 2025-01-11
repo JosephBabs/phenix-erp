@@ -122,6 +122,21 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="num_CNSS">Numéro CNSS</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        name="num_CNSS"
+                                        id="num_CNSS"
+                                        class="form-control"
+                                        placeholder="Numéro de la CNSS"
+                                        value="{{ old('num_CNSS') }}">
+                                    @error('num_CNSS')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
                                     <label for="taxe">Taxe (%)</label>
                                     <input
                                         required

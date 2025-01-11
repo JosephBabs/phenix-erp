@@ -21,7 +21,7 @@ return new class extends Migration
         $table->integer('nombre_heure_assignée'); // Ensure this is defined
         $table->decimal('salaire_brut', 10, 2);
         $table->decimal('montant_a_payer', 10, 2);
-        $table->decimal('taxe', 5, 2); // Add this line if it's missing
+        // $table->decimal('taxe', 5, 2); // Add this line if it's missing
         $table->timestamps();
     });
 }

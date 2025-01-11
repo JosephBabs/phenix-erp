@@ -19,6 +19,7 @@ class Employee extends Model
         'type_de_contrat',
         'salaire_brut',
         'taxe',
+        'num_CNSS',
         'date_de_prise_de_service',
         'date_de_fin_de_contrat',
         'nombre_heure_par_semaine',

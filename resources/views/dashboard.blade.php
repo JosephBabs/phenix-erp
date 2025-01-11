@@ -62,7 +62,7 @@
             <div class="memos mb-4 p-2 card shadow">
                 <h2 class="memo-title">Mémos</h2>
                 <div class="table-wrapper">
-                    <table id="memos-table" class="table">
+                    <table id="memos-table" class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>S/N</th>
@@ -73,7 +73,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($memos as $index => $memo)
+                            @foreach ($memos->reverse() as $index => $memo)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td class="sender">{{ Str::limit($memo->title, 20) }}</td>
@@ -99,7 +99,7 @@
                 <h2>Requêtes de paiement</h2>
 
                 <div class="table-wrapper">
-                    <table id="payments-tabl" class="table table-wrapper">
+                    <table id="payments-tabl" class="table table-wrapper table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>S/N</th>
@@ -109,7 +109,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($paymentRequests as $index => $request)
+                            @foreach ($paymentRequests->reverse() as $index => $request)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $request->request_name }}</td>
@@ -132,7 +132,7 @@
             <div class="staff-list  mb-4 p-2  card shadow">
                 <h2>Staff List</h2>
                 <div class="table-wrapper">
-                    <table id="staff-table" class="table">
+                    <table id="staff-table" class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>S/N</th>
@@ -142,7 +142,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($employees as $index => $employee)
+                            @foreach ($employees->reverse() as $index => $employee)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $employee->full_name }}</td>

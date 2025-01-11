@@ -23,7 +23,18 @@ class PaymentController extends Controller
 
         $user = Auth::user();
         $employees = Employee::findOrFail($employe_id);
-        return view('paiements.create', ['userName' => $user->name], compact('employees'));
+        return view('paiements_create', ['userName' => $user->name], compact('employees'));
+    }
+
+    public function payer()
+    {
+
+        $user = Auth::user();
+        $employees = Employee::all();
+
+        // Fetch all employees with their weekly hours and base salary
+        // $employees = Employee::all(['id', 'nom', 'prenom', 'nombre_heure_par_semaine', 'salaire_base']);
+        return view('paiements_create', ['userName' => $user->name], compact('employees'));
     }
 
     public function creatPayment(){
@@ -35,43 +46,38 @@ class PaymentController extends Controller
     // Store the payment data in the database
     public function store(Request $request)
     {
-        // Validate the incoming request data
-        $validated = $request->validate([
+        // Validate the request
+        $validatedData = $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'temps_de_travail_a_payer_debut' => 'required|date',
-            'temps_de_travail_a_payer_fin' => 'required|date',
-            'nombre_heure_travaillée' => 'required|integer',
-            'heures_supplementaire' => 'nullable|integer',
+            'temps_de_travail_a_payer_fin' => 'required|date|after_or_equal:temps_de_travail_a_payer_debut',
+            'nombre_heure_travaillée' => 'required|numeric|min:0',
+            'nombre_heure_assignée' => 'required|numeric|min:0',
+            'heures_supplementaire' => 'nullable|numeric|min:0',
+            'salaire_brut' => 'required|numeric|min:0',
         ]);
 
-        try {
-            // Fetch the employee data
-            $employee = Employee::findOrFail($validated['employee_id']);
+        // Fetch the employee's tax rate
+        $employee = Employee::findOrFail($validatedData['employee_id']);
+        $taxRate = $employee->tax_rate; // Assuming the tax rate column is named "tax_rate"
 
-            // Calculate the salary components
-            $nombreHeureAssignee = $employee->nombre_heure_par_semaine;
-            $salaireBrut = ($employee->salaire_brut / $nombreHeureAssignee) * $validated['nombre_heure_travaillée'];
-            $montantAPayer = $salaireBrut * ((100 - $employee->taxe) / 100);
+        // Calculate montant_a_payer
+        $montantAPayer = (new Paiement)->calculateNetPay($validatedData['salaire_brut'], $taxRate);
 
-            // Create the payment record
-            Paiement::create([
-                'employee_id' => $validated['employee_id'],
-                'temps_de_travail_a_payer_debut' => $validated['temps_de_travail_a_payer_debut'],
-                'temps_de_travail_a_payer_fin' => $validated['temps_de_travail_a_payer_fin'],
-                'nombre_heure_travaillée' => $validated['nombre_heure_travaillée'],
-                'heures_supplementaire' => $validated['heures_supplementaire'] ?? 0, // Handle null case
-                'salaire_brut' => $salaireBrut,
-                'montant_a_payer' => $montantAPayer,
-            ]);
+        // Create the paiement record
+        Paiement::create([
+            'employee_id' => $validatedData['employee_id'],
+            'temps_de_travail_a_payer_debut' => $validatedData['temps_de_travail_a_payer_debut'],
+            'temps_de_travail_a_payer_fin' => $validatedData['temps_de_travail_a_payer_fin'],
+            'nombre_heure_travaillée' => $validatedData['nombre_heure_travaillée'],
+            'nombre_heure_assignée' => $validatedData['nombre_heure_assignée'],
+            'heures_supplementaire' => $validatedData['heures_supplementaire'] ?? 0,
+            'salaire_brut' => $validatedData['salaire_brut'],
+            'montant_a_payer' => $montantAPayer,
+        ]);
 
-            // Redirect back to the employee's detail page with a success message
-            return redirect()->route('employese.show', $validated['employee_id'])
-                             ->with('success', 'Paiement créé avec succès.');
-
-        } catch (\Exception $e) {
-            // Handle the error and return a meaningful response
-            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue lors de la création du paiement.']);
-        }
+        // Redirect with success message
+        return redirect()->route('paiements.payer')->with('success', 'Paiement créé avec succès.');
     }
 
 

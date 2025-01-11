@@ -47,11 +47,6 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            @if (!Auth::check())
-            <script>
-                window.location.href = '{{ route("login") }}';
-            </script>
-            @endif
             @if (Auth::check())
             <header class="header fixed d-flex justify-content-start">
                 <div class="sidebar-header ">
@@ -62,11 +57,9 @@
                 <div class="d-flex w-100 justify-content-between align-items-center">
 
                     <div class="header-content">
-
                         <h1><strong>Bienvenu, {{ Auth::user()->name }}</strong></h1>
                         <div class="user-info">
                             <p><small><strong>Vendredi 10 Janvier 2025</strong></small></p>
-                            <!-- <p> </p> -->
                         </div>
                     </div>
                     <div class="data">
@@ -76,31 +69,26 @@
                                     <div class="menu-avatar">
                                         <img src="../../assets/img/profile.jpg" alt="User Avatar" class="avatar">
                                         <div style="display: flex; flex-direction:column">
-                                            <span class="auth-user-name">{{ AUTH::user()->name }}</span>
-                                            <span class="auth-user-role">{{ AUTH::user()->role }}</span>
-
+                                            <span class="auth-user-name">{{ Auth::user()->name }}</span>
+                                            <span class="auth-user-role">{{ Auth::user()->role }}</span>
                                         </div>
                                     </div>
                                 </a>
 
                                 <ul class="dropdown-menu">
                                     @auth
-
                                     <li>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <button type="submit" class="dropdown-item">Se déconnecter</button>
                                         </form>
                                     </li>
-
                                     @else
                                     <li><a class="dropdown-item" href="{{ route('login') }}">Se connecter</a></li>
                                     <li><a class="dropdown-item" href="{{ route('login') }}">S'inscrire</a></li>
-
                                     @endauth
                                 </ul>
                             </li>
-
                         </ul>
                     </div>
                 </div>
@@ -110,8 +98,12 @@
                 @yield('content')
             </main>
             @else
-            @include('auth.login')
+            <script>
+                // alert('Please');
+                window.location.href = "{{ route('login') }}";
+            </script>
             @endif
+
         </div>
     </div>
 
