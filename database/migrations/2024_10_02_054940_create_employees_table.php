@@ -1,5 +1,6 @@
 <?php
-// database/migrations/xxxx_xx_xx_xxxxxx_create_employees_table.php
+
+use App\Enums\TypeDeContratEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,19 +11,45 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
-            $table->string('employee_id');
-            $table->date('naissances');
+            $table->string('nom');
+            $table->string('prenoms');
+            $table->date('date_naissance');
+            $table->enum('sexe', ['Masculin', 'Féminin', 'Autres']);
+            $table->enum('etat_civil', ['Mr', 'Mme', 'Mlle']);
+            $table->text('adresse');
+            $table->string('telephone');
+            $table->string('email');
+            $table->string('photo_identite')->nullable();
+
+            // Professional Information
+            $table->string('employee_id')->unique();
             $table->string('poste');
-            $table->boolean('is_active');
-            $table->string('type_de_contrat');
-            $table->string('bank_account');
-            $table->decimal('salaire_brut', 10, 2);
-            $table->decimal('taxe', 5, 2);
-            $table->string('num_CNSS');
-            $table->date('date_de_prise_de_service');
-            $table->date('date_de_fin_de_contrat')->nullable();
-            $table->integer('nombre_heure_par_semaine');
+            $table->string('departement');
+            $table->date('date_embauche');
+            $table->enum('type_de_contrat', TypeDeContratEnum::getValues())  // Use the enum values
+                ->default(TypeDeContratEnum::CDI);
+                $table->integer('duree_contrat');
+            $table->string('lieu_affectation');
+
+            // Salary Information
+            $table->decimal('salaire_base', 10, 2);
+            $table->enum('mode_paiement', ['Virement bancaire', 'Chèque', 'Espèces']);
+            $table->string('compte_bancaire');
+            $table->string('nom_banque');
+            $table->enum('frequence_paiement', ['Mensuel', 'Bimensuel']);
+
+            // Fiscal and Social Status
+            $table->string('num_securite_sociale');
+            $table->string('num_ifu');
+            $table->boolean('retraite')->default(false);
+            $table->boolean('taxe_appliquee')->default(false);
+
+            // Document Uploads
+            $table->string('contrat_signe')->nullable();
+            $table->string('carte_identite')->nullable();
+            $table->string('certificats_diplomes')->nullable();
+            $table->string('rib')->nullable();
+
             $table->timestamps();
         });
     }

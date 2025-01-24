@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Tax;
 use App\Models\PaySlip;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Employee;
 use Illuminate\Http\Request;
-
-use App\Models\{Employee, Salary, PaymentRequest, StaffApplication};
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-
         $employees = Employee::all();
         // Récupérer les données des taxes
         $taxes = Tax::all();
@@ -25,130 +25,94 @@ class EmployeeController extends Controller
         return view('employees', ['userName' => $user->name], compact('employees', 'taxes', 'paySlips'));
     }
 
-
-    public function create()
+    public function show($id)
     {
-        $user = Auth::user();
-        return view('employees_create');
-    }
-
-    public function store(Request $request)
-    {
-        // Validate the incoming request data
-        $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'employee_id' => 'required|string|unique:employees,employee_id', // Ensure unique employee_id
-            'naissances' => 'required|date', // Date of birth
-            'poste' => 'required|string', // Position
-            'is_active' => 'required|boolean', // Employment status (active/inactive)
-            'type_de_contrat' => 'required|string', // Type of contract (e.g., permanent, temporary)
-            'salaire_brut' => 'required|numeric', // Gross salary
-            'taxe' => 'required|numeric', // Tax rate
-            'date_de_prise_de_service' => 'required|date', // Hire date
-            'date_de_fin_de_contrat' => 'nullable|date', // End date of the contract
-            'nombre_heure_par_semaine' => 'required|integer', // Number of hours per week
-            'bank_account' => 'required|string', // Bank account
-        ]);
-
-
-        try {
-            $employee = Employee::create($request->all());
-            Salary::create([
-                'id_employe' => $employee->id,
-                'mois' => now()->month,
-                'annee' => now()->year,
-                'sal_brute' => $validated['salaire_brut'],
-                'deduction' => 0,
-                'sal_net' => $validated['salaire_brut'],
-            ]);
-
-
-        // return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');
-
-            return redirect()
-                ->back()
-                ->with('success', 'Employé ajouté avec succès.');
-        } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé. '. $e->getMessage())
-                ->withInput();
-        }
-    }
-
-    public function edit($id)
-    {
-        // Find the employee by ID
-        $employee  = Employee::find($id);
-
-        // Check if the employee exists
+        $employee = Employee::find($id);
         if ($employee) {
-            // Return the employee data as a JSON response
             return response()->json([
                 'success' => true,
                 'data' => $employee
             ]);
         } else {
-            // Return an error response if employee not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Employé introuvable.'
-            ]);
+            return response()->json(['message' => 'Employee not found'], 404);
         }
     }
 
-
-
-    public function delete($id)
-    {
-        // Find the employee by ID
-        $employee  = Employee::find($id)->delete();
-
-        // Check if the employee exists
-        if ($employee) {
-            // Return the employee data as a JSON response
-            return response()->json([
-                'success' => true,
-                'message' => 'Employé supprimé'
-            ]);
-        } else {
-            // Return an error response if employee not found
-            return response()->json([
-                'success' => false,
-                'message' => 'Employé introuvable.'
-            ]);
-        }
-    }
-
-    public function update(Request $request, Employee $employee)
+    public function store(Request $request)
     {
         $request->validate([
-            'full_name' => 'required|string|max:255',
-            // 'employee_id' => 'required|string|unique:employees',
-            'naissances' => 'required|date', // Date of birth
-            'poste' => 'required|string', // Position
-            'is_active' => 'required|integer', // Employment status (active/inactive)
-            'type_de_contrat' => 'required|string', // Type of contract (e.g., permanent, temporary)
-            'salaire_brut' => 'required|numeric', // Gross salary
-            'taxe' => 'required|numeric', // Tax rate
-            'date_de_prise_de_service' => 'required|date', // Hire date
-            'date_de_fin_de_contrat' => 'required|date', // End date of the contract (nullable)
-            'nombre_heure_par_semaine' => 'required|numeric', // Number of hours per week
-            'bank_account' => 'required|string',
+            // Personal Information
+            'nom' => 'required|string|max:255',
+            'prenoms' => 'required|string|max:255',
+            'date_naissance' => 'required|date',
+            'sexe' => 'required|in:Masculin,Féminin,Autres',
+            'etat_civil' => 'required|in:Mr,Mme,Mlle',
+            'adresse' => 'required|string|max:500',
+            'telephone' => 'required|string|max:20', // You can adjust the max length as per your requirement
+            'email' => 'required|email|unique:employees,email', // Assuming the email needs to be unique in the `employees` table
+
+            // Professional Information
+            'employee_id' => 'required|string|unique:employees,employee_id',
+            'poste' => 'required|string|max:255',
+            'departement' => 'required|string|max:255',
+            'date_embauche' => 'required|date',
+            'type_contrat' => 'required|in:CDI,CDD,Freelance',
+            'duree_contrat' => 'required|integer|min:1', // Assuming the duration is in months and must be at least 1 month
+            'lieu_affectation' => 'required|string|max:255',
+
+            // Salary Information
+            'salaire_base' => 'required|numeric|min:0', // Gross salary, should be a non-negative number
+            'mode_paiement' => 'required|in:Virement bancaire,Chèque,Espèces',
+            'compte_bancaire' => 'required|string|max:34', // IBAN or account number
+            'nom_banque' => 'required|string|max:255',
+            'frequence_paiement' => 'required|in:Mensuel,Bimensuel',
+
+            // Fiscal and Social Status
+            'num_securite_sociale' => 'required|string|max:9', // Assuming it's a string with a max length of 9
+            'num_ifu' => 'required|string|max:12', // Assuming it's a string with a max length of 12
+            'retraite' => 'nullable|boolean', // Optional boolean field
+            'taxe_appliquee' => 'nullable|boolean', // Optional boolean field
+
+            // Document Uploads (assuming these are optional)
+            'contrat_signe' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for contract file
+            'carte_identite' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for identity card file
+            'certificats_diplomes' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for certificates or diplomas
+            'rib' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for RIB file
         ]);
 
-        // $employee->update($request->all());
-        try {
-            $employee->update($request->all());
-            return response()->json(['success' => 'Employé mis à jour avec succès.']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Une erreur est survenue lors de l\'ajout de l\'employé.']);
-        }
+
+        $employee = Employee::create($request->all());
+
+        return response()->json(['success' => 'Employee created successfully', 'employee' => $employee]);
     }
 
-    public function destroy(Employee $employee)
+    public function update(Request $request, $id)
     {
-        $employee->delete();
-        return redirect()->route('employees.index')->with('success', 'Employé supprimé avec succès.');
+        $employee = Employee::find($id);
+
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+
+        $request->validate([
+            'nom' => 'nullable|string',
+            'prenoms' => 'nullable|string',
+            'date_naissance' => 'nullable|date',
+            // Add validation for other fields
+        ]);
+
+        $employee->update($request->all());
+
+        return response()->json(['success' => 'Employee updated successfully', 'employee' => $employee]);
+    }
+
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+        if ($employee) {
+            $employee->delete();
+            return response()->json(['success' => 'Employee deleted successfully']);
+        }
+        return response()->json(['message' => 'Employee not found'], 404);
     }
 }

@@ -15,9 +15,9 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Temporary User',
-            'email' => 'temporary@example.com',
-            'password' => Hash::make('password'), // Encrypt the password
+            'name' => 'Phenix Admin',
+            'email' => 'admin@phenix.com',
+            'password' => Hash::make('password123'), // Encrypt the password
             'role' => 'admin', // Assign any role (admin, hr_manager, or accountant)
             'is_active' => true, // Set the user as active
         ]);

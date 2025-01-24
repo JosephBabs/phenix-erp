@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(EmployesTableSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(PaiementSeeder::class);
+        // $this->call(PaiementSeeder::class);
         $this->call(TaxSeeder::class);
         $this->call(StaffApplicationSeeder::class);
         $this->call(MemoSeeder::class);

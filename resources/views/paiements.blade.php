@@ -146,8 +146,7 @@
                                 <td>{{ $paiement->montant_a_payer }}</td>
                                 <td>{{ $paiement->created_at }}</td>
                                 <td>
-                                    {{-- <a href="{{ route('paiements.print', $paiement->id) }}"
-                                    class="btn btn-info">Imprimer</a> --}}
+                                    
                                 </td>
                             </tr>
                             @endforeach

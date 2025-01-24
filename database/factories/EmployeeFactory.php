@@ -1,6 +1,5 @@
 <?php
 
-// database/factories/EmployeeFactory.php
 namespace Database\Factories;
 
 use App\Models\Employee;
@@ -13,19 +12,44 @@ class EmployeeFactory extends Factory
     public function definition()
     {
         return [
-            'full_name' => $this->faker->name(),
-            'employee_id' => $this->faker->unique()->randomNumber(5),
-            'naissances' => $this->faker->date(), // Date of birth
-            'poste' => $this->faker->jobTitle(), // Position
-            'is_active' => $this->faker->boolean(), // Employment status (active/inactive)
-            'type_de_contrat' => $this->faker->randomElement(['permanent', 'temporary']), // Type of contract
-            'salaire_brut' => $this->faker->numberBetween(30000, 100000), // Gross salary
-            'taxe' => $this->faker->randomFloat(2, 10, 30), // Tax rate (percentage)
-            'date_de_prise_de_service' => $this->faker->date(), // Hire date
-            'date_de_fin_de_contrat' => $this->faker->optional()->date(), // End date of the contract (nullable)
-            'nombre_heure_par_semaine' => $this->faker->numberBetween(20, 40), // Number of hours per week
-            'num_CNSS' => $this->faker->numberBetween(20, 40), // Number of hours per week
-            'bank_account' => $this->faker->bankAccountNumber(), // Bank account
+            // Personal Information
+            'nom' => $this->faker->lastName(),
+            'prenoms' => $this->faker->firstName(),
+            'date_naissance' => $this->faker->date('Y-m-d'), // Date of birth (adjust format)
+            'sexe' => $this->faker->randomElement(['Masculin', 'Féminin', 'Autres']), // Gender
+            'etat_civil' => $this->faker->randomElement(['Mr', 'Mme', 'Mlle']), // Marital status
+            'adresse' => $this->faker->address(), // Full address
+            'telephone' => $this->faker->phoneNumber(), // Phone number
+            'email' => $this->faker->unique()->safeEmail(), // Email address
+            'photo_identite' => $this->faker->imageUrl(400, 400, 'people'), // Random photo URL
+
+            // Professional Information
+            'employee_id' => $this->faker->unique()->numberBetween(100000, 999999), // Employee ID (updated)
+            'poste' => $this->faker->jobTitle(), // Job position
+            'departement' => $this->faker->word(), // Department
+            'date_embauche' => $this->faker->date('Y-m-d'), // Hiring date (adjust format)
+            'type_de_contrat' => $this->faker->randomElement(['CDI', 'CDD', 'Freelance']), // Contract type
+            'duree_contrat' => $this->faker->numberBetween(12, 60), // Contract duration in months
+            'lieu_affectation' => $this->faker->city(), // Place of assignment
+
+            // Salary Information
+            'salaire_base' => $this->faker->numberBetween(30000, 100000), // Gross salary
+            'mode_paiement' => $this->faker->randomElement(['Virement bancaire', 'Chèque', 'Espèces']), // Payment mode
+            'compte_bancaire' => $this->faker->iban(), // Bank account number (IBAN)
+            'nom_banque' => $this->faker->company(), // Bank name
+            'frequence_paiement' => $this->faker->randomElement(['Mensuel', 'Bimensuel']), // Payment frequency
+
+            // Fiscal and Social Status
+            'num_securite_sociale' => $this->faker->unique()->randomNumber(9), // Social security number
+            'num_ifu' => $this->faker->unique()->randomNumber(9), // Tax identification number
+            'retraite' => $this->faker->boolean(), // Retirement regime or allocation
+            'taxe_appliquee' => $this->faker->boolean(), // Tax applied status
+
+            // Document Uploads (placeholders)
+            'contrat_signe' => $this->faker->word(), // Signed contract (filename or placeholder)
+            'carte_identite' => $this->faker->word(), // Identity card (filename or placeholder)
+            'certificats_diplomes' => $this->faker->word(), // Certificates or diplomas (filename or placeholder)
+            'rib' => $this->faker->word(), // Bank identity statement (filename or placeholder)
         ];
     }
 }

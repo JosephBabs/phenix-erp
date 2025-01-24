@@ -49,8 +49,8 @@
                 <div class="card-header">
                     <h4 class="card-title">Table des employés</h4>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
+                <div class="cardbody">
+                    <div class="table-resonsive">
                         <table class="table table-bordered table-striped table-hover" id="employee_table">
                             <thead>
                                 <tr>
@@ -76,7 +76,20 @@
                                     <td>{{ $employee->nombre_heure_par_semaine }}</td>
                                     <td>{{ $employee->bank_account }}</td>
                                     <td>{{ $employee->salaire_brut }}</td>
-                                    <td>-</td>
+                                    <td class="d-flex gap-1">
+                                        <button class="btn btn-sm btn-warning" title="Modifier" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-success" title="Payer" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-cash-stack"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-info" title="Voir Fiche de Paie" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-file-earmark-text"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" title="Supprimer" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -91,35 +104,43 @@
 
 
 @push('scripts')
+
+
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         $("#employee_table").DataTable({
-                    paging: true,
-                    searching: true,
-                    ordering: true,
-                    lengthChange: true,
-                    lengthMenu: [3, 5, 10, 25, 50, 100, 200],
-                    responsive: true,
-                    pageLength: 5,
-                    buttons: true,
-                    info: true,
-                    language: {
-                        search: "Rechercher:",
-                        lengthMenu: "Afficher _MENU_ paiements par page",
-                        info: "Affichage de _START_ à _END_ sur _TOTAL_ paiement(s)",
-                        infoEmpty: "Aucun enregistrement disponible",
-                        infoFiltered: "(filtré à partir de _MAX_ paiement(s) au total)",
-                        paginate: {
-                            first: "Premier",
-                            last: "Dernier",
-                            next: "Suivant",
-                            previous: "Précédent"
-                        },
-                        emptyTable: "Aucune donnée disponible dans le tableau",
-                        searchPlaceholder: 'Rechercher dans le tableau...', // Custom placeholder text
-                        search: 'Rechercher:'
-                    }
-                });
+            paging: true,
+            searching: true,
+            ordering: true,
+            lengthChange: true,
+            lengthMenu: [3, 5, 10, 25, 50, 100, 200],
+            responsive: true,
+            pageLength: 5,
+            buttons: true,
+            info: true,
+            language: {
+                search: "Rechercher:",
+                lengthMenu: "Afficher _MENU_ paiements par page",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ paiement(s)",
+                infoEmpty: "Aucun enregistrement disponible",
+                infoFiltered: "(filtré à partir de _MAX_ paiement(s) au total)",
+                paginate: {
+                    first: "Premier",
+                    last: "Dernier",
+                    next: "Suivant",
+                    previous: "Précédent"
+                },
+                emptyTable: "Aucune donnée disponible dans le tableau",
+                searchPlaceholder: 'Rechercher dans le tableau...', // Custom placeholder text
+                search: 'Rechercher:'
+            }
+        });
     });
 </script>
 @endpush

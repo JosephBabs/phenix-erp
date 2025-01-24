@@ -13,10 +13,7 @@ class EmployesTableSeeder extends Seeder
      * Run the database seeds.
      */
     public function run()
-{
-    Employee::factory()->count(10)->create();
-    
-
-}
-
+    {
+        \App\Models\Employee::factory(10)->create();
+    }
 }

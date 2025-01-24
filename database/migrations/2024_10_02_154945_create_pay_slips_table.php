@@ -10,7 +10,8 @@ class CreatePaySlipsTable extends Migration
     {
         Schema::create('pay_slips', function (Blueprint $table) {
             $table->id(); // ID unique généré automatiquement
-            $table->foreignId('employee_id')->constrained('employees'); // ID de l'employé
+            $table->foreignId('employee_id')->constrained('employees')
+            ->onDelete('cascade'); // ID de l'employé
             // $table->foreignId('taxes')->constrained('employees'); // ID de l'employé
             $table->decimal('gross_salary', 10, 2); // Salaire brut
             $table->decimal('total_taxes', 10, 2); // Total des taxes

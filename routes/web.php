@@ -13,6 +13,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\PagesController;
 
 
 
@@ -22,20 +23,31 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
     // Employees
+
+
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
     Route::get('/employees/create_employee', [EmployeeController::class, 'create'])->name('employees.create');
     Route::post('/employees/create', [EmployeeController::class, 'store'])->name('employees.store');
-    Route::get('/employees/{id}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+    Route::get('/employees/{id}/edit', [EmployeeController::class, 'show'])->name('employees.edit');
     Route::put('/employees/{id}/update', [EmployeeController::class, 'update'])->name('employees.update');
-    Route::get('/employees/{id}/delete', [EmployeeController::class, 'delete'])->name('employees.delete');
+    Route::delete('/employees/{id}/delete', [EmployeeController::class, 'destroy'])->name('employees.delete');
     // Route::resource('employees', EmployeeController::class);
     // Route::resource('taxes', TaxController::class);
     // Route::resource('pay-slips', PaySlipController::class);
 
+    Route::get('/admin/employees/creer', [PagesController::class, 'employeCreer'] );
+    Route::get('/admin/employes', [PagesController::class, 'employes']);
+    Route::get('/admin/paiements', [PagesController::class, 'paiements']);
+    Route::get('/admin/etats_paiements', [PagesController::class, 'etats_paiements']);
+    Route::get('/admin/taxes_cotisations', [PagesController::class, 'taxes_cotisations']);
+    Route::get('/admin/gestion_conges', [PagesController::class, 'gestion_conges']);
+    Route::get('/admin/notifications', [PagesController::class, 'notifications']);
+    Route::get('/admin/parametres', [PagesController::class, 'parametres']);
+    Route::get('/admin/supports', [PagesController::class, 'supports']);
 
 
     // Bons de paiement
