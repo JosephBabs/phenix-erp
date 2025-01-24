@@ -6,9 +6,7 @@ use App\Models\Tax;
 use App\Models\PaySlip;
 use Illuminate\Support\Facades\Auth;
 
-// use App\Models\Employee;
-
-use App\Models\{Employee, Salary, PaymentRequest, StaffApplication};
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,7 +40,7 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             // Personal Information
             'nom' => 'required|string|max:255',
             'prenoms' => 'required|string|max:255',
@@ -58,7 +56,7 @@ class EmployeeController extends Controller
             'poste' => 'required|string|max:255',
             'departement' => 'required|string|max:255',
             'date_embauche' => 'required|date',
-            'type_de_contrat' => 'required|in:CDI,CDD,Freelance',
+            'type_contrat' => 'required|in:CDI,CDD,Freelance',
             'duree_contrat' => 'required|integer|min:1', // Assuming the duration is in months and must be at least 1 month
             'lieu_affectation' => 'required|string|max:255',
 
@@ -82,30 +80,10 @@ class EmployeeController extends Controller
             'rib' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for RIB file
         ]);
 
-        try {
-            $employee = Employee::create($request->all());
-            Salary::create([
-                'id_employe' => $employee->id,
-                'mois' => now()->month,
-                'annee' => now()->year,
-                'sal_brute' => $validated['salaire_base'],
-                'deduction' => 0,
-                'sal_net' => $validated['salaire_base'],
-            ]);
 
+        $employee = Employee::create($request->all());
 
-        // return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');
-
-            return redirect()
-                ->back()
-                ->with('success', 'Employé ajouté avec succès.');
-        } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé. '. $e->getMessage())
-                ->withInput();
-        }
-
+        return response()->json(['success' => 'Employee created successfully', 'employee' => $employee]);
     }
 
     public function update(Request $request, $id)

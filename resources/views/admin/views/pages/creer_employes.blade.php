@@ -70,21 +70,22 @@
                                     <i data-feather="share-2"></i><span class="d-none d-sm-block">Informations salariales</span>
                                 </a>
                             </li>
+
+                            <div class="p-1"><li class="badge badge-pill badge-light-danger" id="errorHolder"></li></div>
                         </ul>
+                        <form id="create-employee-form">
+                            <div class="tab-content">
+                                <!-- Account Tab starts -->
+                                <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                                    <!-- users edit media object start -->
 
-                        <div class="tab-content">
-                            <!-- Account Tab starts -->
-                            <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
-                                <!-- users edit media object start -->
-
-                                <form class="form-validate">
-                                    <div class="media mb-2 border p-3 rounded" >
+                                    <div class="media mb-2 border p-3 rounded">
                                         <!-- Default User Icon Image -->
                                         <img id="profile-image" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Avatar de l'utilisateur" class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer" height="90" width="90" />
                                         <div class="media-body mt-50">
                                             <!-- File Input Section -->
-                                                <label for="this">Photo de profil</label>
-                                                <br>
+                                            <label for="this">Photo de profil</label>
+                                            <br>
                                             <div class="col-12 d-flex mt-1 px-0">
                                                 <!-- Button for selecting or changing photo -->
                                                 <label class="btn btn-primary mr-75 mb-0" for="change-dp-picture" id="label-photo">
@@ -141,10 +142,9 @@
                                             <div class="form-group">
                                                 <label for="etat_civil">État civil</label>
                                                 <select class="form-control" id="etat_civil" name="etat_civil" required>
-                                                    <option value="Célibataire">Célibataire</option>
-                                                    <option value="Marié(e)">Marié(e)</option>
-                                                    <option value="Divorcé(e)">Divorcé(e)</option>
-                                                    <option value="Veuf(ve)">Veuf(ve)</option>
+                                                    <option value="Mr">Mr</option>
+                                                    <option value="Mme">Mme</option>
+                                                    <option value="Mlle">Mlle</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -177,21 +177,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                                <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                    <button type="button" id="suivant-1" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Suivant</button>
-                                    <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
+                                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                        <button type="button" id="suivant-1" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Suivant</button>
+                                        <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Account Tab ends -->
+                                <!-- Account Tab ends -->
 
-                            <!-- Information Tab starts -->
-                            <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
-                                <!-- users edit Info form start -->
-                                <form class="form-validate">
+                                <!-- Information Tab starts -->
+                                <div class="tab-pane" id="information" aria-labelledby="information-tab" role="tabpanel">
+                                    <!-- users edit Info form start -->
                                     <div class="row">
                                         <!-- Poste -->
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="employee_id">Identifiant Unique pour l'employé</label>
+                                                <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="EPCDXXXX" required />
+                                            </div>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="poste">Poste</label>
@@ -219,7 +223,7 @@
                                                 <select class="form-control" id="type_de_contrat" name="type_de_contrat" required>
                                                     <option value="CDI">CDI</option>
                                                     <option value="CDD">CDD</option>
-                                                    <option value="Stage">Stage</option>
+                                                    <option value="Freelance">Freelance</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -238,22 +242,32 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
 
-                                <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                    <button type="button" id="suivant-2" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Suivant</button>
-                                    <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
+                                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                        <button type="button" id="suivant-2" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Suivant</button>
+                                        <button type="reset" class="btn btn-outline-secondary">Réinitialiser</button>
+                                    </div>
+                                    <!-- users edit Info form ends -->
                                 </div>
-                                <!-- users edit Info form ends -->
-                            </div>
-                            <!-- Information Tab ends -->
+                                <!-- Information Tab ends -->
 
-                            <!-- Social Tab starts -->
-                            <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
-                                <!-- users edit social form start -->
+                                <!-- Social Tab starts -->
+                                <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
+                                    <!-- users edit social form start -->
 
-                                <form class="form-validate">
                                     <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="num_ifu">Numéro IFU</label>
+                                                <input type="number" class="form-control"  maxlength="13" id="num_ifu" name="num_ifu" placeholder="Numero CNSS" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="num_securite_sociale">Numéro de sécurité social</label>
+                                                <input type="number" class="form-control" id="num_securite_sociale" name="num_securite_sociale" placeholder="Numero CNSS" required />
+                                            </div>
+                                        </div>
                                         <!-- Salaire de base -->
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -296,15 +310,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
 
-                                <div class="col-12 d-flex flex-sm-row flex-column mt-2">
-                                    <button type="button" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Créer l'employé</button>
+                                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                        <button type="submit" type="button" id="submit-btn" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Créer l'employé</button>
+                                    </div>
+                                    <!-- users edit social form ends -->
                                 </div>
-                                <!-- users edit social form ends -->
+                                <!-- Social Tab ends -->
                             </div>
-                            <!-- Social Tab ends -->
-                        </div>
                         </form>
                     </div>
                 </div>
@@ -319,38 +332,87 @@
 
 
 @push('scripts')
+
 <script>
+    document.getElementById('create-employee-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent form from reloading the page
 
-const tabButtons = document.querySelectorAll('.btn');
-const tabContents = document.querySelectorAll('.tab-pane');
-const accountTab = document.getElementById('account-tab');
-const informationTab = document.getElementById('information-tab');
-const socialTab = document.getElementById('social-tab');
+        // Get the form data
+        let formData = new FormData(this);
 
-function hideTabs() {
-    tabContents.forEach(content => content.classList.remove('active'));
+        // Clear previous errors
+        document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
 
-}
+        // Send the AJAX request using Axios
+        axios.post("{{ route('employees.store') }}", formData, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                }
+            })
+            .then(response => {
+                if (response.data.message) {
+                    // Success: Display success message or handle the success
+                    alert(response.data.message);
+                    document.getElementById('employee-form').reset(); // Reset the form
 
-function showTab(tabId) {
-    hideTabs();
-    document.getElementById(tabId).classList.add('active');
-}
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 422) {
+                    // Display validation errors
+                    const errors = error.response.data.errors;
+                    for (const [field, messages] of Object.entries(errors)) {
+                        let input = document.querySelector(`[name="${field}"]`);
+                        if (input) {
+                            // Append error message next to the input
+                            let container = document.getElementById('errorHolder');
+                            let errorEl = document.createElement('small');
 
-// Event listeners for each button click to navigate to the respective tab
-document.getElementById('suivant-1').addEventListener('click', function () {
-    informationTab.classList.add('active');
-    accountTab.classList.remove('active');
-    socialTab.classList.remove('active');
-    showTab('information');
-});
+                            errorEl.classList.add('text-danger');
+                            errorEl.textContent = messages[0];
+                            // input.parentNode.appendChild(errorEl);
+                            container.appendChild(errorEl);
+                        }
+                    }
+                } else {
+                    // General error
+                    alert(error.response?.data?.message || 'Une erreur est survenue.');
+                }
+            });
+    });
+</script>
+<script>
+    const tabButtons = document.querySelectorAll('.btn');
+    const tabContents = document.querySelectorAll('.tab-pane');
+    const accountTab = document.getElementById('account-tab');
+    const informationTab = document.getElementById('information-tab');
+    const socialTab = document.getElementById('social-tab');
 
-document.getElementById('suivant-2').addEventListener('click', function () {
-    socialTab.classList.add('active');
-    accountTab.classList.remove('active');
-    informationTab.classList.remove('active');
-    showTab('social');
-});
+    function hideTabs() {
+        tabContents.forEach(content => content.classList.remove('active'));
+
+    }
+
+    function showTab(tabId) {
+        hideTabs();
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    // Event listeners for each button click to navigate to the respective tab
+    document.getElementById('suivant-1').addEventListener('click', function() {
+        informationTab.classList.add('active');
+        accountTab.classList.remove('active');
+        socialTab.classList.remove('active');
+        showTab('information');
+    });
+
+    document.getElementById('suivant-2').addEventListener('click', function() {
+        socialTab.classList.add('active');
+        accountTab.classList.remove('active');
+        informationTab.classList.remove('active');
+        showTab('social');
+    });
     // JavaScript to handle the image change and button behavior
     const profileImage = document.getElementById('profile-image');
     const fileInput = document.getElementById('change-dp-picture');
