@@ -17,4 +17,14 @@ class DashboardController extends Controller
             'staffApplications' => StaffApplication::first(),
         ]);
     }
+
+    public function tb()
+    {
+        return view('dashboard', [
+            'employees' => Employee::all(),
+            'memos' => Memo::all(),
+            'paymentRequests' => PaymentRequest::all(),
+            'staffApplications' => StaffApplication::first(),
+        ]);
+    }
 }

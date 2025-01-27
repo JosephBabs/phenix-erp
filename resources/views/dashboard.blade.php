@@ -10,7 +10,7 @@
     <div class="w-100 mb-4">
         <div class="d-flex" style="gap: 10px;">
             <div class="stat-item ">
-
+ 
                 <div class="stat-content">
                     <h3>{{ count($employees) }}</h3>
                     <p>Total des employés</p>

@@ -70,8 +70,15 @@
                                     <i data-feather="share-2"></i><span class="d-none d-sm-block">Informations salariales</span>
                                 </a>
                             </li>
-
-                            <div class="p-1"><li class="badge badge-pill badge-light-danger" id="errorHolder"></li></div>
+                            @if (session('success'))
+                            <p class="badge badge-pill badge-light-success">{{ session('success') }} <a href="{{ route('employees') }}">Voir liste</a></p>
+                            @endif
+                            @if (session('error'))
+                            <p class="badge badge-pill badge-light-danger">{{ session('error') }}</p>
+                            @endif
+                            <div class="p-1">
+                                <li class="badge badge-pill badge-light-danger" id="errorHolder"></li>
+                            </div>
                         </ul>
                         <form id="create-employee-form">
                             <div class="tab-content">
@@ -259,7 +266,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="num_ifu">Numéro IFU</label>
-                                                <input type="number" class="form-control"  maxlength="13" id="num_ifu" name="num_ifu" placeholder="Numero CNSS" required />
+                                                <input type="number" class="form-control" maxlength="13" id="num_ifu" name="num_ifu" placeholder="Numero CNSS" required />
                                             </div>
                                         </div>
                                         <div class="col-md-4">

@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 use App\Models\Tax;
 use App\Models\PaySlip;
 
-use App\Models\{Employee, Salary, PaymentRequest, StaffApplication};
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Paiement;
+
+use App\Models\{Employee, Memo, Taxe, Salary, PaymentRequest, StaffApplication};
 
 use Illuminate\Http\Request;
 
@@ -13,12 +17,36 @@ class PagesController extends Controller
     //
     public function index()
     {
-        return view('admin.views.index');
+        $updated_at = now();
+
+        return view('admin.views.index', [
+            'updated_at' => $updated_at,
+            'employees' => Employee::all(),
+            'memos' => Memo::all(),
+            'paymentRequests' => PaymentRequest::all(),
+            'staffApplications' => StaffApplication::first(),
+        ]);
+        // return view('admin.views.index');
     }
 
+    public function dashboard()
+    {
+
+
+
+        $updated_at = now();
+
+        return view('index', [
+            'updated_at' => $updated_at,
+            'employees' => Employee::all(),
+            'memos' => Memo::all(),
+            'paymentRequests' => PaymentRequest::all(),
+            'staffApplications' => StaffApplication::first(),
+        ]);
+    }
 
     public function employeCreer(){
-        
+
         return view('admin.views.pages.creer_employes');
 
     }
@@ -34,7 +62,11 @@ class PagesController extends Controller
     }
     public function paiements()
     {
-        return view('admin.views.pages.paiements');
+        $user = Auth::user();
+        $employees = Employee::all();
+        $paiements = Paiement::all();
+        $taxe = Taxe::all();
+        return view('admin.views.pages.paiements', compact('employees', 'taxe', 'paiements'));
     }
     public function etats_paiements()
     {

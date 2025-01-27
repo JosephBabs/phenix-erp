@@ -33,6 +33,466 @@
             <!-- Basic table -->
 
             <!--/ Basic table -->
+
+            <section class="app-user-edit">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center active" id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
+                                    <i data-feather="user"></i><span class="d-none d-sm-block">Définition de salaire</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="tax-tab" data-toggle="tab" href="#taxeCotisation" aria-controls="information" role="tab" aria-selected="false">
+                                    <i data-feather="info"></i><span class="d-none d-sm-block">Taxes et Cotisations</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="share-2"></i><span class="d-none d-sm-block">Payer un employé</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="share-2"></i><span class="d-none d-sm-block">Fiches de paie</span>
+                                </a>
+                            </li>
+                            <div class="p-1">
+                                <li class="badge badge-pill badge-light-danger" id="errorHolder"></li>
+                            </div>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Account Tab starts -->
+                            <div class="tab-pane active" id="definition" aria-labelledby="account-tab" role="tabpanel">
+                                <!-- users edit media object start -->
+                                <div class="shadow card">
+                                    <div class="card-header">
+                                        <h4 class="m-">Créer une définition de salaire</h4>
+                                    </div>
+                                    <div class="p-2">
+                                        <form>
+                                            <div class="row g-3">
+                                                <!-- Titre -->
+                                                <!-- <div class="col-md-4">
+                                                    <label for="titre" class="form-label">Titre</label>
+                                                    <select id="titre" class="form-select form-control">
+                                                        <option selected>Sélectionner une option</option>
+                                                        <option value="1">Option 1</option>
+                                                        <option value="2">Option 2</option>
+                                                        <option value="3">Option 3</option>
+                                                    </select>
+                                                </div> -->
+                                                <div class="col-md-4">
+                                                    <label for="titre" class="form-label">Titre</label>
+                                                    <div class="custom-dropdown">
+                                                        <input type="text" id="titre-search" class="form-control search-input" placeholder="Search..." onkeyup="filterDropdown(this)">
+                                                        <div class="dropdown-options">
+                                                            <div class="option" data-value="1">Option 1</div>
+                                                            <div class="option" data-value="2">Option 2</div>
+                                                            <div class="option" data-value="3">Option 3</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <style>
+                                                    .custom-dropdown {
+                                                        position: relative;
+                                                        width: 100%;
+                                                    }
+
+                                                    .search-input {
+                                                        width: 100%;
+                                                        padding: 10px;
+                                                        margin-bottom: 5px;
+                                                        box-sizing: border-box;
+                                                    }
+
+                                                    .dropdown-options {
+                                                        position: absolute;
+                                                        top: 100%;
+                                                        left: 0;
+                                                        right: 0;
+                                                        max-height: 150px;
+                                                        overflow-y: auto;
+                                                        border: 1px solid #ddd;
+                                                        border-radius: 5px;
+                                                        background: #fff;
+                                                        z-index: 1000;
+                                                        display: none;
+                                                    }
+
+                                                    .dropdown-options .option {
+                                                        padding: 10px;
+                                                        cursor: pointer;
+                                                    }
+
+                                                    .dropdown-options .option:hover {
+                                                        background: #f0f0f0;
+                                                    }
+
+                                                    .custom-dropdown.active .dropdown-options {
+                                                        display: block;
+                                                    }
+                                                </style>
+
+
+
+                                                <!-- Grade -->
+                                                <div class="col-md-4">
+                                                    <label for="grade" class="form-label">Grade</label>
+                                                    <select id="grade" class="form-select form-control">
+                                                        <option selected>Choisir un grade</option>
+                                                        <option value="1">Grade 1</option>
+                                                        <option value="2">Grade 2</option>
+                                                        <option value="3">Grade 3</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Salaire de base -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireBase" class="form-label">Salaire de base</label>
+                                                    <input type="number" class="form-control" id="salaireBase" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Allocation -->
+                                                <div class="col-md-4">
+                                                    <label for="allocation" class="form-label">Allocation</label>
+                                                    <input type="number" class="form-control" id="allocation" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Salaire brut -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireBrut" class="form-label">Salaire brut</label>
+                                                    <input type="number" class="form-control" id="salaireBrut" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Deductions -->
+                                                <div class="col-md-4">
+                                                    <label for="deductions" class="form-label">Deductions</label>
+                                                    <input type="number" class="form-control" id="deductions" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Salaire net -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireNet" class="form-label">Salaire net</label>
+                                                    <input type="number" class="form-control" id="salaireNet" placeholder="Entrer un montant">
+                                                </div>
+                                            </div>
+
+                                            <!-- Submit Button -->
+                                            <div class="mt-4">
+                                                <button type="submit" class="btn btn-warning">Créer une définition de salaire</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Account Tab ends -->
+
+                            <!-- Information Tab starts -->
+                            <div class="tab-pane" id="taxeCotisation" aria-labelledby="information-tab" role="tabpanel">
+                                <!-- users edit Info form start -->
+                                <div class="shadow card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <h4 class="m-">Créer une taxe</h4>
+
+                                        <button class="btn btn-primary" id="creTx">Créer une taxe</button>
+                                    </div>
+                                    <div class="p-2 d-none" id="createTaxFormHolder">
+                                        <form id="createTaxForm" method="POST">
+                                            @csrf
+                                            @if(session('success'))
+                                            <div class="alert alert-success">
+                                                {{ session('success') }}
+                                            </div>
+                                            @endif
+
+                                            @if(session('error'))
+                                            <div class="alert alert-danger">
+                                                {{ session('error') }}
+                                            </div>
+                                            @endif
+                                            <div class="row g-3">
+                                                <!-- Titre -->
+                                                <div class="col-md-4">
+                                                    <label for="nom" class="form-label">Nom de la taxe | Cotisation</label>
+                                                    <input type="text" id="nom" name="name" class="form-control" placeholder="Entrer un nom" required>
+                                                </div>
+
+                                                <!-- Type de taxe -->
+                                                <div class="col-md-4">
+                                                    <label for="type_taxe" class="form-label">Type</label>
+                                                    <select id="type_taxe" name="base_calculation" class="form-select form-control" required>
+                                                        <option selected>Choisir un type de taxe</option>
+                                                        <option value="impot">Impot</option>
+                                                        <option value="cnss">CNSS</option>
+                                                        <option value="irpp">IRPP</option>
+                                                        <option value="wht">WHT</option>
+                                                        <option value="nhs">NHS</option>
+                                                        <option value="vat">VAT</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Valeur en % -->
+                                                <div class="col-md-4">
+                                                    <label for="taxe" class="form-label">Valeur en %</label>
+                                                    <input type="number" name="rate" id="taxe" class="form-control" placeholder="Entrer un %" required>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label for="is_active">Est active ?</label>
+                                                <input type="checkbox" id="edit_is_active" name="is_active" checked>
+                                            </div>
+
+                                            <!-- Submit Button -->
+                                            <div class="mt-4">
+                                                <button type="submit" class="btn btn-warning">Créer une taxe</button>
+                                            </div>
+
+
+
+                                            <!-- Dropdown for payroll periods -->
+
+                                        </form>
+                                    </div>
+
+
+
+                                    <div class="p-2">
+                                        <div class="mt-4">
+                                            <h4>
+                                                Liste des taxes
+                                            </h4>
+                                        </div>
+                                        <table class="table datatable-basic">
+                                            <thead>
+                                                <th>SN</th>
+                                                <th>Nom</th>
+                                                <th>Taux</th>
+                                                <th>Actions</th>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($taxe->reverse() as $key => $tax)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{$tax->name}}</td>
+                                                    <td>{{$tax->rate}}</td>
+                                                    <td class="d-flex " style="gap: 10px;">
+                                                        <span><a href="#" class="text-primary">Modifier</a></span>
+                                                        <span><a href="#" class="text-danger">Supprimer</a></span>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- users edit Info form ends -->
+                            </div>
+                            <!-- Information Tab ends -->
+
+                            <!-- Social Tab starts -->
+                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
+                                <!-- users edit social form start -->
+
+
+                                <!-- users edit social form ends -->
+                            </div>
+
+                            <div class="tab-pane" id="payerEmp" aria-labelledby="payer-emp" role="tabpanel">
+                                <div class="row mt--2">
+                                    <div class="card col-12 shadow ">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Formulaire de Paiement</h4>
+                                        </div>
+                                        <div class="card-body ">
+                                            <form method="POST" id="salary-form" action="{{ route('paiements.store') }} ">
+                                                @csrf
+
+                                                @if(session('success'))
+                                                <div class="alert alert-success">
+                                                    {{ session('success') }}
+                                                </div>
+                                                @endif
+
+                                                @if(session('error'))
+                                                <div class="alert alert-danger">
+                                                    {{ session('error') }}
+                                                </div>
+                                                @endif
+
+                                                <div class="row">
+                                                    <!-- Employee selection -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="employee_id" class="form-label">Employé</label>
+                                                        <select name="employee_id" id="employee_id" class="form-select form-control @error('employee_id') is-invalid @enderror" required>
+                                                            <option value="">Sélectionner un Employé</option>
+                                                            @foreach($employees as $employee)
+                                                            <option value="{{ $employee->id }}">
+                                                                {{ $employee->nom  }} {{ $employee->prenoms  }} - Salaire de base: {{ $employee->salaire_base }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('employee_id')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Start Date -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="temps_de_travail_a_payer_debut" class="form-label">Début de la période de travail</label>
+                                                        <input type="date" class="form-control @error('temps_de_travail_a_payer_debut') is-invalid @enderror" id="temps_de_travail_a_payer_debut" name="temps_de_travail_a_payer_debut" required>
+                                                        @error('temps_de_travail_a_payer_debut')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- End Date -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="temps_de_travail_a_payer_fin" class="form-label">Fin de la période de travail</label>
+                                                        <input type="date" class="form-control @error('temps_de_travail_a_payer_fin') is-invalid @enderror" id="temps_de_travail_a_payer_fin" name="temps_de_travail_a_payer_fin" required>
+                                                        @error('temps_de_travail_a_payer_fin')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Hours Worked -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="nombre_heure_assignée" class="form-label">Nombre d'heures assignées</label>
+                                                        <input type="number" readonly value="{{ $employee->nombre_heure_assignée }}" class="form-control @error('nombre_heure_assignée') is-invalid @enderror" id="nombre_heure_assignée" name="nombre_heure_assignée" required>
+                                                        @error('nombre_heure_assignée')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="col-4 mb-3">
+                                                        <label for="nombre_heure_travaillée" class="form-label">Nombre d'heures travaillées</label>
+                                                        <input type="number" class="form-control @error('nombre_heure_travaillée') is-invalid @enderror" id="nombre_heure_travaillée" name="nombre_heure_travaillée" required>
+                                                        @error('nombre_heure_travaillée')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Overtime Hours (Optional) -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="heures_supplementaire" class="form-label">Heures supplémentaires (facultatif)</label>
+                                                        <input type="number" class="form-control @error('heures_supplementaire') is-invalid @enderror" id="heures_supplementaire" name="heures_supplementaire">
+                                                        @error('heures_supplementaire')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Initial Salary (Base Salary) -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="salaire_brut" class="form-label">Salaire Brut</label>
+                                                        <input type="number" class="form-control @error('salaire_brut') is-invalid @enderror" id="salaire_brut" name="salaire_brut" readonly>
+                                                        @error('salaire_brut')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                <!-- Submit Button -->
+                                                <div class="col-4">
+                                                    <button type="submit" class="btn btn-primary" id="salarypay-submit-button">Créer le Paiement</button>
+                                                </div>
+                                            </form>
+
+
+                                            <script>
+                                                document.getElementById('employee_id').addEventListener('change', function() {
+                                                    const selectedOption = this.options[this.selectedIndex];
+                                                    if (selectedOption.value) {
+                                                        const salaireBase = selectedOption.text.match(/Salaire de base: (\d+(\.\d{1,2})?)/);
+                                                        const nombreHeureParSemaine = selectedOption.text.match(/Heures\/semaine: (\d+)/);
+                                                        if (salaireBase) {
+                                                            document.getElementById('salaire_brut').value = salaireBase[1];
+                                                            document.getElementById('nombre_heure_assignée').value = nombreHeureParSemaine[1];
+                                                        }
+                                                    } else {
+                                                        document.getElementById('salaire_brut').value = '';
+                                                        document.getElementById('nombre_heure_assignée').value = '';
+                                                    }
+                                                });
+                                            </script>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Social Tab ends -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <div class="row mt--2">
+                <div class="col-md-6">
+
+                </div>
+
+                <!-- Tableau des employés -->
+                <div class="col-md-12 mt-4">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h4 class="card-title">List de paiements</h4>
+                        </div>
+                        <div class="table-wrapper card-body">
+
+                            <table class="table" id="paimentHistTable">
+                                <thead>
+                                    <tr>
+                                        <th>Numéro de Référence</th>
+                                        <th class="wrap-i">Nom de l'employé</th>
+                                        <th>Date de prise de poste</th>
+                                        <th>Date fin de contrat</th>
+                                        <th>Nombre heure travaillé</th>
+                                        <th>Salaire Net</th>
+                                        <th>montant à payer</th>
+                                        <th>Date de Paiement</th>
+                                        <th class="wrap-it">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($paiements->reverse() as $paiement)
+                                    <tr>
+                                        <td>{{ $paiement->id }}</td>
+                                        <td class="wrap-it">{{ $paiement->employee->full_name }}</td>
+                                        <td>{{ $paiement->temps_de_travail_a_payer_debut }}</td>
+                                        <td>{{ $paiement->temps_de_travail_a_payer_fin }}</td>
+                                        <td>{{ $paiement->nombre_heure_travaillée }}</td>
+                                        <td>{{ $paiement->salaire_brut }}</td>
+                                        <td>{{ $paiement->montant_a_payer }}</td>
+                                        <td>{{ $paiement->created_at }}</td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -42,7 +502,84 @@
 
 
 @push('scripts')
+<!-- Bootstrap CSS -->
 
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).on('click', '.nav-link', function() {
+        const tabId = $(this).attr('href'); // Get the href (e.g., #tab2)
+        window.location.hash = tabId; // Set it as the URL hash
+    });
+
+    $(document).ready(function() {
+        const hash = window.location.hash; // Get the current URL hash
+        if (hash) {
+            // Find the tab with the corresponding href
+            const tabTrigger = document.querySelector(`a[href="${hash}"]`);
+            if (tabTrigger) {
+                const tab = new bootstrap.Tab(tabTrigger); // Create a Bootstrap Tab instance
+                tab.show(); // Show the tab
+            }
+        }
+    });
+
+
+    $(document).ready(function() {
+
+        $('#creTx').on('click', function() {
+            var taxH = $('#createTaxFormHolder');
+            if (taxH.hasClass('d-none')) {
+                taxH.removeClass('d-none');
+            } else {
+                taxH.addClass('d-none');
+            }
+        });
+
+
+        $('#createTaxForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get form data
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: "{{ route('taxes.store') }}", // Ensure this is the correct route
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    // Handle success
+                    if (response.status === 'success') {
+                        toastr.success(response.message); // Display Toastr success message
+                        // Optionally, you can clear the form
+
+                        $('#createTaxForm')[0].reset();
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    // Handle error
+                    var errorMessage = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    toastr.error(errorMessage); // Display Toastr error message
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    // toastr.success("holla");
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -70,6 +607,42 @@
 <!-- BEGIN: Page JS-->
 <!-- <script src="/app-assets/js/scripts/tables/table-datatables-basic.js"></script> -->
 <!-- END: Page JS-->
+<script>
+    function filterDropdown(input) {
+        const dropdown = input.closest('.custom-dropdown');
+        const filter = input.value.toLowerCase();
+        const options = dropdown.querySelectorAll('.option');
+
+        // Show dropdown
+        dropdown.classList.add('active');
+
+        // Filter options
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            option.style.display = text.includes(filter) ? '' : 'none';
+        });
+
+        // Close dropdown if input is empty
+        if (filter === '') {
+            dropdown.classList.remove('active');
+        }
+    }
+
+    // Event listener for selecting options
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('option')) {
+            const dropdown = e.target.closest('.custom-dropdown');
+            const searchInput = dropdown.querySelector('.search-input');
+            searchInput.value = e.target.textContent; // Set the selected value
+            dropdown.classList.remove('active'); // Close dropdown
+        } else if (!e.target.closest('.custom-dropdown')) {
+            // Close all dropdowns if clicked outside
+            document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+</script>
 
 <script>
     $(function() {

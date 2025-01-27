@@ -90,26 +90,7 @@
 
     <div class="row mt--2">
         <div class="col-md-6">
-            <!-- <div class="card full-height">
-                <div class="card-body">
-                    <div class="card-title">Statistiques globales</div>
-                    <div class="card-category">Informations quotidiennes sur les statistiques du système</div>
-                    <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div>
-                                <h3 class="fw-bold">{{ $totalEmployees ?? 0 }}</h3>
-                            </div>
-                            <h6 class="fw-bold mt-3 mb-0">Total des employés</h6>
-                        </div>
-                        <div class="px-2 pb-2 pb-md-0 text-center">
-                            <div>
-                                <h3 class="fw-bold">{{ $totalPayed ?? 0 }}</h3>
-                            </div>
-                            <h6 class="fw-bold mt-3 mb-0">Total payé</h6>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+            
         </div>
 
         <!-- Tableau des employés -->
@@ -146,7 +127,7 @@
                                 <td>{{ $paiement->montant_a_payer }}</td>
                                 <td>{{ $paiement->created_at }}</td>
                                 <td>
-                                    
+
                                 </td>
                             </tr>
                             @endforeach

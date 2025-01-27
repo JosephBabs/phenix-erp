@@ -50,26 +50,41 @@
                                 <thead>
                                     <tr>
 
+                                    <th>Action</th>
                                         <th>Id Employé</th>
                                         <th>Nom et Prénom</th>
                                         <th>Poste</th>
                                         <th>Type de contrat</th>
                                         <th>Salaire brut</th>
-                                        <th>Action</th>
                                         <th>Numero de Compte</th>
-                                        <th>Heures par semaine</th>
                                         <th>Date de prise de service</th>
-                                        <th>Date de Fin de contrat</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($employees->reverse() as $index => $employee)
                                     <tr>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn-icon btn btn-transparent hide-arrow btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i data-feather="more-vertical" id="chat-header-actions" class="font-medium-2"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-left"  aria-labelledby="chat-header-actions">
+                                                    <a class="dropdown-item edit-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Modifier</a>
+                                                    <a class="dropdown-item pay-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Payer</a>
+                                                    <a class="dropdown-item see-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Voir fiche de paie</a>
+                                                    <a class="dropdown-item  delete-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Supprimer</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>{{ $employee->employee_id }}</td>
                                         <td>{{ $employee->nom }} {{ $employee->prenoms }}</td>
                                         <td>{{ $employee->poste }}</td>
                                         <td>{{ $employee->type_de_contrat }}</td>
                                         <td>{{ $employee->salaire_base }}</td>
+                                        <td>{{ $employee->compte_bancaire }}</td>
+                                        <td>{{ $employee->date_embauche }}</td>
+
                                         <td>
                                             <div class="dropdown">
                                                 <button class="btn-icon btn btn-transparent hide-arrow btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,11 +98,6 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $employee->compte_bancaire }}</td>
-                                        <td>{{ $employee->date_de_prise_de_service }}</td>
-                                        <td>{{ $employee->date_de_fin_de_contrat }}</td>
-                                        <td>{{ $employee->nombre_heure_par_semaine }}</td>
-
 
                                     </tr>
                                     @endforeach

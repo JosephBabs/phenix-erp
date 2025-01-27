@@ -12,7 +12,7 @@ class CreateTaxesTable extends Migration
             $table->id(); // ID unique généré automatiquement
             $table->string('name'); // Nom de la taxe
             $table->decimal('rate', 5, 2); // Taux
-            $table->enum('base_calculation', ['gross_salary', 'taxable_income']); // Base de calcul
+            $table->string('base_calculation'); // Base de calcul
             $table->boolean('is_active')->default(true); // Statut
             $table->timestamps(); // Champs de timestamps
         });
