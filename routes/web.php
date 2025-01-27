@@ -88,5 +88,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/approvisionnement', [SupplyController::class, 'index'])->name('approvisionnement');
 
 
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', [PagesController::class, 'index']);
 });
