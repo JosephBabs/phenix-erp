@@ -73,7 +73,7 @@ class EmployeeController extends Controller
             'num_securite_sociale' => 'required|string|max:9', // Assuming it's a string with a max length of 9
             'num_ifu' => 'required|string|max:12', // Assuming it's a string with a max length of 12
             'retraite' => 'nullable|boolean', // Optional boolean field
-            'taxe_appliquee' => 'nullable|boolean', // Optional boolean field
+            'taxe_appliquee' => 'nullable|string|max:255', // Optional boolean field
 
             // Document Uploads (assuming these are optional)
             'contrat_signe' => 'nullable|file|mimes:pdf,jpg,png,jpeg|max:2048', // Example validation for contract file

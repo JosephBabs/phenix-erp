@@ -47,7 +47,8 @@ class PagesController extends Controller
 
     public function employeCreer(){
 
-        return view('admin.views.pages.creer_employes');
+        $taxes = Tax::all();
+        return view('admin.views.pages.creer_employes', compact('taxes'));
 
     }
     public function employes()

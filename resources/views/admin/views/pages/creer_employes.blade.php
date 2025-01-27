@@ -316,6 +316,17 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="taxe_appliquee">Taxe</label>
+                                                <select class="form-control" id="taxe_appliquee" name="taxe_appliquee">
+                                                    @foreach($taxes as $index => $tax)
+                                                    <option value="{{$tax->id }}">{{ $tax->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="col-12 d-flex flex-sm-row flex-column mt-2">
