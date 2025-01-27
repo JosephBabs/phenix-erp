@@ -96,14 +96,17 @@ class EmployeeController extends Controller
 
         // return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');
 
-            return redirect()
-                ->back()
-                ->with('success', 'Employé ajouté avec succès.');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Employee created successfully!',
+            'data' => $employee,
+        ], 201);
         } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Une erreur est survenue lors de l\'ajout de l\'employé. '. $e->getMessage())
-                ->withInput();
+             return response()->json([
+                'status' => 'error',
+                'message' => 'Error creating user!',
+
+            ], 500);
         }
 
     }

@@ -370,14 +370,16 @@
             .then(response => {
                 if (response.data.message) {
                     // Success: Display success message or handle the success
-                    alert(response.data.message);
+                    // alert(response.data.message);
+                    toastr.success(response.message); // Display Toastr success message
+
                     document.getElementById('employee-form').reset(); // Reset the form
 
-                    window.location.reload();
+                    window.location.href('/admin/employes');
                 }
             })
             .catch(error => {
-                if (error.response && error.response.status === 422) {
+                if (error.response && error.response.status === 500) {
                     // Display validation errors
                     const errors = error.response.data.errors;
                     for (const [field, messages] of Object.entries(errors)) {
