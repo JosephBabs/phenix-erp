@@ -322,7 +322,7 @@
                                                 <label for="taxe_appliquee">Taxe</label>
                                                 <select class="form-control" id="taxe_appliquee" name="taxe_appliquee">
                                                     @foreach($taxes as $index => $tax)
-                                                    <option value="{{$tax->id }}">{{ $tax->name }} | Taux: {{ $tax->rate }}</option>
+                                                    <option value="{{$tax->rate }}">{{ $tax->name }} | Taux: {{ $tax->rate }} %</option>
                                                     @endforeach
                                                 </select>
                                             </div>
