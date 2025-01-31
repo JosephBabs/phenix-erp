@@ -19,12 +19,14 @@ class Paiement extends Model
         'employee_id',
         'temps_de_travail_a_payer_debut',
         'temps_de_travail_a_payer_fin',
-        'nombre_heure_travaillée',
-        'nombre_heure_assignée',
-        'heures_supplementaire',
+        'salaire_base',
+        'deduction',
         'salaire_brut',
+        'allocation',
+        'prime',
         'montant_a_payer',
     ];
+
 
     /**
      * Relationship to the Employee model.

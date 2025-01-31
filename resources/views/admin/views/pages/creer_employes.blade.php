@@ -223,6 +223,19 @@
                                                 <input type="date" class="form-control" id="date_embauche" name="date_embauche" required />
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre_heure_assignee">Nombre d'heure assignée (par semaine)</label>
+                                                <input type="number" class="form-control" id="nombre_heure_assigne" name="nombre_heure_sem_assignee">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre_heure_assignee">Nombre d'heure assignée (par mois)</label>
+                                                <input type="number" readonly class="form-control" id="nombre_heure_assignee" name="nombre_heure_assignee">
+                                            </div>
+                                        </div>
                                         <!-- Type de contrat -->
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -352,6 +365,15 @@
 @push('scripts')
 
 <script>
+    var heureParSem = document.getElementById('nombre_heure_assigne')
+    var heureParMois = document.getElementById('nombre_heure_assignee')
+    heureParSem.addEventListener('keyup', function() {
+        const perMois = parseInt(heureParSem.value);
+        heureParMois.value = perMois * 4;
+    });
+
+
+
     document.getElementById('create-employee-form').addEventListener('submit', function(e) {
         e.preventDefault(); // Prevent form from reloading the page
 

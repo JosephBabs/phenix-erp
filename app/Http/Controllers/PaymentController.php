@@ -51,33 +51,37 @@ class PaymentController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'temps_de_travail_a_payer_debut' => 'required|date',
             'temps_de_travail_a_payer_fin' => 'required|date|after_or_equal:temps_de_travail_a_payer_debut',
-            'nombre_heure_travaillée' => 'required|numeric|min:0',
-            'nombre_heure_assignée' => 'required|numeric|min:0',
-            'heures_supplementaire' => 'nullable|numeric|min:0',
+            'salaire_base' => 'required|numeric|min:0',
+            'deduction' => 'required|numeric|min:0', // Taxe appliquée
             'salaire_brut' => 'required|numeric|min:0',
+            'allocation' => 'nullable|numeric|min:0',
+            'prime' => 'nullable|numeric|min:0',
         ]);
 
-        // Fetch the employee's tax rate
+        // Fetch the employee details
         $employee = Employee::findOrFail($validatedData['employee_id']);
-        $taxRate = $employee->tax_rate; // Assuming the tax rate column is named "tax_rate"
 
-        // Calculate montant_a_payer
-        $montantAPayer = (new Paiement)->calculateNetPay($validatedData['salaire_brut'], $taxRate);
+        // Calculate tax amount
+        $taxAmount = ($validatedData['salaire_brut'] * $validatedData['deduction']) / 100;
+
+        // Calculate net salary
+        $salaireNet = $validatedData['salaire_brut'] - $taxAmount + ($validatedData['allocation'] ?? 0) + ($validatedData['prime'] ?? 0);
 
         // Create the paiement record
         Paiement::create([
             'employee_id' => $validatedData['employee_id'],
             'temps_de_travail_a_payer_debut' => $validatedData['temps_de_travail_a_payer_debut'],
             'temps_de_travail_a_payer_fin' => $validatedData['temps_de_travail_a_payer_fin'],
-            'nombre_heure_travaillée' => $validatedData['nombre_heure_travaillée'],
-            'nombre_heure_assignée' => $validatedData['nombre_heure_assignée'],
-            'heures_supplementaire' => $validatedData['heures_supplementaire'] ?? 0,
+            'salaire_base' => $validatedData['salaire_base'],
+            'deduction' => $validatedData['deduction'],
             'salaire_brut' => $validatedData['salaire_brut'],
-            'montant_a_payer' => $montantAPayer,
+            'allocation' => $validatedData['allocation'] ?? 0,
+            'prime' => $validatedData['prime'] ?? 0,
+            'montant_a_payer' => $salaireNet, // Net salary after tax, allocations, and bonuses
         ]);
 
         // Redirect with success message
-        return redirect()->route('paiements.payer')->with('success', 'Paiement créé avec succès.');
+        return redirect()->route('admin.paiements')->with('success', 'Paiement créé avec succès.');
     }
 
 

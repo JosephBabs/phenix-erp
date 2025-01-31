@@ -42,9 +42,12 @@ class CreateEmployeesTable extends Migration
             $table->string('num_securite_sociale');
             $table->string('num_ifu');
             $table->boolean('retraite')->default(false);
-            $table->boolean('taxe_appliquee')->default(false);
+            $table->integer('taxe_appliquee')->default(7);
 
             // Document Uploads
+            // nombre_heure_sem_assignee
+            $table->string('nombre_heure_sem_assignee')->required();
+            $table->string('nombre_heure_assignee')->required();
             $table->string('contrat_signe')->nullable();
             $table->string('carte_identite')->nullable();
             $table->string('certificats_diplomes')->nullable();

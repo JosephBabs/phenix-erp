@@ -1,6 +1,7 @@
 @extends('admin.views.layouts.app')
 @section('title', 'Phenix ERP - Paramètres')
-@section('pageCss')<link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
+@section('pageCss')
+<link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
 <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/app-chat.css">
 <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/app-chat-list.css">
 @endsection
@@ -31,6 +32,187 @@
             <!-- Basic table -->
 
             <!--/ Basic table -->
+            <section class="app-user-edit">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center active" id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
+                                    <i data-feather="user"></i><span class="d-none d-sm-block">Définition de salaire</span>
+                                </a>
+                            </li>
+
+                            <li hidden  class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
+                                </a>
+                            </li>
+                            <li hidden  class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
+                                </a>
+                            </li>
+                            <li hidden class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="file"></i><span class="d-none d-sm-block">Fiches de paie</span>
+                                </a>
+                            </li>
+                            <div class="p-1">
+                                <li class="badge badge-pill badge-light-danger" id="errorHolder"></li>
+                            </div>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Account Tab starts -->
+                            <div class="tab-pane active" id="definition" aria-labelledby="account-tab" role="tabpanel">
+                                <!-- users edit media object start -->
+                                <div class="shadow card">
+                                    <div class="card-header">
+                                        <h4 class="m-">Créer une définition de salaire</h4>
+                                    </div>
+                                    <div class="p-2">
+                                        <form>
+                                            <div class="row g-3">
+                                                <!-- Titre -->
+                                                <!-- <div class="col-md-4">
+                                                    <label for="titre" class="form-label">Titre</label>
+                                                    <select id="titre" class="form-select form-control">
+                                                        <option selected>Sélectionner une option</option>
+                                                        <option value="1">Option 1</option>
+                                                        <option value="2">Option 2</option>
+                                                        <option value="3">Option 3</option>
+                                                    </select>
+                                                </div> -->
+                                                <div class="col-md-4">
+                                                    <label for="titre" class="form-label">Titre</label>
+                                                    <div class="custom-dropdown">
+                                                        <input type="text" id="titre-search" class="form-control search-input" placeholder="Search..." onkeyup="filterDropdown(this)">
+                                                        <div class="dropdown-options">
+                                                            <div class="option" data-value="1">Option 1</div>
+                                                            <div class="option" data-value="2">Option 2</div>
+                                                            <div class="option" data-value="3">Option 3</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <style>
+                                                    .custom-dropdown {
+                                                        position: relative;
+                                                        width: 100%;
+                                                    }
+
+                                                    .search-input {
+                                                        width: 100%;
+                                                        padding: 10px;
+                                                        margin-bottom: 5px;
+                                                        box-sizing: border-box;
+                                                    }
+
+                                                    .dropdown-options {
+                                                        position: absolute;
+                                                        top: 100%;
+                                                        left: 0;
+                                                        right: 0;
+                                                        max-height: 150px;
+                                                        overflow-y: auto;
+                                                        border: 1px solid #ddd;
+                                                        border-radius: 5px;
+                                                        background: #fff;
+                                                        z-index: 1000;
+                                                        display: none;
+                                                    }
+
+                                                    .dropdown-options .option {
+                                                        padding: 10px;
+                                                        cursor: pointer;
+                                                    }
+
+                                                    .dropdown-options .option:hover {
+                                                        background: #f0f0f0;
+                                                    }
+
+                                                    .custom-dropdown.active .dropdown-options {
+                                                        display: block;
+                                                    }
+                                                </style>
+
+
+
+                                                <!-- Grade -->
+                                                <div class="col-md-4">
+                                                    <label for="grade" class="form-label">Grade</label>
+                                                    <select id="grade" class="form-select form-control">
+                                                        <option selected>Choisir un grade</option>
+                                                        <option value="1">Grade 1</option>
+                                                        <option value="2">Grade 2</option>
+                                                        <option value="3">Grade 3</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Salaire de base -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireBase" class="form-label">Salaire de base</label>
+                                                    <input type="number" class="form-control" id="salaireBase" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Allocation -->
+                                                <div class="col-md-4">
+                                                    <label for="allocation" class="form-label">Allocation</label>
+                                                    <input type="number" class="form-control" id="allocation" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Salaire brut -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireBrut" class="form-label">Salaire brut</label>
+                                                    <input type="number" class="form-control" id="salaireBrut" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Deductions -->
+                                                <div class="col-md-4">
+                                                    <label for="deductions" class="form-label">Deductions</label>
+                                                    <input type="number" class="form-control" id="deductions" placeholder="Entrer un montant">
+                                                </div>
+
+                                                <!-- Salaire net -->
+                                                <div class="col-md-4">
+                                                    <label for="salaireNet" class="form-label">Salaire net</label>
+                                                    <input type="number" class="form-control" id="salaireNet" placeholder="Entrer un montant">
+                                                </div>
+                                            </div>
+
+                                            <!-- Submit Button -->
+                                            <div class="mt-4">
+                                                <button type="submit" class="btn btn-warning">Créer une définition de salaire</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Social Tab starts -->
+                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
+                                <!-- users edit social form start -->
+
+
+                                <!-- users edit social form ends -->
+                            </div>
+
+                            <div class="tab-pane" id="payerEmp" aria-labelledby="payer-emp" role="tabpanel">
+
+                            </div>
+
+
+                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
+                                <div class="row ">
+
+
+                                </div>
+                            </div>
+                            <!-- Social Tab ends -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 </div>

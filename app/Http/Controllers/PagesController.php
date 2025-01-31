@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Tax;
 use App\Models\PaySlip;
 
@@ -45,11 +46,11 @@ class PagesController extends Controller
         ]);
     }
 
-    public function employeCreer(){
+    public function employeCreer()
+    {
 
         $taxes = Tax::all();
         return view('admin.views.pages.creer_employes', compact('taxes'));
-
     }
     public function employes()
     {
@@ -71,11 +72,15 @@ class PagesController extends Controller
     }
     public function etats_paiements()
     {
-        return view('admin.views.pages.etats_paiements');
+        return view('admin.views.pages.etats_paiements', [
+            'employees' => Employee::all(),
+            'paiements' => Paiement::all()
+        ]);
     }
     public function taxes_cotisations()
     {
-        return view('admin.views.pages.taxes_cotisations');
+        $taxe = Taxe::all();
+        return view('admin.views.pages.taxes_cotisations', compact('taxe'));
     }
     public function gestion_conges()
     {

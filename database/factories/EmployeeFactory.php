@@ -43,13 +43,15 @@ class EmployeeFactory extends Factory
             'num_securite_sociale' => $this->faker->unique()->randomNumber(9), // Social security number
             'num_ifu' => $this->faker->unique()->randomNumber(9), // Tax identification number
             'retraite' => $this->faker->boolean(), // Retirement regime or allocation
-            'taxe_appliquee' => $this->faker->boolean(), // Tax applied status
+            'taxe_appliquee' => $this->faker->numberBetween(3, 20), // Tax applied status
 
-            // Document Uploads (placeholders)
-            'contrat_signe' => $this->faker->word(), // Signed contract (filename or placeholder)
-            'carte_identite' => $this->faker->word(), // Identity card (filename or placeholder)
-            'certificats_diplomes' => $this->faker->word(), // Certificates or diplomas (filename or placeholder)
-            'rib' => $this->faker->word(), // Bank identity statement (filename or placeholder)
+            // Document Uploads (placeholders) nombre_heure_sem_assignee
+            'nombre_heure_sem_assignee' => $this->faker->numberBetween(40, 100), //
+            'nombre_heure_assignee' => $this->faker->numberBetween(40, 100), //
+            'contrat_signe' => $this->faker->imageUrl(400, 400, 'people'), // Signed contract (filename or placeholder)
+            'carte_identite' => $this->faker->imageUrl(400, 400, 'people'), // Identity card (filename or placeholder)
+            'certificats_diplomes' => $this->faker->imageUrl(400, 400, 'people'), // Certificates or diplomas (filename or placeholder)
+            'rib' => $this->faker->imageUrl(400, 400, 'people'), // Bank identity statement (filename or placeholder)
         ];
     }
 }

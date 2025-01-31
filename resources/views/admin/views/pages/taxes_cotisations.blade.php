@@ -1,6 +1,7 @@
 @extends('admin.views.layouts.app')
 @section('title', 'Phenix ERP - Taxes et Cotisations')
-@section('pageCss')<link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
+@section('pageCss')
+<link rel="stylesheet" type="text/css" href="/app-assets/css/core/menu/menu-types/vertical-menu.css">
 <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/app-chat.css">
 <link rel="stylesheet" type="text/css" href="/app-assets/css/pages/app-chat-list.css">
 @endsection
@@ -28,9 +29,105 @@
 
         </div>
         <div class="content-body">
-            <!-- Basic table -->
 
-            <!--/ Basic table -->
+            <div class="tab-pane" id="taxeCotisation" aria-labelledby="information-tab" role="tabpanel">
+                <!-- users edit Info form start -->
+                <div class="shadow card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4 class="m-">Créer une taxe</h4>
+
+                        <button class="btn btn-primary" id="creTx">Créer une taxe</button>
+                    </div>
+                    <div class="p-2 d-none" id="createTaxFormHolder">
+                        <form id="createTaxForm" method="POST">
+                            @csrf
+                            @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                            @endif
+
+                            @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                            @endif
+                            <div class="row g-3">
+                                <!-- Titre -->
+                                <div class="col-md-4">
+                                    <label for="nom" class="form-label">Nom de la taxe | Cotisation</label>
+                                    <input type="text" id="nom" name="name" class="form-control" placeholder="Entrer un nom" required>
+                                </div>
+
+                                <!-- Type de taxe -->
+                                <div class="col-md-4">
+                                    <label for="type_taxe" class="form-label">Type</label>
+                                    <select id="type_taxe" name="base_calculation" class="form-select form-control" required>
+                                        <option selected>Choisir un type de taxe</option>
+                                        <option value="impot">Impot</option>
+                                        <option value="cnss">CNSS</option>
+                                        <option value="irpp">IRPP</option>
+                                        <option value="wht">WHT</option>
+                                        <option value="nhs">NHS</option>
+                                        <option value="vat">VAT</option>
+                                    </select>
+                                </div>
+
+                                <!-- Valeur en % -->
+                                <div class="col-md-4">
+                                    <label for="taxe" class="form-label">Valeur en %</label>
+                                    <input type="number" name="rate" id="taxe" class="form-control" placeholder="Entrer un %" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="is_active">Est active ?</label>
+                                <input type="checkbox" id="edit_is_active" name="is_active" checked>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-warning">Créer une taxe</button>
+                            </div>
+
+
+
+                            <!-- Dropdown for payroll periods -->
+
+                        </form>
+                    </div>
+
+                    <div class="p-2">
+                        <div class="mt-4">
+                            <h4>
+                                Liste des taxes
+                            </h4>
+                        </div>
+                        <table class="table datatable-basic">
+                            <thead>
+                                <th>SN</th>
+                                <th>Nom</th>
+                                <th>Taux</th>
+                                <th>Actions</th>
+                            </thead>
+                            <tbody>
+                                @foreach($taxe->reverse() as $key => $tax)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{$tax->name}}</td>
+                                    <td>{{$tax->rate}}</td>
+                                    <td class="d-flex " style="gap: 10px;">
+                                        <span><a href="#" class="text-primary">Modifier</a></span>
+                                        <span><a href="#" class="text-danger">Supprimer</a></span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- users edit Info form ends -->
+            </div>
         </div>
     </div>
 </div>
@@ -70,6 +167,50 @@
 <!-- END: Page JS-->
 
 <script>
+    $(document).ready(function() {
+
+        $('#creTx').on('click', function() {
+            var taxH = $('#createTaxFormHolder');
+            if (taxH.hasClass('d-none')) {
+                taxH.removeClass('d-none');
+            } else {
+                taxH.addClass('d-none');
+            }
+        });
+
+
+        $('#createTaxForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get form data
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: "{{ route('taxes.store') }}", // Ensure this is the correct route
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    // Handle success
+                    if (response.status === 'success') {
+                        toastr.success(response.message); // Display Toastr success message
+                        // Optionally, you can clear the form
+
+                        $('#createTaxForm')[0].reset();
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    // Handle error
+                    var errorMessage = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    toastr.error(errorMessage); // Display Toastr error message
+                }
+            });
+        });
+    });
+
     $(function() {
         'use strict';
 

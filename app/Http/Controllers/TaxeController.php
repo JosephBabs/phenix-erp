@@ -13,7 +13,7 @@ class TaxeController extends Controller
     public function index()
     {
         $taxes = Taxe::all(); // Get all taxes
-        return response()->json($taxes);
+        return view('admin.views.pages.taxe_cotisations');
     }
 
     /**

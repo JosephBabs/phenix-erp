@@ -84,14 +84,14 @@ class EmployeeController extends Controller
 
         try {
             $employee = Employee::create($request->all());
-            Salary::create([
-                'id_employe' => $employee->id,
-                'mois' => now()->month,
-                'annee' => now()->year,
-                'sal_brute' => $validated['salaire_base'],
-                'deduction' => 0,
-                'sal_net' => $validated['salaire_base'],
-            ]);
+            // Salary::create([
+            //     'id_employe' => $employee->id,
+            //     'mois' => now()->month,
+            //     'annee' => now()->year,
+            //     'sal_brute' => $validated['salaire_base'],
+            //     'deduction' => 0,
+            //     'sal_net' => $validated['salaire_base'],
+            // ]);
 
 
         // return redirect()->route('employees.index')->with('success', 'Employé ajouté avec succès.');

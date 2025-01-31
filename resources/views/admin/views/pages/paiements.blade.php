@@ -38,271 +38,31 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills" role="tablist">
+
+
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center active" id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
-                                    <i data-feather="user"></i><span class="d-none d-sm-block">Définition de salaire</span>
+                                <a class="nav-link d-flex align-items-center active" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="tax-tab" data-toggle="tab" href="#taxeCotisation" aria-controls="information" role="tab" aria-selected="false">
-                                    <i data-feather="info"></i><span class="d-none d-sm-block">Taxes et Cotisations</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="share-2"></i><span class="d-none d-sm-block">Payer un employé</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="share-2"></i><span class="d-none d-sm-block">Fiches de paie</span>
+                                <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
                                 </a>
                             </li>
                             <div class="p-1">
                                 <li class="badge badge-pill badge-light-danger" id="errorHolder"></li>
                             </div>
                         </ul>
+
+
+
                         <div class="tab-content">
-                            <!-- Account Tab starts -->
-                            <div class="tab-pane active" id="definition" aria-labelledby="account-tab" role="tabpanel">
-                                <!-- users edit media object start -->
-                                <div class="shadow card">
-                                    <div class="card-header">
-                                        <h4 class="m-">Créer une définition de salaire</h4>
-                                    </div>
-                                    <div class="p-2">
-                                        <form>
-                                            <div class="row g-3">
-                                                <!-- Titre -->
-                                                <!-- <div class="col-md-4">
-                                                    <label for="titre" class="form-label">Titre</label>
-                                                    <select id="titre" class="form-select form-control">
-                                                        <option selected>Sélectionner une option</option>
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
-                                                    </select>
-                                                </div> -->
-                                                <div class="col-md-4">
-                                                    <label for="titre" class="form-label">Titre</label>
-                                                    <div class="custom-dropdown">
-                                                        <input type="text" id="titre-search" class="form-control search-input" placeholder="Search..." onkeyup="filterDropdown(this)">
-                                                        <div class="dropdown-options">
-                                                            <div class="option" data-value="1">Option 1</div>
-                                                            <div class="option" data-value="2">Option 2</div>
-                                                            <div class="option" data-value="3">Option 3</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <style>
-                                                    .custom-dropdown {
-                                                        position: relative;
-                                                        width: 100%;
-                                                    }
-
-                                                    .search-input {
-                                                        width: 100%;
-                                                        padding: 10px;
-                                                        margin-bottom: 5px;
-                                                        box-sizing: border-box;
-                                                    }
-
-                                                    .dropdown-options {
-                                                        position: absolute;
-                                                        top: 100%;
-                                                        left: 0;
-                                                        right: 0;
-                                                        max-height: 150px;
-                                                        overflow-y: auto;
-                                                        border: 1px solid #ddd;
-                                                        border-radius: 5px;
-                                                        background: #fff;
-                                                        z-index: 1000;
-                                                        display: none;
-                                                    }
-
-                                                    .dropdown-options .option {
-                                                        padding: 10px;
-                                                        cursor: pointer;
-                                                    }
-
-                                                    .dropdown-options .option:hover {
-                                                        background: #f0f0f0;
-                                                    }
-
-                                                    .custom-dropdown.active .dropdown-options {
-                                                        display: block;
-                                                    }
-                                                </style>
 
 
 
-                                                <!-- Grade -->
-                                                <div class="col-md-4">
-                                                    <label for="grade" class="form-label">Grade</label>
-                                                    <select id="grade" class="form-select form-control">
-                                                        <option selected>Choisir un grade</option>
-                                                        <option value="1">Grade 1</option>
-                                                        <option value="2">Grade 2</option>
-                                                        <option value="3">Grade 3</option>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Salaire de base -->
-                                                <div class="col-md-4">
-                                                    <label for="salaireBase" class="form-label">Salaire de base</label>
-                                                    <input type="number" class="form-control" id="salaireBase" placeholder="Entrer un montant">
-                                                </div>
-
-                                                <!-- Allocation -->
-                                                <div class="col-md-4">
-                                                    <label for="allocation" class="form-label">Allocation</label>
-                                                    <input type="number" class="form-control" id="allocation" placeholder="Entrer un montant">
-                                                </div>
-
-                                                <!-- Salaire brut -->
-                                                <div class="col-md-4">
-                                                    <label for="salaireBrut" class="form-label">Salaire brut</label>
-                                                    <input type="number" class="form-control" id="salaireBrut" placeholder="Entrer un montant">
-                                                </div>
-
-                                                <!-- Deductions -->
-                                                <div class="col-md-4">
-                                                    <label for="deductions" class="form-label">Deductions</label>
-                                                    <input type="number" class="form-control" id="deductions" placeholder="Entrer un montant">
-                                                </div>
-
-                                                <!-- Salaire net -->
-                                                <div class="col-md-4">
-                                                    <label for="salaireNet" class="form-label">Salaire net</label>
-                                                    <input type="number" class="form-control" id="salaireNet" placeholder="Entrer un montant">
-                                                </div>
-                                            </div>
-
-                                            <!-- Submit Button -->
-                                            <div class="mt-4">
-                                                <button type="submit" class="btn btn-warning">Créer une définition de salaire</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Account Tab ends -->
-
-                            <!-- Information Tab starts -->
-                            <div class="tab-pane" id="taxeCotisation" aria-labelledby="information-tab" role="tabpanel">
-                                <!-- users edit Info form start -->
-                                <div class="shadow card">
-                                    <div class="card-header d-flex justify-content-between">
-                                        <h4 class="m-">Créer une taxe</h4>
-
-                                        <button class="btn btn-primary" id="creTx">Créer une taxe</button>
-                                    </div>
-                                    <div class="p-2 d-none" id="createTaxFormHolder">
-                                        <form id="createTaxForm" method="POST">
-                                            @csrf
-                                            @if(session('success'))
-                                            <div class="alert alert-success">
-                                                {{ session('success') }}
-                                            </div>
-                                            @endif
-
-                                            @if(session('error'))
-                                            <div class="alert alert-danger">
-                                                {{ session('error') }}
-                                            </div>
-                                            @endif
-                                            <div class="row g-3">
-                                                <!-- Titre -->
-                                                <div class="col-md-4">
-                                                    <label for="nom" class="form-label">Nom de la taxe | Cotisation</label>
-                                                    <input type="text" id="nom" name="name" class="form-control" placeholder="Entrer un nom" required>
-                                                </div>
-
-                                                <!-- Type de taxe -->
-                                                <div class="col-md-4">
-                                                    <label for="type_taxe" class="form-label">Type</label>
-                                                    <select id="type_taxe" name="base_calculation" class="form-select form-control" required>
-                                                        <option selected>Choisir un type de taxe</option>
-                                                        <option value="impot">Impot</option>
-                                                        <option value="cnss">CNSS</option>
-                                                        <option value="irpp">IRPP</option>
-                                                        <option value="wht">WHT</option>
-                                                        <option value="nhs">NHS</option>
-                                                        <option value="vat">VAT</option>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Valeur en % -->
-                                                <div class="col-md-4">
-                                                    <label for="taxe" class="form-label">Valeur en %</label>
-                                                    <input type="number" name="rate" id="taxe" class="form-control" placeholder="Entrer un %" required>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label for="is_active">Est active ?</label>
-                                                <input type="checkbox" id="edit_is_active" name="is_active" checked>
-                                            </div>
-
-                                            <!-- Submit Button -->
-                                            <div class="mt-4">
-                                                <button type="submit" class="btn btn-warning">Créer une taxe</button>
-                                            </div>
-
-
-
-                                            <!-- Dropdown for payroll periods -->
-
-                                        </form>
-                                    </div>
-
-
-
-                                    <div class="p-2">
-                                        <div class="mt-4">
-                                            <h4>
-                                                Liste des taxes
-                                            </h4>
-                                        </div>
-                                        <table class="table datatable-basic">
-                                            <thead>
-                                                <th>SN</th>
-                                                <th>Nom</th>
-                                                <th>Taux</th>
-                                                <th>Actions</th>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($taxe->reverse() as $key => $tax)
-                                                <tr>
-                                                    <td>{{ $key + 1 }}</td>
-                                                    <td>{{$tax->name}}</td>
-                                                    <td>{{$tax->rate}}</td>
-                                                    <td class="d-flex " style="gap: 10px;">
-                                                        <span><a href="#" class="text-primary">Modifier</a></span>
-                                                        <span><a href="#" class="text-danger">Supprimer</a></span>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- users edit Info form ends -->
-                            </div>
-                            <!-- Information Tab ends -->
-
-                            <!-- Social Tab starts -->
-                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
-                                <!-- users edit social form start -->
-
-
-                                <!-- users edit social form ends -->
-                            </div>
-
-                            <div class="tab-pane" id="payerEmp" aria-labelledby="payer-emp" role="tabpanel">
-                                <div class="row mt--2">
+                            <div class="tab-pane active" id="payerEmp" aria-labelledby="payer-emp" role="tabpanel">
+                                <div class="row">
                                     <div class="card col-12 shadow ">
                                         <div class="card-header">
                                             <h4 class="card-title">Formulaire de Paiement</h4>
@@ -325,16 +85,17 @@
 
                                                 <div class="row">
                                                     <!-- Employee selection -->
-                                                    <div class="col-4 mb-3">
+                                                    <div class="col-12 mb-3">
                                                         <label for="employee_id" class="form-label">Employé</label>
                                                         <select name="employee_id" id="employee_id" class="form-select form-control @error('employee_id') is-invalid @enderror" required>
                                                             <option value="">Sélectionner un Employé</option>
                                                             @foreach($employees as $employee)
                                                             <option value="{{ $employee->id }}">
-                                                                {{ $employee->nom  }} {{ $employee->prenoms  }} - Salaire de base: {{ $employee->salaire_base }}
+                                                                {{ $employee->nom  }} {{ $employee->prenoms  }} - Salaire de base: {{ $employee->salaire_base }} - Taxe : {{ $employee->taxe_appliquee }}%
                                                             </option>
                                                             @endforeach
                                                         </select>
+
                                                         @error('employee_id')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
@@ -365,17 +126,52 @@
                                                     </div>
 
                                                     <!-- Hours Worked -->
-                                                    <div class="col-4 mb-3">
-                                                        <label for="nombre_heure_assignée" class="form-label">Nombre d'heures assignées</label>
+                                                    <!-- <div class="col-4 mb-3">
+                                                        <label for="nombre_heure_assignée" class="form-label">Nombre d'heures assignées (par mois)</label>
                                                         <input type="number" readonly value="{{ $employee->nombre_heure_assignée }}" class="form-control @error('nombre_heure_assignée') is-invalid @enderror" id="nombre_heure_assignée" name="nombre_heure_assignée" required>
                                                         @error('nombre_heure_assignée')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
                                                         @enderror
+                                                    </div> -->
+
+
+
+                                                    <!-- Initial Salary (Base Salary) -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="salaire_base" class="form-label">Salaire de base</label>
+                                                        <input type="number" class="form-control @error('salaire_base') is-invalid @enderror" id="salaire_base" name="salaire_base" readonly>
+                                                        @error('salaire_base')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-4 mb-3">
+                                                        <label for="deduction" class="form-label">Déduction - Taxe (%)</label>
+                                                        <input type="text" class="form-control @error('deduction') is-invalid @enderror" id="taxe_deduit" name="deduction" readonly>
+                                                        <span class="text-muted" id="resulDeduct"></span>
+                                                        @error('deduction')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
                                                     </div>
 
+                                                    <!-- Overtime Rate (Optional) -->
                                                     <div class="col-4 mb-3">
+                                                        <label for="salaire_brut" class="form-label">Salaire brut TTC</label>
+                                                        <input type="number" class="form-control @error('salaire_brut') is-invalid @enderror" id="salaire_brut" name="salaire_brut" readonly>
+                                                        @error('salaire_brut')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+
+                                                    <!-- <div hidden class="col-4 mb-3">
                                                         <label for="nombre_heure_travaillée" class="form-label">Nombre d'heures travaillées</label>
                                                         <input type="number" class="form-control @error('nombre_heure_travaillée') is-invalid @enderror" id="nombre_heure_travaillée" name="nombre_heure_travaillée" required>
                                                         @error('nombre_heure_travaillée')
@@ -385,8 +181,8 @@
                                                         @enderror
                                                     </div>
 
-                                                    <!-- Overtime Hours (Optional) -->
-                                                    <div class="col-4 mb-3">
+                                                    Overtime Hours (Optional)
+                                                    <div hidden class="col-4 mb-3">
                                                         <label for="heures_supplementaire" class="form-label">Heures supplémentaires (facultatif)</label>
                                                         <input type="number" class="form-control @error('heures_supplementaire') is-invalid @enderror" id="heures_supplementaire" name="heures_supplementaire">
                                                         @error('heures_supplementaire')
@@ -394,18 +190,39 @@
                                                             {{ $message }}
                                                         </div>
                                                         @enderror
-                                                    </div>
-
-                                                    <!-- Initial Salary (Base Salary) -->
+                                                    </div> -->
                                                     <div class="col-4 mb-3">
-                                                        <label for="salaire_brut" class="form-label">Salaire Brut</label>
-                                                        <input type="number" class="form-control @error('salaire_brut') is-invalid @enderror" id="salaire_brut" name="salaire_brut" readonly>
-                                                        @error('salaire_brut')
+                                                        <label for="allocation" class="form-label">Allocation</label>
+                                                        <input type="number" placeholder="allocation ex= 10000" class="form-control @error('allocation') is-invalid @enderror" id="allocation" name="allocation">
+                                                        @error('allocation')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
                                                         </div>
                                                         @enderror
                                                     </div>
+                                                    <!-- prime -->
+                                                    <div class="col-12   form-group">
+                                                        <label for="prime" class="form-label">Prime</label>
+                                                        <br>
+                                                        <input type="number" placeholder="Entrer prime ex=20000" class="form-control @error('prime') is-invalid @enderror" id="prime" name="prime">
+                                                        <button hidden class="btn btn-primary">+</button>
+                                                        @error('prime')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="col-12 mb-3">
+                                                        <label for="salaire_net" class="form-label">Salaire Net à payer</label>
+                                                        <input type="number" class="form-control @error('salaire_brut') is-invalid @enderror" id="salaire_net" name="salaire_net" readonly>
+                                                        @error('salaire_net')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+
                                                 </div>
                                                 <!-- Submit Button -->
                                                 <div class="col-4">
@@ -419,18 +236,85 @@
                                                     const selectedOption = this.options[this.selectedIndex];
                                                     if (selectedOption.value) {
                                                         const salaireBase = selectedOption.text.match(/Salaire de base: (\d+(\.\d{1,2})?)/);
-                                                        const nombreHeureParSemaine = selectedOption.text.match(/Heures\/semaine: (\d+)/);
+                                                        // const nombreHeureParSemaine = selectedOption.text.match(/heure assignée: (\d+)/);
+                                                        const taxe = selectedOption.text.match(/Taxe : (\d+)/);
+
                                                         if (salaireBase) {
-                                                            document.getElementById('salaire_brut').value = salaireBase[1];
-                                                            document.getElementById('nombre_heure_assignée').value = nombreHeureParSemaine[1];
+                                                            document.getElementById('salaire_base').value = salaireBase[1];
+                                                            document.getElementById('taxe_deduit').value = taxe[1];
+                                                            document.getElementById('resulDeduct').textContent = taxe[1] + "% = " + parseFloat(salaireBase[1] * (taxe[1] / 100)).toFixed(2)
+                                                            document.getElementById('salaire_brut').value = salaireBase[1] - (salaireBase[1] * (taxe[1] / 100));
+                                                            calculateNetSalary();
+                                                            // document.getElementById('salaire_net').value = parseFloat(document.getElementById('salaire_brut').value) || 0;
+                                                            function calculateNetSalary() {
+                                                                const baseAmount = parseFloat(document.getElementById('salaire_brut').value) || 0;
+                                                                const allocation = parseFloat(document.getElementById('allocation').value) || 0;
+                                                                const prime = parseFloat(document.getElementById('prime').value) || 0;
+                                                                document.getElementById('salaire_net').value = (baseAmount + allocation + prime).toFixed(2);
+                                                            }
+
+                                                            document.getElementById('allocation').addEventListener('keydown', calculateNetSalary);
+                                                            document.getElementById('prime').addEventListener('keydown', calculateNetSalary);
                                                         }
+
+
                                                     } else {
+                                                        document.getElementById('salaire_base').value = '';
+                                                        // document.getElementById('nombre_heure_assignée').value = '';
+                                                        document.getElementById('taxe_deduit').value = '';
                                                         document.getElementById('salaire_brut').value = '';
-                                                        document.getElementById('nombre_heure_assignée').value = '';
                                                     }
                                                 });
                                             </script>
 
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
+                                <div class=" card ">
+                                    <!-- Tableau des employés -->
+                                    <div class="row">
+                                        <div class="">
+                                            <div class="card-header">
+                                                <h4 class="card-title">List de paiements</h4>
+                                            </div>
+                                            <table class="datatables-basic table" id="paimentHistTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Numéro de Référence</th>
+                                                        <th class="wrap-i">Nom de l'employé</th>
+                                                        <th>Date de prise de poste</th>
+                                                        <th>Date fin de contrat</th>
+                                                        <th>Salaire Net</th>
+                                                        <th>Deduction</th>
+                                                        <th>montant à payer</th>
+                                                        <th>Date de Paiement</th>
+                                                        <th class="wrap-it">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($paiements->reverse() as $paiement)
+                                                    <tr>
+                                                        <td>{{ $paiement->id }}</td>
+                                                        <td class="wrap-it">{{ $paiement->employee->nom }} {{ $paiement->employee->prenoms }}</td>
+                                                        <td>{{ $paiement->temps_de_travail_a_payer_debut }}</td>
+                                                        <td>{{ $paiement->temps_de_travail_a_payer_fin }}</td>
+                                                        <td>{{ $paiement->salaire_base }}</td>
+                                                        <td>{{ $paiement->deduction }}%</td>
+                                                        <td>{{ $paiement->montant_a_payer }}</td>
+                                                        <td>{{ $paiement->created_at }}</td>
+                                                        <td></td>
+                                                        <td>
+
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
 
                                         </div>
                                     </div>
@@ -444,55 +328,7 @@
 
 
 
-            <div class="row mt--2">
-                <div class="col-md-6">
 
-                </div>
-
-                <!-- Tableau des employés -->
-                <div class="col-md-12 mt-4">
-                    <div class="card shadow">
-                        <div class="card-header">
-                            <h4 class="card-title">List de paiements</h4>
-                        </div>
-                        <div class="table-wrapper card-body">
-
-                            <table class="table" id="paimentHistTable">
-                                <thead>
-                                    <tr>
-                                        <th>Numéro de Référence</th>
-                                        <th class="wrap-i">Nom de l'employé</th>
-                                        <th>Date de prise de poste</th>
-                                        <th>Date fin de contrat</th>
-                                        <th>Nombre heure travaillé</th>
-                                        <th>Salaire Net</th>
-                                        <th>montant à payer</th>
-                                        <th>Date de Paiement</th>
-                                        <th class="wrap-it">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($paiements->reverse() as $paiement)
-                                    <tr>
-                                        <td>{{ $paiement->id }}</td>
-                                        <td class="wrap-it">{{ $paiement->employee->full_name }}</td>
-                                        <td>{{ $paiement->temps_de_travail_a_payer_debut }}</td>
-                                        <td>{{ $paiement->temps_de_travail_a_payer_fin }}</td>
-                                        <td>{{ $paiement->nombre_heure_travaillée }}</td>
-                                        <td>{{ $paiement->salaire_brut }}</td>
-                                        <td>{{ $paiement->montant_a_payer }}</td>
-                                        <td>{{ $paiement->created_at }}</td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -529,51 +365,6 @@
                 tab.show(); // Show the tab
             }
         }
-    });
-
-
-    $(document).ready(function() {
-
-        $('#creTx').on('click', function() {
-            var taxH = $('#createTaxFormHolder');
-            if (taxH.hasClass('d-none')) {
-                taxH.removeClass('d-none');
-            } else {
-                taxH.addClass('d-none');
-            }
-        });
-
-
-        $('#createTaxForm').on('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            // Get form data
-            var formData = $(this).serialize();
-
-            $.ajax({
-                url: "{{ route('taxes.store') }}", // Ensure this is the correct route
-                type: "POST",
-                data: formData,
-                success: function(response) {
-                    // Handle success
-                    if (response.status === 'success') {
-                        toastr.success(response.message); // Display Toastr success message
-                        // Optionally, you can clear the form
-
-                        $('#createTaxForm')[0].reset();
-                        location.reload();
-                    }
-                },
-                error: function(xhr) {
-                    // Handle error
-                    var errorMessage = 'An error occurred while processing your request.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    toastr.error(errorMessage); // Display Toastr error message
-                }
-            });
-        });
     });
 </script>
 
@@ -648,7 +439,7 @@
     $(function() {
         'use strict';
 
-        var dt_debats_table = $('#debatsTable');
+        var dt_debats_table = $('#paimentHistTable');
 
         window.table = dt_debats_table;
 
@@ -665,81 +456,70 @@
                 displayLength: 10,
                 lengthMenu: [7, 10, 25, 50, 75, 100],
                 buttons: [{
-                        extend: 'collection',
-                        className: 'btn btn-outline-secondary dropdown-toggle mr-2',
-                        text: feather.icons['share'].toSvg({
-                            class: 'font-small-4 mr-50'
-                        }) + 'Exporter',
-                        buttons: [{
-                                extend: 'print',
-                                text: feather.icons['printer'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Print',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [3, 4, 5, 6, 7]
-                                }
-                            },
-                            {
-                                extend: 'csv',
-                                text: feather.icons['file-text'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Csv',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [3, 4, 5, 6, 7]
-                                }
-                            },
-                            {
-                                extend: 'excel',
-                                text: feather.icons['file'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Excel',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [3, 4, 5, 6, 7]
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                text: feather.icons['clipboard'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Pdf',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [3, 4, 5, 6, 7]
-                                }
-                            },
-                            {
-                                extend: 'copy',
-                                text: feather.icons['copy'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Copy',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [3, 4, 5, 6, 7]
-                                }
+                    extend: 'collection',
+                    className: 'btn btn-outline-secondary dropdown-toggle mr-2',
+                    text: feather.icons['share'].toSvg({
+                        class: 'font-small-4 mr-50'
+                    }) + 'Exporter',
+                    buttons: [{
+                            extend: 'print',
+                            text: feather.icons['printer'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Print',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [3, 4, 5, 6, 7]
                             }
-                        ]
-                    },
-                    {
-                        text: feather.icons['plus'].toSvg({
-                            class: 'mr-50 font-small-4'
-                        }) + 'Ajouter un sujet',
-                        className: 'create-new btn btn-primary',
-                        attr: {
-                            'data-toggle': 'modal',
-                            'data-target': '#modals-slide-in'
+                        },
+                        {
+                            extend: 'csv',
+                            text: feather.icons['file-text'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Csv',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [3, 4, 5, 6, 7]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            text: feather.icons['file'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Excel',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [3, 4, 5, 6, 7]
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: feather.icons['clipboard'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Pdf',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [3, 4, 5, 6, 7]
+                            }
+                        },
+                        {
+                            extend: 'copy',
+                            text: feather.icons['copy'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Copy',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [3, 4, 5, 6, 7]
+                            }
                         }
-                    }
-                ],
+                    ]
+                }],
                 responsive: true,
                 language: {
                     search: "Rechercher:",
-                    lengthMenu: "Afficher _MENU_ sujets KYC par page",
-                    info: "Affichage de _START_ à _END_ sur _TOTAL_ sujets",
+                    lengthMenu: "Afficher _MENU_ paiements par page",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ paiements",
                     infoEmpty: "Aucun enregistrement disponible",
-                    infoFiltered: "(filtré à partir de _MAX_ sujets au total)",
+                    infoFiltered: "(filtré à partir de _MAX_ paiements au total)",
                     paginate: {
                         first: "Premier",
                         last: "Dernier",
@@ -749,7 +529,6 @@
                     emptyTable: "Aucune donnée disponible dans le tableau",
                 }
             });
-            $('div.head-label').html('<h6 class="mb-0">Liste des sujets de débats</h6>');
             $('#debatsTable_filter input').attr('placeholder', 'Rechercher un sujet...');
 
         }

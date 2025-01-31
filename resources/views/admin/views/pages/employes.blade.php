@@ -50,7 +50,7 @@
                                 <thead>
                                     <tr>
 
-                                    <th>Action</th>
+                                        <th>Action</th>
                                         <th>Id Employé</th>
                                         <th>Nom et Prénom</th>
                                         <th>Poste</th>
@@ -69,7 +69,7 @@
                                                 <button class="btn-icon btn btn-transparent hide-arrow btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i data-feather="more-vertical" id="chat-header-actions" class="font-medium-2"></i>
                                                 </button>
-                                                <div class="dropdown-menu dropdown-menu-left"  aria-labelledby="chat-header-actions">
+                                                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="chat-header-actions">
                                                     <a class="dropdown-item edit-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Modifier</a>
                                                     <a class="dropdown-item pay-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Payer</a>
                                                     <a class="dropdown-item see-button" href="javascript:void(0);" data-id="{{ $employee->id }}">Voir fiche de paie</a>
@@ -465,6 +465,23 @@
                             </div>
                         </div>
 
+                        <!-- heure assignée par semaine -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit-nombre_heure_assignee">Nombre d'heure assignée (par semaine)</label>
+                                <input type="number" class="form-control" id="edit-nombre_heure_assigne" name="nombre_heure_sem_assignee">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="edit-nombre_heure_assignee">Nombre d'heure assignée (par mois)</label>
+                                <input type="number" disabled class="form-control" id="edit-nombre_heure_assignee" name="nombre_heure_assignee">
+                            </div>
+                        </div>
+
+
+                        <!-- heeur par mois -->
                         <!-- Type de contrat -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -561,6 +578,17 @@
                             </div>
                         </div>
 
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="edit-taxe_appliquee">Taxe</label>
+                                <select class="form-control" id="edit-taxe_appliquee" name="taxe_appliquee">
+                                    @foreach($taxes as $index => $tax)
+                                    <option value="{{$tax->rate }}">{{ $tax->name }} | Taux: {{ $tax->rate }} %</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Contrat signé -->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -647,6 +675,13 @@
 </script>
 
 <script>
+    var edit_heureParSem = document.getElementById('edit-nombre_heure_assigne')
+    var edit_heureParMois = document.getElementById('edit-nombre_heure_assignee')
+    edit_heureParSem.addEventListener('keyup', function() {
+        const perMois = parseInt(heureParSem.value);
+        edit_heureParMois.value = perMois * 4;
+    });
+
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', function() {
             const employeeId = this.getAttribute('data-id');
