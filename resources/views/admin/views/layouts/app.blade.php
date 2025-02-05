@@ -66,7 +66,7 @@
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="/app-assets/vendors/js/charts/apexcharts.min.js"></script>
+    <!-- <script src="/app-assets/vendors/js/charts/apexcharts.min.js"></script> -->
     <script src="/app-assets/vendors/js/extensions/toastr.min.js"></script>
     <!-- END: Page Vendor JS-->
 
@@ -78,7 +78,7 @@
     @stack('scripts');
 
     <!-- BEGIN: Page JS-->
-    <script src="/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script>
+    <!-- <script src="/app-assets/js/scripts/pages/dashboard-ecommerce.js"></script> -->
     <!-- END: Page JS-->
 
     <script>

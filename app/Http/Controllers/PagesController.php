@@ -74,7 +74,7 @@ class PagesController extends Controller
     {
         return view('admin.views.pages.etats_paiements', [
             'employees' => Employee::all(),
-            'paiements' => Paiement::all()
+            'paiements' => Paiement::with('employee')->get(),
         ]);
     }
     public function taxes_cotisations()

@@ -12,12 +12,23 @@ class PaySlip extends Model
 
     protected $fillable = [
         'employee_id',
+        'title',
+        'grade',
+        'base_salary',
+        'housing_allowance',
+        'transport_allowance',
+        'public_services_allowance',
+        'tax_paye',
+        'cnss',
+        'total_deductions',
         'gross_salary',
-        'total_taxes',
         'net_salary',
         'payment_date',
         'reference_number',
     ];
+
+    // Relationship: Payslip belongs to an Employee
+    
 
     public function employee()
     {

@@ -278,7 +278,7 @@
                                 <div class=" card ">
                                     <!-- Tableau des employés -->
                                     <div class="row">
-                                        <div class="">
+                                        <div class="col-lg-12">
                                             <div class="card-header">
                                                 <h4 class="card-title">List de paiements</h4>
                                             </div>
@@ -308,9 +308,7 @@
                                                         <td>{{ $paiement->montant_a_payer }}</td>
                                                         <td>{{ $paiement->created_at }}</td>
                                                         <td></td>
-                                                        <td>
 
-                                                        </td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>
@@ -454,72 +452,76 @@
                 info: true, // Display table info
                 dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                 displayLength: 10,
+                order: [
+                    [0, 'desc']
+                ],
                 lengthMenu: [7, 10, 25, 50, 75, 100],
                 buttons: [{
-                    extend: 'collection',
-                    className: 'btn btn-outline-secondary dropdown-toggle mr-2',
-                    text: feather.icons['share'].toSvg({
-                        class: 'font-small-4 mr-50'
-                    }) + 'Exporter',
-                    buttons: [{
-                            extend: 'print',
-                            text: feather.icons['printer'].toSvg({
-                                class: 'font-small-4 mr-50'
-                            }) + 'Print',
-                            className: 'dropdown-item',
-                            exportOptions: {
-                                columns: [3, 4, 5, 6, 7]
+                        extend: 'collection',
+                        className: 'btn btn-outline-secondary dropdown-toggle mr-2',
+                        text: feather.icons['share'].toSvg({
+                            class: 'font-small-4 mr-50'
+                        }) + 'Exporter',
+                        buttons: [{
+                                extend: 'print',
+                                text: feather.icons['printer'].toSvg({
+                                    class: 'font-small-4 mr-50'
+                                }) + 'Print',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                                }
+                            },
+                            {
+                                extend: 'csv',
+                                text: feather.icons['file-text'].toSvg({
+                                    class: 'font-small-4 mr-50'
+                                }) + 'Csv',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: feather.icons['file'].toSvg({
+                                    class: 'font-small-4 mr-50'
+                                }) + 'Excel',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                text: feather.icons['clipboard'].toSvg({
+                                    class: 'font-small-4 mr-50'
+                                }) + 'Pdf',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                                }
+                            },
+                            {
+                                extend: 'copy',
+                                text: feather.icons['copy'].toSvg({
+                                    class: 'font-small-4 mr-50'
+                                }) + 'Copy',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                                }
                             }
-                        },
-                        {
-                            extend: 'csv',
-                            text: feather.icons['file-text'].toSvg({
-                                class: 'font-small-4 mr-50'
-                            }) + 'Csv',
-                            className: 'dropdown-item',
-                            exportOptions: {
-                                columns: [3, 4, 5, 6, 7]
-                            }
-                        },
-                        {
-                            extend: 'excel',
-                            text: feather.icons['file'].toSvg({
-                                class: 'font-small-4 mr-50'
-                            }) + 'Excel',
-                            className: 'dropdown-item',
-                            exportOptions: {
-                                columns: [3, 4, 5, 6, 7]
-                            }
-                        },
-                        {
-                            extend: 'pdf',
-                            text: feather.icons['clipboard'].toSvg({
-                                class: 'font-small-4 mr-50'
-                            }) + 'Pdf',
-                            className: 'dropdown-item',
-                            exportOptions: {
-                                columns: [3, 4, 5, 6, 7]
-                            }
-                        },
-                        {
-                            extend: 'copy',
-                            text: feather.icons['copy'].toSvg({
-                                class: 'font-small-4 mr-50'
-                            }) + 'Copy',
-                            className: 'dropdown-item',
-                            exportOptions: {
-                                columns: [3, 4, 5, 6, 7]
-                            }
-                        }
-                    ]
-                }],
+                        ]
+                    }
+                ],
                 responsive: true,
                 language: {
                     search: "Rechercher:",
-                    lengthMenu: "Afficher _MENU_ paiements par page",
-                    info: "Affichage de _START_ à _END_ sur _TOTAL_ paiements",
+                    lengthMenu: "Afficher _MENU_ employés par page",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ employés",
                     infoEmpty: "Aucun enregistrement disponible",
-                    infoFiltered: "(filtré à partir de _MAX_ paiements au total)",
+                    infoFiltered: "(filtré à partir de _MAX_ employés au total)",
                     paginate: {
                         first: "Premier",
                         last: "Dernier",
@@ -529,7 +531,8 @@
                     emptyTable: "Aucune donnée disponible dans le tableau",
                 }
             });
-            $('#debatsTable_filter input').attr('placeholder', 'Rechercher un sujet...');
+            $('div.head-label').html('<h6 class="mb-0">Liste des paiments</h6>');
+            $('#paimentHistTable_filter input').attr('placeholder', 'Rechercher un paiement...');
 
         }
 
@@ -537,8 +540,6 @@
 </script>
 
 <script>
-    window.filterStatus = (tables, status) => {
-        table.column(6).search(status).draw();
-    };
+
 </script>
 @endpush

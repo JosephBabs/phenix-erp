@@ -39,25 +39,21 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills" role="tablist">
-                            <li hidden class="nav-item">
-                                <a class="nav-link d-flex align-items-center " id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
-                                    <i data-feather="user"></i><span class="d-none d-sm-block">Définition de salaire</span>
-                                </a>
-                            </li>
 
-                            <li hidden class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
-                                </a>
-                            </li>
-                            <li hidden class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center   active" id="payList-tab" data-toggle="tab" href="#paySlipList" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes des fiches de paiements</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center  active" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="file"></i><span class="d-none d-sm-block">Fiches de paie</span>
+                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="file"></i><span class="d-none d-sm-block">Créer Fiches de paie</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Bons de paiement (Vues générées)</span>
                                 </a>
                             </li>
                             <div class="p-1">
@@ -73,114 +69,121 @@
 
 
                             <!-- Social Tab starts -->
-                            <div class="tab-pane active" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
+                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
                                 <!-- users edit social form start -->
 
                                 <div class="container mt-4">
                                     <h2 class="mb-4">Créer une fiche de paie</h2>
 
-                                    
-                                    <form method="POST">
+                                    <form method="POST" id="payslipForm" action="{{ route('admin.payslips.store') }}">
                                         @csrf
 
+                                        @if(session('success'))
+                                        <div class="alert alert-success">{{ session('success') }}</div>
+                                        @endif
+
+                                        @if(session('error'))
+                                        <div class="alert alert-danger">{{ session('error') }}</div>
+                                        @endif
+                                        <div id="formAlert"></div>
+
+                                        <!-- Employee Selection -->
                                         <section class="mb-4">
                                             <div class="row">
                                                 <div class="col-md-4">
-
                                                     <label for="employee_id" class="form-label">Employé</label>
                                                     <select name="employee_id" id="employee_id" class="form-select form-control @error('employee_id') is-invalid @enderror" required>
                                                         <option value="">Sélectionner un Employé</option>
-                                                        @foreach($employees as $employee)
-                                                        <option value="{{ $employee->id }}">
-                                                            {{ $employee->nom  }} {{ $employee->prenoms  }} - Salaire de base: {{ $employee->salaire_base }} - heure assignée: {{ $employee->nombre_heure_assignee }} - Taxe : {{ $employee->taxe_appliquee }}
+                                                        @foreach($paiements as $paiement)
+                                                        <option value="{{ $paiement->employee_id }}">
+                                                            {{ $paiement->employee->nom }} {{ $paiement->employee->prenoms }} - Salaire de base: {{ $paiement->employee->salaire_base }}
                                                         </option>
                                                         @endforeach
                                                     </select>
-                                                    @error('employee_id')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                    @enderror
+                                                    @error('employee_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="form-label">Titre</label>
-                                                    <select name="title" class="form-select form-control">
-                                                        <option disabled selected>Select title</option>
-                                                    </select>
+                                                    <input type="text" name="title" class="form-control">
+                                                    @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="form-label">Grade</label>
-                                                    <select name="grade" class="form-select form-control">
-                                                        <option disabled selected>Select level</option>
-                                                    </select>
+                                                    <input type="text" name="grade" class="form-control">
+                                                    @error('grade') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                             </div>
                                         </section>
 
+                                        <!-- Salary & Allowances -->
                                         <section class="mb-4">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <label class="form-label">Salaire de base</label>
-                                                    <input type="text" name="base_salary" class="form-control" value="1290000" readonly />
+                                                    <input type="text" name="base_salary" id="base_salary" class="form-control" readonly>
+                                                    @error('base_salary') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Allocation de logement</label>
-                                                    <div class="input-group">
-                                                        <input type="text" name="housing_allowance" class="form-control" value="12900" readonly />
-                                                        <div class="input-group-text">
-                                                            <input type="checkbox" name="include_housing" checked />
-                                                        </div>
-                                                    </div>
+                                                    <input type="text" name="housing_allowance" value="0" id="housing_allowance" class="form-control">
+                                                    @error('housing_allowance') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                             </div>
 
                                             <div class="row mt-3">
                                                 <div class="col-md-6">
                                                     <label class="form-label">Indemnité de transport</label>
-                                                    <div class="input-group">
-                                                        <input type="text" name="transport_allowance" class="form-control" value="6000" readonly />
-                                                        <div class="input-group-text">
-                                                            <input type="checkbox" name="include_transport" checked />
-                                                        </div>
-                                                    </div>
+                                                    <input type="text" name="transport_allowance" value="0" id="transport_allowance" class="form-control">
+                                                    @error('transport_allowance') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="form-label">Allocation de services publics</label>
-                                                    <div class="input-group">
-                                                        <input type="text" name="public_services_allowance" class="form-control" />
-                                                        <div class="input-group-text">
-                                                            <input type="checkbox" name="include_public_services" />
-                                                        </div>
-                                                    </div>
+                                                    <input type="text" name="public_services_allowance" value="0" id="public_services_allowance" class="form-control">
+                                                    @error('public_services_allowance') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                             </div>
                                         </section>
 
+                                        <!-- Deductions & Salary Calculation -->
                                         <section class="mb-4">
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    <label class="form-label">TAX/PAYE</label>
-                                                    <input type="text" name="tax_paye" class="form-control" value="28766" readonly />
+                                                    <label class="form-label">TAX/PAYE (%)</label>
+                                                    <input type="text" name="tax_paye" id="tax_paye" class="form-control" readonly>
+                                                    @error('tax_paye') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="form-label">CNSS</label>
-                                                    <input type="text" name="cnss" class="form-control" value="8187" readonly />
+                                                    <input type="text" name="cnss" id="cnss" value="0" class="form-control">
+                                                    @error('cnss') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="form-label">Total des déductions</label>
-                                                    <input type="text" name="total_deductions" class="form-control" value="36953" readonly />
+                                                    <input type="text" name="total_deductions" id="total_deductions" class="form-control" readonly>
+                                                    @error('total_deductions') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
                                             </div>
                                         </section>
 
                                         <section>
                                             <div class="mb-3">
-                                                <label class="form-label">Salaire net</label>
-                                                <input type="text" name="net_salary" class="form-control" readonly />
+                                                <label class="form-label">Salaire brut</label>
+                                                <input type="text" name="gross_salary" id="gross_salary" class="form-control" readonly>
+                                                @error('gross_salary') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                             </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Salaire net</label>
+                                                <input type="text" name="net_salary" id="net_salary" class="form-control" readonly>
+                                                @error('net_salary') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            </div>
+
+                                            <!-- Submit Button -->
                                             <button type="submit" class="btn btn-warning w-100">Créer le bon de salaire</button>
                                         </section>
                                     </form>
+
+
+
                                 </div>
 
                                 <!-- users edit social form ends -->
@@ -191,8 +194,29 @@
                             </div>
 
 
-                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
-
+                            <div class="tab-pane active" id="paySlipList" aria-labelledby="pay-list" role="tabpanel">
+                                <div class="row w-100">
+                                    <div class="col-lg-12 container mt-5">
+                                        <table id="payslipTable" class="display table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employee</th>
+                                                    <th>Title</th>
+                                                    <th>Grade</th>
+                                                    <th>Base Salary</th>
+                                                    <th>Housing Allowance</th>
+                                                    <th>Transport Allowance</th>
+                                                    <th>Tax</th>
+                                                    <th>Total Deductions</th>
+                                                    <th>Net Salary</th>
+                                                    <th>Payment Date</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                             <!-- Social Tab ends -->
                         </div>
@@ -209,7 +233,163 @@
 
 
 @push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#payslipTable').DataTable({
+            processing: true,
+            serverSide: false,
+            responsive: true,
+            ajax: {
+                url: `/admin/payslips/`, // Fetch data from the created route
+                type: 'GET'
+            },
+            columns: [{
+                    data: 'employee_id',
+                    name: 'employee'
+                },
+                {
+                    data: 'title',
+                    name: 'title'
+                },
+                {
+                    data: 'grade',
+                    name: 'grade'
+                },
+                {
+                    data: 'base_salary',
+                    name: 'base_salary'
+                },
+                {
+                    data: 'housing_allowance',
+                    name: 'housing_allowance'
+                },
+                {
+                    data: 'transport_allowance',
+                    name: 'transport_allowance'
+                },
+                {
+                    data: 'tax_paye',
+                    name: 'tax_paye'
+                },
+                {
+                    data: 'total_deductions',
+                    name: 'total_deductions'
+                },
+                {
+                    data: 'net_salary',
+                    name: 'net_salary'
+                },
+                {
+                    data: 'payment_date',
+                    name: 'payment_date'
+                },
+                {
+                    data: null
+                }
+            ]
+        });
+    });
+</script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('payslipForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let form = this;
+            let formData = new FormData(form);
+            let submitButton = form.querySelector('button[type="submit"]');
+
+            // Disable submit button & show loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = 'Processing...';
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Créer le bon de salaire';
+
+                    let alertBox = document.getElementById('formAlert');
+                    if (data.success) {
+                        alertBox.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+                        form.reset(); // Reset form on success
+                    } else {
+                        alertBox.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                    }
+                })
+                .catch(error => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Créer le bon de salaire';
+
+                    console.error('Error:', error);
+                    document.getElementById('formAlert').innerHTML = `<div class="alert alert-danger">Une erreur est survenue. Veuillez réessayer.</div>`;
+                });
+        });
+    });
+</script>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('employee_id').addEventListener('change', function() {
+            const employeeId = this.value;
+
+            if (employeeId) {
+                const employees = @json($employees);
+                const paiements = @json($paiements);
+
+                const employee = employees.find(emp => emp.id == employeeId);
+                if (employee) {
+                    // Fill in base salary
+                    document.getElementById('base_salary').value = employee.salaire_base || 0;
+
+                    // Find corresponding payment entry
+                    const paiement = paiements.find(p => p.employee_id == employeeId);
+                    if (paiement) {
+                        // Fill in allowances and tax
+                        document.getElementById('housing_allowance').value = paiement.allocation || 0;
+                        document.getElementById('tax_paye').value = employee.taxe_appliquee || 0;
+
+                        // Calculate deductions (assuming "deduction" is a percentage)
+                        const baseSalary = parseFloat(employee.salaire_base) || 0;
+
+                        const deductionRate = parseFloat(paiement.deduction) || 0;
+                        const totalDeductions = (baseSalary * deductionRate) / 100;
+                        document.getElementById('gross_salary').value = baseSalary;
+                        document.getElementById('total_deductions').value = totalDeductions.toFixed(2);
+
+                        // Calculate net salary
+                        const netSalary = baseSalary - totalDeductions;
+                        document.getElementById('net_salary').value = netSalary.toFixed(2);
+                    } else {
+                        // Clear fields if no payment record is found
+                        clearFields();
+                    }
+                }
+            } else {
+                // Clear all fields if no employee is selected
+                clearFields();
+            }
+        });
+
+        function clearFields() {
+            document.getElementById('base_salary').value = '';
+            document.getElementById('housing_allowance').value = '';
+            document.getElementById('tax_paye').value = '';
+            document.getElementById('total_deductions').value = '';
+            document.getElementById('net_salary').value = '';
+        }
+    });
+</script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

@@ -9,17 +9,35 @@ class CreatePaySlipsTable extends Migration
     public function up()
     {
         Schema::create('pay_slips', function (Blueprint $table) {
-            $table->id(); // ID unique généré automatiquement
-            $table->foreignId('employee_id')->constrained('employees')
-            ->onDelete('cascade'); // ID de l'employé
-            // $table->foreignId('taxes')->constrained('employees'); // ID de l'employé
-            $table->decimal('gross_salary', 10, 2); // Salaire brut
-            $table->decimal('total_taxes', 10, 2); // Total des taxes
-            $table->decimal('net_salary', 10, 2); // Salaire net
-            $table->date('payment_date'); // Date de paiement
-            $table->string('reference_number'); // Numéro de référence de la paie
-            $table->timestamps(); // Champs de timestamps
+            $table->id();
+            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+
+            // Additional employee details
+            $table->string('title')->nullable();
+            $table->string('grade')->nullable();
+
+            // Salary Details
+            $table->decimal('base_salary', 10, 2);
+            $table->decimal('housing_allowance', 10, 2)->default(0);
+            $table->decimal('transport_allowance', 10, 2)->default(0);
+            $table->decimal('public_services_allowance', 10, 2)->default(0);
+
+            // Deductions
+            $table->decimal('tax_paye', 10, 2)->default(0);
+            $table->decimal('cnss', 10, 2)->default(0);
+            $table->decimal('total_deductions', 10, 2)->default(0);
+
+            // Final Computation
+            $table->decimal('net_salary', 10, 2);
+            $table->decimal('gross_salary', 10, 2);
+
+            // Other Info
+            $table->string('reference_number')->unique();
+            $table->date('payment_date');
+
+            $table->timestamps();
         });
+
     }
 
     public function down()
