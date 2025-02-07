@@ -87,9 +87,11 @@
                                                     <div class="custom-dropdown">
                                                         <input type="text" id="titre-search" class="form-control search-input" placeholder="Search..." onkeyup="filterDropdown(this)">
                                                         <div class="dropdown-options">
-                                                            <div class="option" data-value="1">Option 1</div>
-                                                            <div class="option" data-value="2">Option 2</div>
-                                                            <div class="option" data-value="3">Option 3</div>
+                                                            <div class="option" data-value="1">PDG</div>
+                                                            <div class="option" data-value="2">Superviseur</div>
+                                                            <div class="option" data-value="3">RH</div>
+                                                            <div class="option" data-value="4">Comptable</div>
+                                                            <div class="option" data-value="5">Employées</div>
                                                         </div>
                                                     </div>
                                                 </div>

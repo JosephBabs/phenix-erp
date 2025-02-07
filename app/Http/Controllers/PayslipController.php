@@ -101,12 +101,24 @@ class PayslipController extends Controller
     public function show($id)
     {
         $payslip = Payslip::findOrFail($id);
-        return view('payslips.show', compact('payslip'));
+        $employee = Employee::where('id', $payslip->employee_id)->get();
+        // dd($employee);
+        return view('admin.views.pages.payslip', compact('payslip', 'employee'));
     }
 
     public function data()
     {
         $payslip = Payslip::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'Payslip fetched successfully!',
+            'data' => $payslip
+        ], 201);
+    }
+
+    public function getSlip($id)
+    {
+        $payslip = Payslip::where('id', $id)->first();
         return response()->json([
             'success' => true,
             'message' => 'Payslip fetched successfully!',

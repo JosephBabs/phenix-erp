@@ -43,7 +43,7 @@ class EmployeeFactory extends Factory
             'num_securite_sociale' => $this->faker->unique()->randomNumber(9), // Social security number
             'num_ifu' => $this->faker->unique()->randomNumber(9), // Tax identification number
             'retraite' => $this->faker->boolean(), // Retirement regime or allocation
-            'taxe_appliquee' => $this->faker->numberBetween(3, 20), // Tax applied status
+            'taxe_appliquee' => $this->faker->numberBetween(3, 8), // Tax applied status
 
             // Document Uploads (placeholders) nombre_heure_sem_assignee
             'nombre_heure_sem_assignee' => $this->faker->numberBetween(40, 100), //

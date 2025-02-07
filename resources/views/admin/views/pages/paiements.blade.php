@@ -307,7 +307,17 @@
                                                         <td>{{ $paiement->deduction }}%</td>
                                                         <td>{{ $paiement->montant_a_payer }}</td>
                                                         <td>{{ $paiement->created_at }}</td>
-                                                        <td></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-primary text-white btn-sm " type="button" id="actionsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    Actions
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                                                                    <li><a class="dropdown-item accept-action" href="#" data-kyc-id="{{ $paiement->id }} ">Modifier</a></li>
+                                                                    <li><a class="dropdown-item reject-action" href="#" data-kyc-id="{{ $paiement->id  }}}">Supprimer</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
 
                                                     </tr>
                                                     @endforeach
@@ -376,7 +386,7 @@
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!-- -->
 <!-- BEGIN: Vendor JS-->
-<script src="../../../app-assets/vendors/js/vendors.min.js"></script>
+<!-- <script src="../../../app-assets/vendors/js/vendors.min.js"></script> -->
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
@@ -452,70 +462,75 @@
                 info: true, // Display table info
                 dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                 displayLength: 10,
+                responsive: true,
+                columnDefs: [{
+                    targets: [8],
+                    orderable: false,
+                    className: 'text-center',
+                    responsivePriority: 1
+                }],
                 order: [
                     [0, 'desc']
                 ],
                 lengthMenu: [7, 10, 25, 50, 75, 100],
                 buttons: [{
-                        extend: 'collection',
-                        className: 'btn btn-outline-secondary dropdown-toggle mr-2',
-                        text: feather.icons['share'].toSvg({
-                            class: 'font-small-4 mr-50'
-                        }) + 'Exporter',
-                        buttons: [{
-                                extend: 'print',
-                                text: feather.icons['printer'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Print',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
-                                }
-                            },
-                            {
-                                extend: 'csv',
-                                text: feather.icons['file-text'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Csv',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
-                                }
-                            },
-                            {
-                                extend: 'excel',
-                                text: feather.icons['file'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Excel',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                text: feather.icons['clipboard'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Pdf',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
-                                }
-                            },
-                            {
-                                extend: 'copy',
-                                text: feather.icons['copy'].toSvg({
-                                    class: 'font-small-4 mr-50'
-                                }) + 'Copy',
-                                className: 'dropdown-item',
-                                exportOptions: {
-                                    columns: [1, 2, 3, 4, 5, 7, 8, 9]
-                                }
+                    extend: 'collection',
+                    className: 'btn btn-outline-secondary dropdown-toggle mr-2',
+                    text: feather.icons['share'].toSvg({
+                        class: 'font-small-4 mr-50'
+                    }) + 'Exporter',
+                    buttons: [{
+                            extend: 'print',
+                            text: feather.icons['printer'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Print',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4, 5, 7, 8, 9]
                             }
-                        ]
-                    }
-                ],
-                responsive: true,
+                        },
+                        {
+                            extend: 'csv',
+                            text: feather.icons['file-text'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Csv',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            text: feather.icons['file'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Excel',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                            }
+                        },
+                        {
+                            extend: 'pdf',
+                            text: feather.icons['clipboard'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Pdf',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                            }
+                        },
+                        {
+                            extend: 'copy',
+                            text: feather.icons['copy'].toSvg({
+                                class: 'font-small-4 mr-50'
+                            }) + 'Copy',
+                            className: 'dropdown-item',
+                            exportOptions: {
+                                columns: [1, 2, 3, 4, 5, 7, 8, 9]
+                            }
+                        }
+                    ]
+                }],
                 language: {
                     search: "Rechercher:",
                     lengthMenu: "Afficher _MENU_ employés par page",

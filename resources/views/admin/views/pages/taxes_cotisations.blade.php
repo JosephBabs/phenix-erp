@@ -107,7 +107,6 @@
                                 <th>SN</th>
                                 <th>Nom</th>
                                 <th>Taux</th>
-                                <th>Actions</th>
                             </thead>
                             <tbody>
                                 @foreach($taxe->reverse() as $key => $tax)
@@ -115,10 +114,7 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{$tax->name}}</td>
                                     <td>{{$tax->rate}}</td>
-                                    <td class="d-flex " style="gap: 10px;">
-                                        <span><a href="#" class="text-primary">Modifier</a></span>
-                                        <span><a href="#" class="text-danger">Supprimer</a></span>
-                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -51,7 +51,7 @@
                                 </a>
                             </li>
 
-                            <li class="nav-item">
+                            <li hidden class="nav-item">
                                 <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
                                     <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Bons de paiement (Vues générées)</span>
                                 </a>
@@ -228,12 +228,146 @@
     </div>
 </div>
 
+
+
+<!-- Edit Payslip Modal -->
+<!-- Edit Payslip Modal -->
+<div class="modal fade" id="editPayslipModal" tabindex="-1" aria-labelledby="editPayslipModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPayslipModalLabel">Modifier le Bon de Paiement</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="editPayslipForm">
+                    @csrf
+                    <input type="hidden" id="edit-payslip_id" name="id">
+
+                    <div id="formAlert"></div>
+
+                    <!-- Employee Selection -->
+                    <section class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="edit-employee_id" class="form-label">Employé</label>
+                                <input type="text" id="edit-employee_id" name="employee_id" hidden class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Titre</label>
+                                <input type="text" name="title" id="edit-title" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Grade</label>
+                                <input type="text" name="grade" id="edit-grade" class="form-control">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Salary & Allowances -->
+                    <section class="mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Salaire de base</label>
+                                <input type="text" name="base_salary" id="edit-base_salary" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Allocation de logement</label>
+                                <input type="text" name="housing_allowance" id="edit-housing_allowance" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Indemnité de transport</label>
+                                <input type="text" name="transport_allowance" id="edit-transport_allowance" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Allocation de services publics</label>
+                                <input type="text" name="public_services_allowance" id="edit-public_services_allowance" class="form-control">
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Deductions & Salary Calculation -->
+                    <section class="mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">TAX/PAYE (%)</label>
+                                <input type="text" name="tax_paye" id="edit-tax_paye" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">CNSS</label>
+                                <input type="text" name="cnss" id="edit-cnss" class="form-control">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Total des déductions</label>
+                                <input type="text" name="total_deductions" id="edit-total_deductions" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="mb-3">
+                            <label class="form-label">Salaire brut</label>
+                            <input type="text" name="gross_salary" id="edit-gross_salary" class="form-control" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Salaire net</label>
+                            <input type="text" name="net_salary" id="edit-net_salary" class="form-control" readonly>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-warning w-100">Mettre à jour</button>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @endsection
 
 
 
 @push('scripts')
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Open Edit Modal and Fetch Data
+
+
+
+        // Handle Form Submission
+        document.getElementById("editPayslipForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let payslipId = document.getElementById("payslip_id").value;
+            let formData = new FormData(this);
+
+            fetch(`/admin/payslips/${payslipId}/update`, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Payslip updated successfully!");
+                        location.reload();
+                    } else {
+                        alert("Error updating payslip.");
+                    }
+                })
+                .catch(error => console.error("Error submitting form:", error));
+        });
+    });
+
+
+
     $(document).ready(function() {
         $('#payslipTable').DataTable({
             processing: true,
@@ -243,6 +377,11 @@
                 url: `/admin/payslips/`, // Fetch data from the created route
                 type: 'GET'
             },
+            columnDefs: [{
+                targets: 10,
+                orderable: false,
+                responsivePriority: 1,
+            }],
             columns: [{
                     data: 'employee_id',
                     name: 'employee'
@@ -284,14 +423,120 @@
                     name: 'payment_date'
                 },
                 {
-                    data: null
+                    data: null,
+                    render: function(data, type, row) {
+                        return `<td>
+                            <div class="dropdown">
+                                    <button class="btn btn-primary text-white btn-sm " type="button" id="actionsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                                        <li><a class="dropdown-item accept-action editPayslipBtn" onclick="editThis(${row.id})" href="#" data-id="${row.id}">Modifier</a></li>
+                                        <li><a class="dropdown-item reject-action" href="/admin/payslips/${row.id}" data-kyc-id="${row.id}">Générer le bon de paiement</a></li>
+                                    </ul>
+                                </div>
+                        </td>`;
+                    }
                 }
             ]
         });
     });
+
+
+
+    function editThis(payslipId) {
+        fetch(`/admin/payslips/${payslipId}/show`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("edit-payslip_id").value = data.data.id;
+                    document.getElementById("edit-employee_id").value = data.data.employee_id;
+                    document.getElementById("edit-title").value = data.data.title;
+                    document.getElementById("edit-grade").value = data.data.grade;
+                    document.getElementById("edit-base_salary").value = data.data.base_salary;
+                    document.getElementById("edit-housing_allowance").value = data.data.housing_allowance;
+                    document.getElementById("edit-transport_allowance").value = data.data.transport_allowance;
+                    document.getElementById("edit-public_services_allowance").value = data.data.public_services_allowance;
+                    document.getElementById("edit-tax_paye").value = data.data.tax_paye;
+                    document.getElementById("edit-cnss").value = data.data.cnss;
+                    document.getElementById("edit-total_deductions").value = data.data.total_deductions;
+                    document.getElementById("edit-gross_salary").value = data.data.gross_salary;
+                    document.getElementById("edit-net_salary").value = data.data.net_salary;
+
+                    // calculateEditSalary(data.employee_id);
+
+                // Show the modal
+                new bootstrap.Modal(document.getElementById("editPayslipModal")).show();
+            })
+            .catch(error => console.error("Error fetching payslip data:", error));
+
+    }
+
+
+   // Function to calculate salary details
+   function calculateEditSalary(employeeId) {
+
+
+            // Fill in allowances and tax
+            document.getElementById('edit-housing_allowance').value = paiement.allocation || 0;
+            document.getElementById('edit-tax_paye').value = paiement.employee.taxe_appliquee || 0;
+
+            // Calculate deductions (assuming "deduction" is a percentage)
+            const baseSalary = parseFloat(paiement.employee.salaire_base) || 0;
+            const deductionRate = parseFloat(paiement.deduction) || 0;
+            const totalDeductions = (baseSalary * deductionRate) / 100;
+
+            document.getElementById('edit-gross_salary').value = baseSalary;
+            document.getElementById('edit-total_deductions').value = totalDeductions.toFixed(2);
+
+            // Calculate net salary
+            const netSalary = baseSalary - totalDeductions;
+            document.getElementById('edit-net_salary').value = netSalary.toFixed(2);
+
+    }
+
+    // Function to clear edit modal fields
+    function clearEditFields() {
+        document.getElementById('edit-housing_allowance').value = "";
+        document.getElementById('edit-tax_paye').value = "";
+        document.getElementById('edit-gross_salary').value = "";
+        document.getElementById('edit-total_deductions').value = "";
+        document.getElementById('edit-net_salary').value = "";
+    }
+
+    // Open Edit Modal and Fetch Data
+
+
+    // Handle Form Submission
+    document.getElementById("editPayslipForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let payslipId = document.getElementById("edit-payslip_id").value;
+        let formData = new FormData(this);
+
+        fetch(`/admin/payslips/${payslipId}/update`, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Payslip updated successfully!");
+                location.reload();
+            } else {
+                alert("Error updating payslip.");
+            }
+        })
+        .catch(error => console.error("Error submitting form:", error));
+    });
+
 </script>
 
 <script>
+
+
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('payslipForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
@@ -397,7 +642,7 @@
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!-- -->
 <!-- BEGIN: Vendor JS-->
-<script src="../../../app-assets/vendors/js/vendors.min.js"></script>
+<!-- <script src="../../../app-assets/vendors/js/vendors.min.js"></script> -->
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->

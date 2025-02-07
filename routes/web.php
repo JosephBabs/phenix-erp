@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('payslips/create', [PayslipController::class, 'create'])->name('payslips.create');
         Route::post('payslips/add', [PayslipController::class, 'store'])->name('payslips.store');
         Route::get('payslips/', [PayslipController::class, 'data'])->name('payslips.data');
-        // Route::get('payslips/id', [PayslipController::class, 'show'])->name('payslips.show');
+        Route::get('payslips/{id}/show', [PayslipController::class, 'getSlip'])->name('payslips.show');
         Route::get('payslips/{id}/edit', [PayslipController::class, 'edit'])->name('payslips.edit');
         Route::put('payslips/{id}', [PayslipController::class, 'update'])->name('payslips.update');
         Route::delete('payslips/{id}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
