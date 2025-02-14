@@ -18,6 +18,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\TaxeController;
+use App\Http\Controllers\CompanyController;
 
 
 
@@ -56,6 +57,10 @@ Route::middleware(['auth'])->group(function () {
     // Route::resource('employees', EmployeeController::class);
     // Route::resource('taxes', TaxController::class);
     // Route::resource('pay-slips', PaySlipController::class);
+    Route::post('/companies/store', [CompanyController::class, 'store'])->name('companies.store');
+    Route::put('/company/update/{id}', [CompanyController::class, 'update'])->name('company.update');
+
+
     Route::post('taxte', [TaxeController::class, 'store'])->name('taxes.store');
     Route::get('/admin/employees/creer', [PagesController::class, 'employeCreer']);
     Route::get('/admin/employes', [PagesController::class, 'employes']);

@@ -52,12 +52,16 @@
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                     <div>
                                         <div class="logo-wrapper">
-                                            <img id="logo-img" width="120px" height="auto" src="/images/phenix_logo.png" alt="Logo" />
-
+                                            <img id="logo-img" width="120px" height="auto" src="/{{ $company->logo  }}?? 'https://cdn-icons-png.flaticon.com/512/149/149071.png' " alt="Logo" />
                                         </div>
-                                        <p class="card-text mb-25">Abomey Calavi, Iita</p>
-                                        <p class="card-text mb-25">Ms Dimitrius c/245</p>
-                                        <p class="card-text mb-0">+229 61654378</p>
+                                        @if($company)
+                                        <p class="card-text mb-25">{{ $company->nom }}</p>
+                                        <p class="card-text mb-25">{{ $company->adresse }}</p>
+                                        <p class="card-text mb-0">{{ $company->email }}</p>
+                                        <p class="card-text mb-0">{{ $company->telephone }}</p>
+                                        @else
+                                        <p><a href="/admin/parametres">Veuillez Configurer <br> le profile d'entreprise</a></p>
+                                        @endif
                                     </div>
                                     <div class="mt-md-0 mt-2">
                                         <h4 class="invoice-title">

@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.min.css">
     <!-- END: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.min.css">
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css">
@@ -73,6 +74,33 @@
     <!-- BEGIN: Theme JS-->
     <script src="/app-assets/js/core/app-menu.js"></script>
     <script src="/app-assets/js/core/app.js"></script>
+    <script>
+        function showToast(message, type) {
+            switch (type) {
+                case 'error':
+                case 'danger':
+                    toastr.error(message);
+                    break;
+                case 'warning':
+                    toastr.warning(message);
+                    break;
+                case 'success':
+                    toastr.success(message);
+                    break;
+                default:
+                    toastr.success(message);
+                    break;
+            }
+        }
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-center",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+        };
+    </script>
     <!-- END: Theme JS-->
 
     @stack('scripts');

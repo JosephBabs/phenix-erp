@@ -36,18 +36,19 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills" role="tablist">
+
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center active" id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
-                                    <i data-feather="user"></i><span class="d-none d-sm-block">Définition de salaire</span>
+                                <a class="nav-link d-flex align-items-center active" id="profil-Entreprise" data-toggle="tab" href="#profilEntreprise" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="user"></i><span class="d-none d-sm-block">Profil de l'entreprise</span>
                                 </a>
                             </li>
 
-                            <li hidden  class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="payerEmp-tab" data-toggle="tab" href="#payerEmp" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="salaire-tab" data-toggle="tab" href="#definition" aria-controls="account" role="tab" aria-selected="true">
+                                    <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Définition de salaire</span>
                                 </a>
                             </li>
-                            <li hidden  class="nav-item">
+                            <li hidden class="nav-item">
                                 <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
                                     <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
                                 </a>
@@ -63,7 +64,7 @@
                         </ul>
                         <div class="tab-content">
                             <!-- Account Tab starts -->
-                            <div class="tab-pane active" id="definition" aria-labelledby="account-tab" role="tabpanel">
+                            <div class="tab-pane" id="definition" aria-labelledby="account-tab" role="tabpanel">
                                 <!-- users edit media object start -->
                                 <div class="shadow card">
                                     <div class="card-header">
@@ -72,16 +73,7 @@
                                     <div class="p-2">
                                         <form>
                                             <div class="row g-3">
-                                                <!-- Titre -->
-                                                <!-- <div class="col-md-4">
-                                                    <label for="titre" class="form-label">Titre</label>
-                                                    <select id="titre" class="form-select form-control">
-                                                        <option selected>Sélectionner une option</option>
-                                                        <option value="1">Option 1</option>
-                                                        <option value="2">Option 2</option>
-                                                        <option value="3">Option 3</option>
-                                                    </select>
-                                                </div> -->
+
                                                 <div class="col-md-4">
                                                     <label for="titre" class="form-label">Titre</label>
                                                     <div class="custom-dropdown">
@@ -191,9 +183,86 @@
 
 
                             <!-- Social Tab starts -->
-                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
+                            <div class="tab-pane  active" id="profilEntreprise" aria-labelledby="social-tab" role="tabpanel">
                                 <!-- users edit social form start -->
 
+                                <form id="create-company-form" method="POST" action="{{ isset($company) ? route('company.update', $company->id) : route('company.store') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    @if(isset($company))
+                                    @method('PUT')
+                                    @endif
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="account" aria-labelledby="account-tab" role="tabpanel">
+                                            <div class="media mb-2 border p-3 rounded">
+                                                <img id="profile-image" src="/{{ $company->logo ?? 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}"
+                                                    alt="Logo de l'entreprise"
+                                                    class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer"
+                                                    height="90" width="90" />
+                                                <div class="media-body mt-50">
+                                                    <label for="this">Logo de l'entreprise</label>
+                                                    <br>
+                                                    <div class="col-12 d-flex mt-1 px-0">
+                                                        <label class="btn btn-primary mr-75 mb-0" for="change-dp-picture">
+                                                            <span class="d-none d-sm-block">Choisir une photo</span>
+                                                            <input class="form-control" hidden type="file" id="change-dp-picture" name="logo" accept="image/png, image/jpeg, image/jpg" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="nom">Nom de la structure</label>
+                                                        <input type="text" class="form-control" id="nom" name="nom" value="{{ $company->nom ?? '' }}" placeholder="Nom de l'entreprise" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="ifu">IFU</label>
+                                                        <input type="text" class="form-control" id="ifu" name="ifu" value="{{ $company->ifu ?? '' }}" placeholder="65xxxxxxxx (13 caractères)" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="date_creation">Date de création</label>
+                                                        <input type="date" class="form-control" id="date_creation" name="date_creation" value="{{ $company->date_creation ?? '' }}" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="adresse">Adresse</label>
+                                                        <input type="text" class="form-control" id="adresse" name="adresse" value="{{ $company->adresse ?? '' }}" placeholder="Adresse" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="telephone">Téléphone</label>
+                                                        <input type="text" class="form-control" id="telephone" name="telephone" value="{{ $company->telephone ?? '' }}" placeholder="Téléphone" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="email">Email</label>
+                                                        <input type="email" class="form-control" id="email" name="email" value="{{ $company->email ?? '' }}" placeholder="Email" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                                <button type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">
+                                                    {{ isset($company) ? 'Mettre à jour' : 'Soumettre' }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
 
                                 <!-- users edit social form ends -->
                             </div>
@@ -254,6 +323,135 @@
 <!-- END: Page JS-->
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const getProfileCompany = function() {
+            $.ajax({
+                url: '/api/get-company',
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    $('#company_name').text(response.company_name);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        // getProfileCompany();
+        var CompanyForm = document.getElementById('create-company-form');
+
+        // CompanyForm.addEventListener('submit', function(e) {
+        //     e.preventDefault();
+        //     var formData = new FormData(CompanyForm);
+
+        //     $.ajax({
+        //         url: '/companies/store',
+        //         type: 'POST',
+        //         data: formData,
+        //         contentType: false,
+        //         processData: false,
+        //         success: function(response) {
+        //             console.log(response);
+        //         },
+        //         error: function(error) {
+        //             console.error(error);
+        //         }
+        //     });
+        // })
+
+        document.getElementById('create-company-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+            var formAction = this.getAttribute('action');
+
+            $.ajax({
+                url: formAction,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        showToast(response.message, 'success');
+                    } else {
+                        showToast("Une erreur inattendue s'est produite.", 'error');
+                    }
+                },
+                error: function(xhr) {
+                    let errorMessage = "Une erreur s'est produite. Veuillez réessayer.";
+
+                    // Check if response is JSON and contains a message
+                    if (xhr.responseJSON) {
+                        if (xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else if (xhr.responseJSON.errors) {
+                            // Handle validation errors (e.g., Laravel form validation)
+                            errorMessage = Object.values(xhr.responseJSON.errors).flat().join('<br>');
+                        }
+                    }
+
+                    showToast(errorMessage, 'error');
+                }
+            });
+
+        });
+
+        /**
+         * Function to display toast messages
+         */
+
+
+    });
+
+    const profileImage = document.getElementById('profile-image');
+    const fileInput = document.getElementById('change-dp-picture');
+    const labelPhoto = document.getElementById('photo-label');
+    const photoIdentiteInput = document.getElementById('photo_identite');
+    const removePhotoButton = document.getElementById('remove-photo');
+    const removePhotoMobileButton = document.getElementById('remove-photo-mobile');
+    const labelText = document.getElementById('label-photo');
+
+
+    // Handle file input change
+    fileInput.addEventListener('change', function(event) {
+        // alert('Hello world');
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update the profile image with the selected file
+                profileImage.src = e.target.result;
+                // Show "Changer photo" option
+                labelText.innerText = "Choisir une autre photo";
+                labelPhoto.classList.remove("btn-primary");
+                labelPhoto.classList.add("btn-warning");
+                // Display the remove button
+                removePhotoButton.classList.remove("d-none");
+                removePhotoMobileButton.classList.remove("d-none");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle remove photo button click
+    removePhotoButton.addEventListener('click', function() {
+        profileImage.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        labelText.innerText = "Choisir une photo";
+        labelPhoto.classList.remove("btn-warning");
+        labelPhoto.classList.add("btn-primary");
+        removePhotoButton.classList.add("d-none");
+        removePhotoMobileButton.classList.add("d-none");
+        fileInput.value = ''; // Reset the input value
+    });
+
+    removePhotoMobileButton.addEventListener('click', function() {
+        removePhotoButton.click(); // Trigger the same action for mobile
+    });
+
     $(function() {
         'use strict';
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payslip;
 use App\Models\Employee;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
@@ -101,9 +102,19 @@ class PayslipController extends Controller
     public function show($id)
     {
         $payslip = Payslip::findOrFail($id);
+        $company = Company::first();
         $employee = Employee::where('id', $payslip->employee_id)->get();
         // dd($employee);
-        return view('admin.views.pages.payslip', compact('payslip', 'employee'));
+        $json = response()->json([
+            'success' => true,
+            'message' => 'Payslip fetched successfully!',
+            'data' => [
+                'payslip' => $payslip,
+                'employee' => $employee,
+                'company' => $company
+            ]
+        ], 200);
+        return view('admin.views.pages.payslip', compact('payslip', 'employee', 'company', 'json'));
     }
 
     public function data()
