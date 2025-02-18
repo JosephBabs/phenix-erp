@@ -237,7 +237,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editPayslipModalLabel">Modifier le Bon de Paiement</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
             </div>
             <div class="modal-body">
                 <form method="POST" id="editPayslipForm">
@@ -249,7 +249,7 @@
                     <!-- Employee Selection -->
                     <section class="mb-4">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-4" hidden>
                                 <label for="edit-employee_id" class="form-label">Employé</label>
                                 <input type="text" id="edit-employee_id" name="employee_id" hidden class="form-control">
                             </div>
