@@ -454,7 +454,8 @@
         if (dt_debats_table.length) {
             var dt_debats = dt_debats_table.DataTable({
                 processing: true, // Show loading indicator while processing
-                serverSide: false, // Set this to true if using server-side processing
+                serverSide: false,
+                responsive: true, // Set this to true if using server-side processing
                 paging: true, // Enable pagination
                 searching: true, // Enable searching
                 ordering: true, // Enable sorting
@@ -462,7 +463,6 @@
                 info: true, // Display table info
                 dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                 displayLength: 10,
-                responsive: true,
                 columnDefs: [{
                     targets: [8],
                     orderable: false,
