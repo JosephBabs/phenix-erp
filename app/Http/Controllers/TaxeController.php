@@ -72,8 +72,8 @@ class TaxeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0|max:100',
-            'base_calculation' => 'required|in:gross_salary,taxable_income',
-            'is_active' => 'required|boolean',
+            // 'base_calculation' => 'required|in:gross_salary,taxable_income',
+            // 'is_active' => 'required|boolean',
         ]);
 
         $taxe = Taxe::findOrFail($id); // Find tax by ID or fail
@@ -84,6 +84,7 @@ class TaxeController extends Controller
             'message' => 'Tax updated successfully!',
             'data' => $taxe,
         ]);
+        // return redirect()->back()->with('success', 'Taxe mise à jour avec succès!');
     }
 
     /**
@@ -94,9 +95,11 @@ class TaxeController extends Controller
         $taxe = Taxe::findOrFail($id); // Find tax by ID or fail
         $taxe->delete();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Tax deleted successfully!',
-        ]);
+
+    return redirect()->back()->with('success', 'Taxe supprimée avec succès!');
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Tax deleted successfully!',
+        // ]);
     }
 }

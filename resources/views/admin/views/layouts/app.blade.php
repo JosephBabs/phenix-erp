@@ -18,7 +18,6 @@
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/charts/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.min.css">
     <!-- END: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/extensions/toastr.min.css">
 
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/css/bootstrap.css">
@@ -32,7 +31,7 @@
 
 
     <!-- BEGIN: Custom CSS-->
-     <!-- BEGIN: Vendor CSS-->
+    <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="/app-assets/vendors/css/tables/datatable/responsive.bootstrap4.min.css">
@@ -61,7 +60,19 @@
     <div class="drag-target"></div>
     @include('admin.views.partials.footer')
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+            showToast("{{ session('success') }}", 'success');
+            @endif
 
+            @if($errors -> any())
+            @foreach($errors -> all() as $error)
+            showToast("{{ $error }}", 'error');
+            @endforeach
+            @endif
+        });
+    </script>
     <!-- BEGIN: Vendor JS-->
     <script src="/app-assets/vendors/js/vendors.min.js"></script>
     <!-- BEGIN Vendor JS-->

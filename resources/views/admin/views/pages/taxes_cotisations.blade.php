@@ -107,6 +107,7 @@
                                 <th>SN</th>
                                 <th>Nom</th>
                                 <th>Taux</th>
+                                <th>Actions</th>
                             </thead>
                             <tbody>
                                 @foreach($taxe->reverse() as $key => $tax)
@@ -114,11 +115,29 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{$tax->name}}</td>
                                     <td>{{$tax->rate}}</td>
+                                    <td>
+                                        <!-- Edit Button -->
+                                        <button data-target="editTaxModal" class="btn btn-sm btn-primary edit-tax"
+                                            data-id="{{ $tax->id }}"
+                                            data-name="{{ $tax->name }}"
+                                            data-rate="{{ $tax->rate }}">
+                                            Éditer
+                                        </button>
 
+                                        <!-- Delete Button -->
+                                        <form action="{{ route('taxe.destroy', $tax->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr?');">
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+
                     </div>
                 </div>
 
@@ -127,6 +146,43 @@
         </div>
     </div>
 </div>
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="editTaxModal" tabindex="-1" aria-labelledby="editTaxModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTaxModalLabel">Modifier la Taxe</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editTaxForm" method="PUT">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="tax_id">
+
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input type="text" class="form-control" name="name" id="tax_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Taux</label>
+                        <input type="number" step="0.01" class="form-control" name="rate" id="tax_rate" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Mettre à jour</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -164,6 +220,23 @@
 
 <script>
     $(document).ready(function() {
+        $('.edit-tax').on('click', function() {
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            let rate = $(this).data('rate');
+
+            $('#tax_id').val(id);
+            $('#tax_name').val(name);
+            $('#tax_rate').val(rate);
+
+            // Set the action URL for the form dynamically
+            $('#editTaxForm').attr('data-id',  id);
+
+            $('#editTaxModal').modal('show');
+        });
+    });
+
+    $(document).ready(function() {
 
         $('#creTx').on('click', function() {
             var taxH = $('#createTaxFormHolder');
@@ -184,6 +257,38 @@
             $.ajax({
                 url: "{{ route('taxes.store') }}", // Ensure this is the correct route
                 type: "POST",
+                data: formData,
+                success: function(response) {
+                    // Handle success
+                    if (response.status === 'success') {
+                        toastr.success(response.message); // Display Toastr success message
+                        // Optionally, you can clear the form
+
+                        $('#createTaxForm')[0].reset();
+                        location.reload();
+                    }
+                },
+                error: function(xhr) {
+                    // Handle error
+                    var errorMessage = 'An error occurred while processing your request.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    toastr.error(errorMessage); // Display Toastr error message
+                }
+            });
+        });
+
+        $('#editTaxForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Get form data
+            var formData = $(this).serialize();
+            var id = $(this).data('id'); // Get the ID of the tax to be updated
+
+            $.ajax({
+                url: `/taxes/update/${id}`, // Ensure this is the correct route
+                type: "PUT",
                 data: formData,
                 success: function(response) {
                     // Handle success

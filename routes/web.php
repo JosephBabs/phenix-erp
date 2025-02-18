@@ -62,6 +62,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::post('taxte', [TaxeController::class, 'store'])->name('taxes.store');
+    Route::put('taxes/update/{id}', [TaxeController::class, 'update'])->name('taxes.update');
+    Route::delete('taxes/delete/{id}', [TaxeController::class, 'destroy'])->name('taxe.destroy');
+    Route::put('/taxes/{id}', [TaxeController::class, 'update'])->name('tax.update');
+Route::delete('/taxes/{id}', [TaxeController::class, 'destroy'])->name('tax.destroy');
+
     Route::get('/admin/employees/creer', [PagesController::class, 'employeCreer']);
     Route::get('/admin/employes', [PagesController::class, 'employes']);
     Route::get('/admin/paiements', [PagesController::class, 'paiements'])->name('admin.paiements');
