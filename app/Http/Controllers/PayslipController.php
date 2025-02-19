@@ -119,7 +119,8 @@ class PayslipController extends Controller
 
     public function data()
     {
-        $payslip = Payslip::all();
+        $payslip = Payslip::with('employee')->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Payslip fetched successfully!',

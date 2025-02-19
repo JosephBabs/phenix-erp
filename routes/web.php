@@ -10,6 +10,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\CircularController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\CongeController;
+use App\Http\Controllers\PeriodeExerciceController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\StockController;
@@ -43,8 +45,24 @@ Route::middleware(['auth'])->group(function () {
         Route::get('payslips/{id}/edit', [PayslipController::class, 'edit'])->name('payslips.edit');
         Route::put('payslips/{id}', [PayslipController::class, 'update'])->name('payslips.update');
         Route::delete('payslips/{id}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
+        Route::resource('conges', CongeController::class);
+        Route::post('conges/store', [CongeController::class, 'store'])->name('conges.store');
+        Route::post('conges/{conge}/terminer', [CongeController::class, 'changerStatut'])->name('conges.terminer');
     });
 
+    Route::post('/periodes/generate', [PeriodeExerciceController::class, 'store'])->name('periodes.generate');
+    Route::post('/periodes/store', [PeriodeExerciceController::class, 'store'])->name('periodes.store');
+    Route::put('/periodes/update/{id}', [PeriodeExerciceController::class, 'update'])->name('periodes.update');
+    Route::get('/periodes/list', [PeriodeExerciceController::class, 'getPeriodes']);
+
+    // Routes pour l'édition et la suppression avec modals
+    Route::get('/periodes/{id}/edit', [PeriodeExerciceController::class, 'edit'])->name('periodes.edit');
+    Route::delete('/periodes/{id}', [PeriodeExerciceController::class, 'destroy'])->name('periodes.destroy');
+
+    Route::post('conges/{conge}/terminer', [CongeController::class, 'changerStatut'])->name('conges.terminer');
+    Route::post('conges/store', [CongeController::class, 'store'])->name('conges.store');
+    Route::put('conges/update', [CongeController::class, 'update'])->name('conges.update');
+    Route::delete('conges/delete', [CongeController::class, 'destroy'])->name('conges.destroy');
     Route::get('/admin/dashboard', [PagesController::class, 'index'])->name('dashboard');
     Route::get('/admin/tb', [DashboardController::class, 'tb'])->name('dashboard');
 
@@ -65,14 +83,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('taxes/update/{id}', [TaxeController::class, 'update'])->name('taxes.update');
     Route::delete('taxes/delete/{id}', [TaxeController::class, 'destroy'])->name('taxe.destroy');
     Route::put('/taxes/{id}', [TaxeController::class, 'update'])->name('tax.update');
-Route::delete('/taxes/{id}', [TaxeController::class, 'destroy'])->name('tax.destroy');
+    Route::delete('/taxes/{id}', [TaxeController::class, 'destroy'])->name('tax.destroy');
 
     Route::get('/admin/employees/creer', [PagesController::class, 'employeCreer']);
     Route::get('/admin/employes', [PagesController::class, 'employes']);
     Route::get('/admin/paiements', [PagesController::class, 'paiements'])->name('admin.paiements');
     Route::get('/admin/etats_paiements', [PagesController::class, 'etats_paiements']);
     Route::get('/admin/taxes_cotisations', [PagesController::class, 'taxes_cotisations']);
-    Route::get('/admin/gestion_conges', [PagesController::class, 'gestion_conges']);
+    Route::get('/admin/gestion_conges', [CongeController::class, 'index']);
     Route::get('/admin/notifications', [PagesController::class, 'notifications']);
     Route::get('/admin/parametres', [PagesController::class, 'parametres']);
     Route::get('/admin/supports', [PagesController::class, 'supports']);

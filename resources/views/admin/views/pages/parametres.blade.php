@@ -53,9 +53,9 @@
                                     <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
                                 </a>
                             </li>
-                            <li hidden class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="file"></i><span class="d-none d-sm-block">Fiches de paie</span>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#exoFsci" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="file"></i><span class="d-none d-sm-block">Créer une période d'exercice fiscal</span>
                                 </a>
                             </li>
                             <div class="p-1">
@@ -186,7 +186,7 @@
                             <div class="tab-pane  active" id="profilEntreprise" aria-labelledby="social-tab" role="tabpanel">
                                 <!-- users edit social form start -->
 
-                                <form id="create-company-form" method="POST" action="{{ isset($company) ? route('company.update', $company->id) : route('company.store') }}" enctype="multipart/form-data">
+                                <form id="create-company-form" method="POST" action="{{ isset($company) ? route('company.update', $company->id) : route('companies.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     @if(isset($company))
                                     @method('PUT')
@@ -267,17 +267,76 @@
                                 <!-- users edit social form ends -->
                             </div>
 
-                            <div class="tab-pane" id="payerEmp" aria-labelledby="payer-emp" role="tabpanel">
+                            <div class="tab-pane" id="exoFsci" aria-labelledby="payer-emp" role="tabpanel">
+                                <div class="container">
+                                    <h2>Gestion des périodes d'exercice fiscal</h2>
 
-                            </div>
+                                    <!-- Bouton pour générer automatiquement la période -->
+                                    <div class="d-flex justify-content-between">
+                                        <form action="{{ route('periodes.generate') }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success">Générer Période Automatique</button>
+                                        </form>
+                                        <!-- Bouton pour ouvrir le modal de création -->
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createPeriodeModal">
+                                            Ajouter une période fiscale
+                                        </button>
+                                    </div>
 
 
-                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
-                                <div class="row ">
+                                    @if(session('success'))
+                                    <div class="alert alert-success mt-3">{{ session('success') }}</div>
+                                    @endif
 
 
+                                    @if(session('error'))
+                                    <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+                                    @endif
+                                    @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @endif
+
+                                    <table class="table mt-4">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Date Début</th>
+                                                <th>Date Fin</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Boutons pour ouvrir les modals d'édition -->
+                                            @foreach ($periodes as $periode)
+                                            <tr>
+                                                <td>{{ $periode->id }}</td>
+                                                <td>{{ $periode->date_debut }}</td>
+                                                <td>{{ $periode->date_fin }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editPeriodeModal-{{ $periode->id }}">
+                                                        Modifier
+                                                    </button>
+                                                    <form action="{{ route('periodes.destroy', $periode->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer cette période ?')">Supprimer</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
+
+
+
                             <!-- Social Tab ends -->
                         </div>
                     </div>
@@ -287,6 +346,65 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal de création -->
+<div class="modal fade" id="createPeriodeModal" tabindex="-1" aria-labelledby="createPeriodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPeriodeModalLabel">Créer une période fiscale</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('periodes.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="date_debut" class="form-label">Date de début</label>
+                        <input type="date" class="form-control" id="date_debut" name="date_debut" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_fin" class="form-label">Date de fin</label>
+                        <input type="date" class="form-control" id="date_fin" name="date_fin" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal d'édition -->
+@foreach ($periodes as $periode)
+<div class="modal fade" id="editPeriodeModal-{{ $periode->id }}" tabindex="-1" aria-labelledby="editPeriodeModalLabel-{{ $periode->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPeriodeModalLabel-{{ $periode->id }}">Modifier la période fiscale</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('periodes.update', $periode->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="date_debut" class="form-label">Date de début</label>
+                        <input type="date" class="form-control" id="date_debut" name="date_debut" value="{{ $periode->date_debut }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date_fin" class="form-label">Date de fin</label>
+                        <input type="date" class="form-control" id="date_fin" name="date_fin" value="{{ $periode->date_fin }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 
 @endsection
 

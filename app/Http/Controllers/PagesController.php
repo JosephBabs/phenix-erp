@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Paiement;
 
-use App\Models\{Employee, Memo, Taxe, Company, PaymentRequest, StaffApplication};
+use App\Models\{Employee, Memo, Taxe, PeriodeExercice, Company, PaymentRequest, StaffApplication};
 
 use Illuminate\Http\Request;
 
@@ -96,7 +96,8 @@ class PagesController extends Controller
     public function parametres()
     {
         $company = Company::first();
-        return view('admin.views.pages.parametres', compact('company'));
+        $periodes = PeriodeExercice::all();
+        return view('admin.views.pages.parametres', compact('company', 'periodes'));
     }
     public function supports()
     {

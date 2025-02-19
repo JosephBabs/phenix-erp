@@ -45,7 +45,7 @@
                                     <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" hidden>
                                 <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
                                     <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
                                 </a>
@@ -65,7 +65,7 @@
                                 <div class="row">
                                     <div class="card col-12 shadow ">
                                         <div class="card-header">
-                                            <h4 class="card-title">Formulaire de Paiement</h4>
+                                            <h4 class="card-title">Formulaire de lancement de processus de paiment <h4>
                                         </div>
                                         <div class="card-body ">
                                             <form method="POST" id="salary-form" action="{{ route('paiements.store') }} ">
@@ -73,7 +73,7 @@
 
                                                 @if(session('success'))
                                                 <div class="alert alert-success">
-                                                    {{ session('success') }}
+                                                    {{ session('success') }} <a href="/admin/etats_paiements">Finaliser les détails de paiements; et Créer fiche de paie</a>
                                                 </div>
                                                 @endif
 
@@ -105,25 +105,24 @@
 
                                                     <!-- Start Date -->
                                                     <div class="col-4 mb-3">
-                                                        <label for="temps_de_travail_a_payer_debut" class="form-label">Début de la période de travail</label>
-                                                        <input type="date" class="form-control @error('temps_de_travail_a_payer_debut') is-invalid @enderror" id="temps_de_travail_a_payer_debut" name="temps_de_travail_a_payer_debut" required>
-                                                        @error('temps_de_travail_a_payer_debut')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                        @enderror
+                                                        <label for="periode_fiscale" class="form-label">Période Fiscale</label>
+                                                        <select id="periode_fiscale" class="form-control">
+                                                            <option value="">Sélectionner une période</option>
+                                                        </select>
                                                     </div>
 
-                                                    <!-- End Date -->
+                                                    <!-- Date de début -->
+                                                    <div class="col-4 mb-3">
+                                                        <label for="temps_de_travail_a_payer_debut" class="form-label">Début de la période de travail</label>
+                                                        <input type="date" class="form-control" id="temps_de_travail_a_payer_debut" name="temps_de_travail_a_payer_debut" required>
+                                                    </div>
+
+                                                    <!-- Date de fin -->
                                                     <div class="col-4 mb-3">
                                                         <label for="temps_de_travail_a_payer_fin" class="form-label">Fin de la période de travail</label>
-                                                        <input type="date" class="form-control @error('temps_de_travail_a_payer_fin') is-invalid @enderror" id="temps_de_travail_a_payer_fin" name="temps_de_travail_a_payer_fin" required>
-                                                        @error('temps_de_travail_a_payer_fin')
-                                                        <div class="invalid-feedback">
-                                                            {{ $message }}
-                                                        </div>
-                                                        @enderror
+                                                        <input type="date" class="form-control" id="temps_de_travail_a_payer_fin" name="temps_de_travail_a_payer_fin" required>
                                                     </div>
+
 
                                                     <!-- Hours Worked -->
                                                     <!-- <div class="col-4 mb-3">
@@ -230,6 +229,32 @@
                                                 </div>
                                             </form>
 
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    fetch('/periodes/list')
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            let select = document.getElementById('periode_fiscale');
+                                                            data.forEach(periode => {
+                                                                let option = document.createElement('option');
+                                                                option.value = periode.id;
+                                                                option.textContent = `Du ${periode.date_debut} au ${periode.date_fin}`;
+                                                                option.setAttribute('data-debut', periode.date_debut);
+                                                                option.setAttribute('data-fin', periode.date_fin);
+                                                                select.appendChild(option);
+                                                            });
+                                                        });
+
+                                                    document.getElementById('periode_fiscale').addEventListener('change', function() {
+                                                        let selectedOption = this.options[this.selectedIndex];
+                                                        if (selectedOption.value) {
+                                                            document.getElementById('temps_de_travail_a_payer_debut').value = selectedOption.getAttribute('data-debut');
+                                                            document.getElementById('temps_de_travail_a_payer_fin').value = selectedOption.getAttribute('data-fin');
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+
 
                                             <script>
                                                 document.getElementById('employee_id').addEventListener('change', function() {
@@ -274,13 +299,13 @@
                             </div>
 
 
-                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
+                            <div hidden class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
                                 <div class=" card ">
                                     <!-- Tableau des employés -->
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="card-header">
-                                                <h4 class="card-title">List de paiements</h4>
+                                                <h4 class="card-title">Liste de paiements</h4>
                                             </div>
                                             <table class="datatables-basic table" id="paimentHistTable">
                                                 <thead>
@@ -464,7 +489,7 @@
                 dom: '<"card-header border-bottom p-1"<"head-label"><"dt-action-buttons text-right"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                 displayLength: 10,
                 columnDefs: [{
-                    targets: [0,2,8],
+                    targets: [0, 2, 8],
                     orderable: false,
                     className: 'text-center',
                     responsivePriority: 1

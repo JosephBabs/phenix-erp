@@ -9,18 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('conges', function (Blueprint $table) {
-            $table->id('id_conge');
-            $table->foreignId('id_employe')->constrained('employees')->onDelete('cascade');
-            $table->foreignId('id_tax')->constrained('taxes')->onDelete('cascade');
-            $table->integer('mois');
-            $table->integer('annee');
-            $table->decimal('montant', 10, 2);
+            $table->id();
+            $table->foreignId('id_employee')->constrained('employees')->onDelete('cascade');
+            $table->date('date_debut');
+            $table->date('date_fin');
+            $table->enum('statut', ['payé', 'non payé']);
+            $table->enum('etat', ['en cours', 'terminé'])->default('en cours');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

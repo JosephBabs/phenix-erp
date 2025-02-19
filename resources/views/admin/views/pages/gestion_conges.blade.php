@@ -33,7 +33,150 @@
         </div>
         <div class="content-body">
             <!-- Basic table -->
+            <div class="container">
+                <h2>Gestion des Congés</h2>
 
+                <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#ajouterCongeModal">Ajouter un Congé</button>
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Employé</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th>Statut</th>
+                            <th>État</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($conges as $conge)
+                        <tr>
+                            <td>{{ $conge->employee->nom }} {{ $conge->employee->prenoms }}</td>
+                            <td>{{ $conge->date_debut }}</td>
+                            <td>{{ $conge->date_fin }}</td>
+                            <td>{{ ucfirst($conge->statut) }}</td>
+                            <td>
+                                <span class="badge bg-{{ $conge->etat == 'en cours' ? 'warning' : 'success' }}">
+                                    {{ ucfirst($conge->etat) }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editCongeModal-{{ $conge->id }}">Modifier</button>
+                                <form action="{{ route('conges.terminer', $conge->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">Terminer</button>
+                                </form>
+                                <form hidden action="{{ route('conges.destroy', $conge->id) }}" method="POST" class="d-inline">
+                                    @csrf @method('DELETE')
+                                    <button hidden type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+
+
+                        <!-- Modal d'édition -->
+                        <div class="modal fade" id="editCongeModal-{{ $conge->id }}" tabindex="-1" aria-labelledby="editCongeLabel-{{ $conge->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editCongeLabel-{{ $conge->id }}">Modifier le congé</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('conges.update', $conge->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <div class="form-group">
+                                                <label>Employé</label>
+                                                <select name="employee_id" class="form-control">
+                                                    <option value="{{ $conge->employee_id }}" {{ $conge->employee_id == $conge->employee_id ? 'selected' : '' }}>
+                                                        {{ $conge->employee->nom }}  {{ $conge->employee->prenoms }}
+                                                    </option>
+
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Date début</label>
+                                                <input type="date" name="date_debut" class="form-control" value="{{ $conge->date_debut }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Date fin</label>
+                                                <input type="date" name="date_fin" class="form-control" value="{{ $conge->date_fin }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Statut</label>
+                                                <select name="statut" class="form-control">
+                                                    <option value="payé" {{ $conge->statut == 'payé' ? 'selected' : '' }}>Payé</option>
+                                                    <option value="non payé" {{ $conge->statut == 'non payé' ? 'selected' : '' }}>Non payé</option>
+                                                </select>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Enregistrer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal Ajouter Congé -->
+            <div class="modal fade" id="ajouterCongeModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter un Congé</h5>
+                            <button type="button" class="close" data-dismiss="modal">x</button>
+                        </div>
+                        <form action="{{ route('conges.store') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <label>Employé</label>
+                                <select name="id_employee" class="form-control">
+                                    @foreach(\App\Models\Employee::all() as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->nom }} {{ $employee->prenoms }}</option>
+                                    @endforeach
+                                </select>
+                                <label>Date début</label>
+                                <input type="date" name="date_debut" class="form-control">
+                                <label>Date fin</label>
+                                <input type="date" name="date_fin" class="form-control">
+                                <label>Statut</label>
+                                <select name="statut" class="form-control">
+                                    <option value="payé">Payé</option>
+                                    <option value="non payé">Non payé</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!--/ Basic table -->
         </div>
     </div>
