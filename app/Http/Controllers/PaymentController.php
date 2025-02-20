@@ -51,10 +51,13 @@ class PaymentController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'temps_de_travail_a_payer_debut' => 'required|date',
             'temps_de_travail_a_payer_fin' => 'required|date|after_or_equal:temps_de_travail_a_payer_debut',
+            'periode_fiscale_id' => 'required|exists:periode_exercices,id',
             'salaire_base' => 'required|numeric|min:0',
             'deduction' => 'required|numeric|min:0', // Taxe appliquée
             'salaire_brut' => 'required|numeric|min:0',
             'allocation' => 'nullable|numeric|min:0',
+            'retenue_salaire' => 'nullable|numeric|min:0',
+            'avance_salaire' => 'nullable|numeric|min:0',
             'prime' => 'nullable|numeric|min:0',
         ]);
 
@@ -72,10 +75,13 @@ class PaymentController extends Controller
             'employee_id' => $validatedData['employee_id'],
             'temps_de_travail_a_payer_debut' => $validatedData['temps_de_travail_a_payer_debut'],
             'temps_de_travail_a_payer_fin' => $validatedData['temps_de_travail_a_payer_fin'],
+            'periode_fiscale_id' => $validatedData['periode_fiscale_id'],
             'salaire_base' => $validatedData['salaire_base'],
             'deduction' => $validatedData['deduction'],
             'salaire_brut' => $validatedData['salaire_brut'],
             'allocation' => $validatedData['allocation'] ?? 0,
+            'avance_salaire' => $validatedData['avance_salaire'] ?? 0,
+            'retenue_salaire' => $validatedData['retenue_salaire'] ?? 0,
             'prime' => $validatedData['prime'] ?? 0,
             'montant_a_payer' => $salaireNet, // Net salary after tax, allocations, and bonuses
         ]);

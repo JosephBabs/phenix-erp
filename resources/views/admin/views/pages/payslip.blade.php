@@ -50,33 +50,48 @@
                             <div class="card-body invoice-padding pb-0">
                                 <!-- Header starts -->
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
-                                    <div>
-                                        <div class="logo-wrapper">
-                                            <img id="logo-img" width="120px" height="auto" src="/{{ $company->logo  }}?? 'https://cdn-icons-png.flaticon.com/512/149/149071.png' " alt="Logo" />
-                                        </div>
-                                        @if($company)
-                                        <p class="card-text mb-25">{{ $company->nom }}</p>
-                                        <p class="card-text mb-25">{{ $company->adresse }}</p>
-                                        <p class="card-text mb-0">{{ $company->email }}</p>
-                                        <p class="card-text mb-0">{{ $company->telephone }}</p>
-                                        @else
-                                        <p><a href="/admin/parametres">Veuillez Configurer <br> le profile d'entreprise</a></p>
-                                        @endif
-                                    </div>
-                                    <div class="mt-md-0 mt-2">
-                                        <h4 class="invoice-title">
-                                            Bon de paiement
-                                            <span class="invoice-number">#BNP-00{{ $payslip->id }}PBJ</span>
-                                        </h4>
-                                        <div class="invoice-date-wrapper">
-                                            <p class="invoice-date-title">Date :</p>
-                                            <p class="invoice-date">{{ now() }}</p>
-                                        </div>
-                                        <div class="invoice-date-wrapper">
-                                            <p class="invoice-date-title">Date de paiement:</p>
-                                            <p class="invoice-date">{{ $payslip->payment_date }}</p>
-                                        </div>
-                                    </div>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <div>
+
+                                                    @if($company)
+                                                    <div class="logo-wrapper">
+                                                        <img id="logo-img" width="120px" height="auto" src="/{{ $company->logo  }}?? 'https://cdn-icons-png.flaticon.com/512/149/149071.png' " alt="Logo" />
+                                                    </div>
+                                                    <p class="card-text mb-25">{{ $company->nom }}</p>
+                                                    <p class="card-text mb-25">{{ $company->adresse }}</p>
+                                                    <p class="card-text mb-0">{{ $company->email }}</p>
+                                                    <p class="card-text mb-0">{{ $company->telephone }}</p>
+                                                    @else
+                                                    <p><a href="/admin/parametres">Veuillez Configurer <br> le profile d'entreprise</a></p>
+                                                    @endif
+                                                </div>
+                                            </tr>
+
+                                            <tr>
+
+                                                <div class="mt-md-0 mt-2">
+                                                    <h4 class="invoice-title">
+                                                        Bon de paiement
+                                                        <span class="invoice-number">#BNP-00{{ $payslip->id }}PBJ</span>
+                                                    </h4>
+                                                    <div class="invoice-date-wrapper">
+                                                        <p class="invoice-date-title">Date :</p>
+                                                        <p class="invoice-date">{{ now() }}</p>
+                                                    </div>
+                                                    <div class="invoice-date-wrapper">
+                                                        <p class="invoice-date-title">Date de paiement:</p>
+                                                        <p class="invoice-date">{{ $payslip->payment_date }}</p>
+                                                    </div>
+                                                </div>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+
+
                                 </div>
                                 <!-- Header ends -->
                             </div>
@@ -86,41 +101,55 @@
                             <!-- Address and Contact starts -->
                             <div class="card-body invoice-padding pt-0">
                                 <div class="row invoice-spacing">
-                                    <div class="col-xl-7 p-0">
-                                        <h6 class="mb-2">Payé à:</h6>
-                                        <h6 class="mb-25">{{ $employee[0]->etat_civil }} {{ $employee[0]->nom }} {{ $employee[0]->prenoms }}</h6>
-                                        <p class="card-text mb-25"><strong> Titre: </strong>{{ $payslip->title ?? '-' }}</p>
-                                        <p class="card-text mb-25"><strong>Grade: </strong>{{ $payslip->grade ?? '-' }}</p>
-                                        <p class="card-text mb-25" style="word-break: break-all; max-width: 170px;"><strong>Adresse: </strong>{{ $employee[0]->adresse }}</p>
-                                        <p class="card-text mb-0"><strong>Contacts: </strong>{{ $employee[0]->telephone }} <br> {{ $employee[0]->email }}</p>
-                                        <p class="card-text mb-0"><strong>IFU: </strong>{{ $employee[0]->num_ifu }} </p>
-                                    </div>
-                                    <div class="col-xl-4 p-0 mt-xl-0 mt-2">
-                                        <h6 class="mb-2">Détails de paiement:</h6>
-                                        <table>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="pr-1">Total Net:</td>
-                                                    <td><span class="font-weight-bold">{{ $payslip->net_salary ?? '-' }}</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pr-1">Nom de banque</td>
-                                                    <td>{{ $employee[0]->nom_banque ?? '-' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pr-1">N° de compte</td>
-                                                    <td>{{ $employee[0]->compte_bancaire ?? '-' }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="4" style="width: 100%;">
+
+                                                    <div class="col-xl-7 p-0">
+                                                        <h6 class="mb-2">Payé à:</h6>
+                                                        <h6 class="mb-25">{{ $employee->etat_civil }} {{ $employee->nom }} {{ $employee->prenoms }}</h6>
+                                                        <p class="card-text mb-25"><strong> Titre: </strong>{{ $payslip->title ?? '-' }}</p>
+                                                        <p class="card-text mb-25"><strong>Grade: </strong>{{ $payslip->grade ?? '-' }}</p>
+                                                        <p class="card-text mb-25" style="word-break: break-all; max-width: 170px;"><strong>Adresse: </strong>{{ $employee->adresse }}</p>
+                                                        <p class="card-text mb-0"><strong>Contacts: </strong>{{ $employee->telephone }} <br> {{ $employee->email }}</p>
+                                                        <p class="card-text mb-0"><strong>IFU: </strong>{{ $employee->num_ifu }} </p>
+                                                    </div>
+                                                </td>
+                                                <td colspan="4" style="width: 100%;">
+                                                    <div class="col-xl-4 p-0 mt-xl-0 mt-2">
+                                                        <h6 class="mb-2">Détails de paiement:</h6>
+                                                        <table>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="pr-1">Total Net:</td>
+                                                                    <td><span class="font-weight-bold">{{ $payslip->net_salary ?? '-' }}</span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="pr-1">Nom de banque</td>
+                                                                    <td>{{ $employee->nom_banque ?? '-' }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="pr-1">N° de compte</td>
+                                                                    <td>{{ $employee->compte_bancaire ?? '-' }}</td>
+                                                                </tr>
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
                             <!-- Address and Contact ends -->
 
                             <!-- Invoice Description starts -->
                             <div id="displayResult" class="table-responsive">
-                                <table class="table">
+                                <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th class="py-1">Taxe/allocations description</th>
@@ -138,15 +167,16 @@
                                                 </p>
                                             </td>
                                             <td class="py-1">
-                                                <span class="font-weight-bold">{{ $employee[0]->taxe_appliquee }}%</span>
+                                                <span class="font-weight-bold">{{ $employee->taxe_appliquee }}%</span>
                                             </td>
                                             <td class="py-1">
-                                                <span class="font-weight-bold">{{ $payslip->total_deductions }}</span>
+                                                <span class="font-weight-bold">{{ ($payslip->gross_salary * ($employee->taxe_appliquee / 100 )) }}</span>
                                             </td>
                                             <td class="py-1">
-                                                <span class="font-weight-bold">{{ $payslip->total_deductions }}</span>
+                                                <span class="font-weight-bold">{{ ($payslip->gross_salary * ($employee->taxe_appliquee / 100 )) }}</span>
                                             </td>
                                         </tr>
+
                                         <tr class="border-bottom">
                                             <td class="py-1">
                                                 <p class="card-text font-weight-bold mb-25">Allocations</p>
@@ -177,6 +207,23 @@
                                                 <span class="font-weight-bold">{{ $payslip->housing_allowance ?? '-' }}</span>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td class="py-1">Avance sur salaire</td>
+                                            <td class="py-1">-</td>
+                                            <td class="py-1">-</td>
+                                            <td class="py-1">
+                                                <span class="font-weight-bold" id="avance">
+                                                    {{ $avanceRetenues->where('type', 'avance')->first()->montant ?? '0' }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1">Retenus</td>
+                                            <td class="py-1">-</td>
+                                            <td class="py-1">-</td>
+                                            <td class="py-1"><span class="font-weight-bold" id="reduction">{{ $avanceRetenues->where('type', 'retenue')->first()->montant ?? '0' }}</span></td>
+                                            <!-- <td class="py-1"><span class="font-weight-bold">{{ $payslip->reduction ?? '0' }}</span></td> -->
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -197,7 +244,7 @@
                                                 <p class="card-text font-weight-bold mb-25">Cotisations et Taxe</p>
                                             </td>
                                             <td class="py-1">
-                                                <input type="number" id="taxRate" class="form-control" value="{{ $employee[0]->taxe_appliquee }}" oninput="calculateTotal()">%
+                                                <input type="number" id="taxRate" class="form-control" value="{{ $employee->taxe_appliquee }}" oninput="calculateTotal()">%
                                             </td>
                                             <td class="py-1">
                                                 <input type="text" id="taxAmount" class="form-control" value="{{ $payslip->total_deductions }}" oninput="calculateTotal()">
@@ -240,24 +287,28 @@
 
                             <div class="card-body invoice-padding pb-0">
                                 <div class="row invoice-sales-total-wrapper">
-                                    <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
+                                    <div class="col-md-0 order-md-1 order-2 mt-md-0 mt-3">
                                         <p class="card-text mb-0">
-                                            <span class="font-weight-bold">Comptable:</span> <span class="ml-75">Joseph Babatounde</span>
+                                            <!-- <span class="font-weight-bold">Comptable:</span> <span class="ml-75">Joseph Babatounde</span> -->
                                         </p>
                                     </div>
-                                    <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
-                                        <div class="invoice-total-wrapper">
+                                    <div class="col-md-12 d-flex w-100 justify-content-end order-md-2 order-1">
+                                        <div class="invoice-total-wrapper" style="width: 100%">
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Salaire de base:</p>
-                                                <p class="invoice-total-amount">{{ $employee[0]->base_salary }}</p>
+                                                <p class="invoice-total-amount">{{ $employee->salaire_base }}</p>
                                             </div>
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Allocations</p>
-                                                <p class="invoice-total-amount">{{ ($employee[0]->housing_allowance + $employee[0]->transport_allowance) }}</p>
+                                                <p class="invoice-total-amount">{{ ($payslip->housing_allowance + $payslip->transport_allowance) }}</p>
+                                            </div>
+                                            <div class="invoice-total-item">
+                                                <p class="invoice-total-title">Deductions (taxes/ avances/ retenues)</p>
+                                                <p class="invoice-total-amount">{{ $payslip->total_deductions }}</p>
                                             </div>
                                             <div class="invoice-total-item">
                                                 <p class="invoice-total-title">Taxe:</p>
-                                                <p class="invoice-total-amount">{{ $employee[0]->taxe_appliquee }}%</p>
+                                                <p class="invoice-total-amount">{{ $payslip->tax_paye }}%</p>
                                             </div>
                                             <hr class="my-50" />
                                             <div class="invoice-total-item">
@@ -268,6 +319,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <!-- Invoice Description ends -->
 
                             <hr class="invoice-spacing" />
@@ -318,52 +371,52 @@
 
 @push('scripts')
 <script>
-function editBon(){
-    document.getElementById('editResult').classList.remove('d-none');
-    document.getElementById('displayResult').classList.add('d-none');
-    document.getElementById("saveIn").classList.remove('d-none');
-    document.getElementById("bon_id").disabled = false;
-    document.getElementById("bon_date").disabled = false;
-    document.getElementById("bon_client_id").disabled = false;
-    document.getElementById("bon_montant").disabled = false;
-}
+    function editBon() {
+        document.getElementById('editResult').classList.remove('d-none');
+        document.getElementById('displayResult').classList.add('d-none');
+        document.getElementById("saveIn").classList.remove('d-none');
+        document.getElementById("bon_id").disabled = false;
+        document.getElementById("bon_date").disabled = false;
+        document.getElementById("bon_client_id").disabled = false;
+        document.getElementById("bon_montant").disabled = false;
+    }
 
-function saveBon(){
-    document.getElementById('editResult').classList.add('d-none');
-    document.getElementById('displayResult').classList.remove('d-none');
-    document.getElementById("saveIn").classList.add('d-none');
-    document.getElementById("bon_id").disabled = true;
-    document.getElementById("bon_date").disabled = true;
-    document.getElementById("bon_client_id").disabled = true;
-    document.getElementById("bon_montant").disabled = true;
-    calculateTotal();
-}
+    function saveBon() {
+        document.getElementById('editResult').classList.add('d-none');
+        document.getElementById('displayResult').classList.remove('d-none');
+        document.getElementById("saveIn").classList.add('d-none');
+        document.getElementById("bon_id").disabled = true;
+        document.getElementById("bon_date").disabled = true;
+        document.getElementById("bon_client_id").disabled = true;
+        document.getElementById("bon_montant").disabled = true;
+        calculateTotal();
+    }
 
 
-function calculateTotal() {
-    let taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
-    let taxAmount = parseFloat(document.getElementById('taxAmount').value) || 0;
-    let transportAllowance = parseFloat(document.getElementById('transportAllowance').value) || 0;
-    let housingAllowance = parseFloat(document.getElementById('housingAllowance').value) || 0;
+    function calculateTotal() {
+        let taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+        let taxAmount = parseFloat(document.getElementById('taxAmount').value) || 0;
+        let transportAllowance = parseFloat(document.getElementById('transportAllowance').value) || 0;
+        let housingAllowance = parseFloat(document.getElementById('housingAllowance').value) || 0;
 
-    let totalDeductions = taxAmount;
-    let totalAllowances = transportAllowance + housingAllowance;
-    let baseSalary = parseFloat("{{ $employee[0]->base_salary }}") || 0;
-    let netSalary = baseSalary + totalAllowances - totalDeductions;
+        let totalDeductions = taxAmount;
+        let totalAllowances = transportAllowance + housingAllowance;
+        let baseSalary = parseFloat("{{ $employee->base_salary }}") || 0;
+        let netSalary = baseSalary + totalAllowances - totalDeductions;
 
-    document.getElementById('totalDeductions').innerText = totalDeductions.toFixed(2);
-    document.getElementById('transportTotal').innerText = transportAllowance.toFixed(2);
-    document.getElementById('housingTotal').innerText = housingAllowance.toFixed(2);
-    document.getElementById('netSalary').innerText = netSalary.toFixed(2);
-}
+        document.getElementById('totalDeductions').innerText = totalDeductions.toFixed(2);
+        document.getElementById('transportTotal').innerText = transportAllowance.toFixed(2);
+        document.getElementById('housingTotal').innerText = housingAllowance.toFixed(2);
+        document.getElementById('netSalary').innerText = netSalary.toFixed(2);
+    }
 
-function printInvoice() {
-    let printContent = document.querySelector('.invoice-preview-card').outerHTML;
-    let originalContent = document.body.outerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
-    location.reload();
-}
+    function printInvoice() {
+        let printContent = document.querySelector('.invoice-preview-card').outerHTML;
+        let originalContent = document.body.outerHTML;
+        document.body.innerHTML = printContent;
+        window.print();
+        document.body.innerHTML = originalContent;
+        location.reload();
+    }
 </script>
 @endpush

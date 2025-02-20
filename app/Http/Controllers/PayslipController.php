@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvanceRetenue;
 use App\Models\Payslip;
 use App\Models\Employee;
 use App\Models\Company;
@@ -103,7 +104,8 @@ class PayslipController extends Controller
     {
         $payslip = Payslip::findOrFail($id);
         $company = Company::first();
-        $employee = Employee::where('id', $payslip->employee_id)->get();
+        $employee = Employee::where('id', $payslip->employee_id)->first();
+        $avanceRetenues = AvanceRetenue::where('employe_id', $payslip->employee_id)->first();
         // dd($employee);
         $json = response()->json([
             'success' => true,
@@ -114,7 +116,7 @@ class PayslipController extends Controller
                 'company' => $company
             ]
         ], 200);
-        return view('admin.views.pages.payslip', compact('payslip', 'employee', 'company', 'json'));
+        return view('admin.views.pages.payslip', compact('payslip', 'employee', 'avanceRetenues', 'company', 'json'));
     }
 
     public function data()

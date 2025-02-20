@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Paiement;
 
-use App\Models\{Employee, Memo, Taxe, PeriodeExercice, Company, PaymentRequest, StaffApplication};
+use App\Models\AvanceRetenue;
+
+use App\Models\{Employee, Memo, Taxe, PeriodeExercice, PeriodeFiscale, Company, PaymentRequest, StaffApplication};
 
 use Illuminate\Http\Request;
 
@@ -67,16 +69,19 @@ class PagesController extends Controller
         $user = Auth::user();
         $employees = Employee::all();
         $paiements = Paiement::all();
+        $avancesRetenues = AvanceRetenue::all(); //
+        $periodes = PeriodeExercice::all();
 
         $taxe = Taxe::all();
-        return view('admin.views.pages.paiements', compact('employees', 'taxe', 'paiements'));
+        return view('admin.views.pages.paiements', compact('employees', 'avancesRetenues', 'periodes', 'taxe', 'paiements'));
     }
     public function etats_paiements()
     {
         $company = Company::first();
         return view('admin.views.pages.etats_paiements', [
             'employees' => Employee::all(),
-            'company'=> Company::first(),
+            'company' => Company::first(),
+            'avancesRetenues' => AvanceRetenue::all(),
             'paiements' => Paiement::with('employee')->get(),
         ]);
     }

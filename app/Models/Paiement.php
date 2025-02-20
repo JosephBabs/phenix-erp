@@ -19,10 +19,13 @@ class Paiement extends Model
         'employee_id',
         'temps_de_travail_a_payer_debut',
         'temps_de_travail_a_payer_fin',
+        'periode_fiscale_id',
         'salaire_base',
         'deduction',
         'salaire_brut',
         'allocation',
+        'avance_salaire',
+        'retenue_salaire',
         'prime',
         'montant_a_payer',
     ];

@@ -41,13 +41,14 @@
                         <ul class="nav nav-pills" role="tablist">
 
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center   active" id="payList-tab" data-toggle="tab" href="#paySlipList" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes des fiches de paiements</span>
+                                <a class="nav-link d-flex align-items-center  active" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="file"></i><span class="d-none d-sm-block">Créer Fiches de paie</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" id="fichepaie-tab" data-toggle="tab" href="#fichePaie" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="file"></i><span class="d-none d-sm-block">Créer Fiches de paie</span>
+                                <a class="nav-link d-flex align-items-center " id="payList-tab" data-toggle="tab" href="#paySlipList" aria-controls="social" role="tab" aria-selected="false">
+                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes des fiches de paiements</span>
                                 </a>
                             </li>
 
@@ -69,7 +70,7 @@
 
 
                             <!-- Social Tab starts -->
-                            <div class="tab-pane" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
+                            <div class="tab-pane   active" id="fichePaie" aria-labelledby="social-tab" role="tabpanel">
                                 <!-- users edit social form start -->
 
                                 <div class="container mt-4">
@@ -145,7 +146,7 @@
 
                                                 <div class="col-md-12">
                                                     <label class="form-label">Allocation de services publics</label>
-                                                    <input type="text"  id="total_allowance" name="add_allowance[]" value="0" class="form-control allowance-input allowance-input">
+                                                    <input type="text" id="total_allowance" name="add_allowance[]" value="0" class="form-control allowance-input allowance-input">
                                                     <button type="button" class="btn btn-primary mt-2" onclick="addAllowance()">+</button>
                                                 </div>
 
@@ -159,9 +160,9 @@
                                             </div>
                                             <!-- Button to add new allowance fields -->
                                             <div class="col-md-12 mt-5">
-                                                    <label class="form-label"><strong>Allocations Totales</strong></label>
-                                                    <input type="text" id="public_services_allowance" name="public_services_allowance" value="0" class="form-control allowance-input">
-                                                </div>
+                                                <label class="form-label"><strong>Allocations Totales</strong></label>
+                                                <input type="text" id="public_services_allowance" name="public_services_allowance" value="0" class="form-control allowance-input">
+                                            </div>
                                         </section>
 
                                         <script>
@@ -234,6 +235,16 @@
                                                     <input type="text" name="total_deductions" id="total_deductions" class="form-control" readonly>
                                                     @error('total_deductions') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                 </div>
+
+                                                <div class="col-4  form-group ">
+                                                    <label for="avance_salaire">Avance sur Salaire </label>
+                                                    <input type="number" id="avance_salaire" name="avance_salaire" class="form-control" value="0" readonly>
+                                                </div>
+
+                                                <div class="col-4  form-group ">
+                                                    <label for="retenue_salaire">Retenues sur Salaire</label>
+                                                    <input type="number" id="retenue_salaire" name="retenue_salaire" class="form-control" value="0" readonly>
+                                                </div>
                                             </div>
                                         </section>
 
@@ -243,6 +254,7 @@
                                                 <input type="text" name="gross_salary" id="gross_salary" class="form-control" readonly>
                                                 @error('gross_salary') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                             </div>
+
                                             <div class="mb-3">
                                                 <label class="form-label">Salaire net</label>
                                                 <input type="text" name="net_salary" id="net_salary" class="form-control" readonly>
@@ -266,9 +278,9 @@
                             </div>
 
 
-                            <div class="tab-pane active" id="paySlipList" aria-labelledby="pay-list" role="tabpanel">
+                            <div class="tab-pane " id="paySlipList" aria-labelledby="pay-list" role="tabpanel">
                                 <div class="row w-100">
-                                    <div class="col-lg-12 container mt-5">
+                                    <div class="col-lg-12 container table-responsive mt-5">
                                         <table id="payslipTable" class="display table table-striped">
                                             <thead>
                                                 <tr>
@@ -359,6 +371,7 @@
                             </div>
                         </div>
                     </section>
+
 
                     <!-- Deductions & Salary Calculation -->
                     <section class="mb-4">
@@ -726,7 +739,7 @@
             // alert("Please select");
         }
 
-        let netSalary = isTaxEnabled ? (grossSalary - (grossSalary * taxRate / 100) +allocations  ) : grossSalary + allocations;
+        let netSalary = isTaxEnabled ? (grossSalary - (grossSalary * taxRate / 100) + allocations) : grossSalary + allocations;
         document.getElementById("net_salary").value = netSalary.toFixed(2);
     }
 </script>
@@ -735,54 +748,82 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
         document.getElementById('employee_id').addEventListener('change', function() {
             const employeeId = this.value;
 
             if (employeeId) {
                 const employees = @json($employees);
                 const paiements = @json($paiements);
+                const avancesRetenues = @json($avancesRetenues);
 
                 const employee = employees.find(emp => emp.id == employeeId);
                 if (employee) {
-                    // Fill in base salary
+                    // Salaire de base
                     document.getElementById('base_salary').value = employee.salaire_base || 0;
 
-                    // Find corresponding payment entry
+                    // Récupérer le paiement correspondant
                     const paiement = paiements.find(p => p.employee_id == employeeId);
                     if (paiement) {
-                        // Fill in allowances and tax
+                        // Allocation et taxe
                         document.getElementById('housing_allowance').value = paiement.allocation || 0;
                         document.getElementById('tax_paye').value = employee.taxe_appliquee || 0;
 
-                        // Calculate deductions (assuming "deduction" is a percentage)
+                        // Calcul des déductions fiscales (taxe appliquée)
                         const baseSalary = parseFloat(employee.salaire_base) || 0;
-
                         const deductionRate = parseFloat(paiement.deduction) || 0;
-                        const totalDeductions = (baseSalary * deductionRate) / 100;
-                        document.getElementById('gross_salary').value = baseSalary;
+                        const taxDeductions = (baseSalary * deductionRate) / 100;
+
+                        // Récupérer les avances et retenues
+                        let avance = 0;
+                        let retenue = 0;
+                        avancesRetenues.forEach(item => {
+                            if (item.employe_id == employeeId) {
+                                if (item.type === 'avance') avance += parseFloat(item.montant);
+                                if (item.type === 'retenue') retenue += parseFloat(item.montant);
+                            }
+                        });
+
+                        // Mettre à jour les champs avances et retenues
+                        document.getElementById('avance_salaire').value = avance || 0;
+                        document.getElementById('retenue_salaire').value = retenue || 0;
+
+                        // Total des déductions (taxe + avances + retenues)
+                        const totalDeductions = taxDeductions + avance + retenue;
                         document.getElementById('total_deductions').value = totalDeductions.toFixed(2);
 
-                        // Calculate net salary
+                        // Calcul du salaire net
                         const netSalary = baseSalary - totalDeductions;
+                        document.getElementById('gross_salary').value = baseSalary.toFixed(2);
                         document.getElementById('net_salary').value = netSalary.toFixed(2);
                     } else {
-                        // Clear fields if no payment record is found
                         clearFields();
                     }
                 }
             } else {
-                // Clear all fields if no employee is selected
                 clearFields();
             }
         });
 
+        // Fonction pour vider les champs
         function clearFields() {
             document.getElementById('base_salary').value = '';
             document.getElementById('housing_allowance').value = '';
             document.getElementById('tax_paye').value = '';
+            document.getElementById('avance_salaire').value = 0;
+            document.getElementById('retenue_salaire').value = 0;
             document.getElementById('total_deductions').value = '';
+            document.getElementById('gross_salary').value = '';
             document.getElementById('net_salary').value = '';
         }
+
+        // function clearFields() {
+        //     document.getElementById('base_salary').value = '';
+        //     document.getElementById('housing_allowance').value = '';
+        //     document.getElementById('tax_paye').value = '';
+        //     document.getElementById('total_deductions').value = '';
+        //     document.getElementById('net_salary').value = '';
+        // }
     });
 </script>
 

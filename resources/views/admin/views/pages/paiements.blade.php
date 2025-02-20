@@ -45,9 +45,9 @@
                                     <i data-feather="dollar-sign"></i><span class="d-none d-sm-block">Payer un employé</span>
                                 </a>
                             </li>
-                            <li class="nav-item" hidden>
+                            <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" id="payList-tab" data-toggle="tab" href="#payList" aria-controls="social" role="tab" aria-selected="false">
-                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Listes de paiements</span>
+                                    <i data-feather="list"></i><span class="d-ne d-sm-block">Avance ou retenues sur salaire</span>
                                 </a>
                             </li>
                             <div class="p-1">
@@ -91,10 +91,12 @@
                                                             <option value="">Sélectionner un Employé</option>
                                                             @foreach($employees as $employee)
                                                             <option value="{{ $employee->id }}">
-                                                                {{ $employee->nom  }} {{ $employee->prenoms  }} - Salaire de base: {{ $employee->salaire_base }} - Taxe : {{ $employee->taxe_appliquee }}%
+                                                                {{ $employee->nom }} {{ $employee->prenoms }} - Salaire de base: {{ $employee->salaire_base }} - Taxe : {{ $employee->taxe_appliquee }}%
                                                             </option>
                                                             @endforeach
                                                         </select>
+
+
 
                                                         @error('employee_id')
                                                         <div class="invalid-feedback">
@@ -102,14 +104,24 @@
                                                         </div>
                                                         @enderror
                                                     </div>
-
                                                     <!-- Start Date -->
                                                     <div class="col-4 mb-3">
                                                         <label for="periode_fiscale" class="form-label">Période Fiscale</label>
-                                                        <select id="periode_fiscale" class="form-control">
+                                                        <select id="periode_fiscale" name="periode_fiscale_id" class="form-control">
                                                             <option value="">Sélectionner une période</option>
                                                         </select>
                                                     </div>
+                                                    <div class="col-4  form-group ">
+                                                        <label for="avance_salaire">Avance sur Salaire </label>
+                                                        <input type="number" id="avance_salaire" name="avance_salaire" class="form-control" value="0" readonly>
+                                                    </div>
+
+                                                    <div class="col-4  form-group ">
+                                                        <label for="retenue_salaire">Retenues sur Salaire</label>
+                                                        <input type="number" id="retenue_salaire" name="retenue_salaire" class="form-control" value="0" readonly>
+                                                    </div>
+
+
 
                                                     <!-- Date de début -->
                                                     <div class="col-4 mb-3">
@@ -256,10 +268,13 @@
                                             </script>
 
 
-                                            <script>
+                                            <!-- <script>
+
+                                                var $avancesRetenues = @json($avancesRetenues);
                                                 document.getElementById('employee_id').addEventListener('change', function() {
                                                     const selectedOption = this.options[this.selectedIndex];
                                                     if (selectedOption.value) {
+
                                                         const salaireBase = selectedOption.text.match(/Salaire de base: (\d+(\.\d{1,2})?)/);
                                                         // const nombreHeureParSemaine = selectedOption.text.match(/heure assignée: (\d+)/);
                                                         const taxe = selectedOption.text.match(/Taxe : (\d+)/);
@@ -290,7 +305,71 @@
                                                         document.getElementById('salaire_brut').value = '';
                                                     }
                                                 });
+                                            </script> -->
+
+                                            <script>
+                                                var avancesRetenues = @json($avancesRetenues);
+
+                                                document.getElementById('employee_id').addEventListener('change', function() {
+                                                    const selectedOption = this.options[this.selectedIndex];
+                                                    if (selectedOption.value) {
+                                                        const employeeId = selectedOption.value;
+
+                                                        // Récupérer le salaire de base et la taxe depuis l'option sélectionnée
+                                                        const salaireBase = selectedOption.text.match(/Salaire de base: (\d+(\.\d{1,2})?)/);
+                                                        const taxe = selectedOption.text.match(/Taxe : (\d+)/);
+
+                                                        if (salaireBase) {
+                                                            let salaireBaseValue = parseFloat(salaireBase[1]);
+                                                            let taxeValue = parseFloat(taxe ? taxe[1] : 0);
+
+                                                            document.getElementById('salaire_base').value = salaireBaseValue;
+                                                            document.getElementById('taxe_deduit').value = taxeValue;
+                                                            document.getElementById('resulDeduct').textContent = taxeValue + "% = " + (salaireBaseValue * (taxeValue / 100)).toFixed(2);
+
+                                                            let salaireBrut = salaireBaseValue - (salaireBaseValue * (taxeValue / 100));
+
+                                                            // Récupérer les avances et retenues pour cet employé
+                                                            let avance = 0;
+                                                            let retenue = 0;
+                                                            avancesRetenues.forEach(item => {
+                                                                if (item.employe_id == employeeId) {
+                                                                    if (item.type === 'avance') avance += parseFloat(item.montant);
+                                                                    if (item.type === 'retenue') retenue += parseFloat(item.montant);
+                                                                }
+                                                            });
+
+                                                            // Mettre à jour les champs avances et retenues
+                                                            document.getElementById('avance_salaire').value = avance || 0;
+                                                            document.getElementById('retenue_salaire').value = retenue || 0;
+
+                                                            // Déduire avances et retenues du salaire brut
+                                                            let salaireNet = salaireBrut - avance - retenue;
+                                                            document.getElementById('salaire_brut').value = salaireBrut.toFixed(2);
+                                                            document.getElementById('salaire_net').value = salaireNet.toFixed(2);
+
+                                                            // Gérer allocation et prime
+                                                            function calculateNetSalary() {
+                                                                const baseAmount = parseFloat(document.getElementById('salaire_brut').value) || 0;
+                                                                const allocation = parseFloat(document.getElementById('allocation').value) || 0;
+                                                                const prime = parseFloat(document.getElementById('prime').value) || 0;
+                                                                const salaireFinal = baseAmount + allocation + prime - avance - retenue;
+                                                                document.getElementById('salaire_net').value = salaireFinal.toFixed(2);
+                                                            }
+
+                                                            document.getElementById('allocation').addEventListener('keydown', calculateNetSalary);
+                                                            document.getElementById('prime').addEventListener('keydown', calculateNetSalary);
+                                                        }
+                                                    } else {
+                                                        document.getElementById('salaire_base').value = '';
+                                                        document.getElementById('taxe_deduit').value = '';
+                                                        document.getElementById('salaire_brut').value = '';
+                                                        document.getElementById('avance_salaire').value = 0;
+                                                        document.getElementById('retenue_salaire').value = 0;
+                                                    }
+                                                });
                                             </script>
+
 
 
                                         </div>
@@ -299,58 +378,223 @@
                             </div>
 
 
-                            <div hidden class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
+                            <div class="tab-pane" id="payList" aria-labelledby="pay-list" role="tabpanel">
                                 <div class=" card ">
                                     <!-- Tableau des employés -->
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="card-header">
-                                                <h4 class="card-title">Liste de paiements</h4>
-                                            </div>
-                                            <table class="datatables-basic table" id="paimentHistTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Numéro de Référence</th>
-                                                        <th class="wrap-i">Nom de l'employé</th>
-                                                        <th>Date de prise de poste</th>
-                                                        <th>Date fin de contrat</th>
-                                                        <th>Salaire Net</th>
-                                                        <th>Deduction</th>
-                                                        <th>montant à payer</th>
-                                                        <th>Date de Paiement</th>
-                                                        <th class="wrap-it">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($paiements->reverse() as $paiement)
-                                                    <tr>
-                                                        <td>{{ $paiement->id }}</td>
-                                                        <td class="wrap-it">{{ $paiement->employee->nom }} {{ $paiement->employee->prenoms }}</td>
-                                                        <td>{{ $paiement->temps_de_travail_a_payer_debut }}</td>
-                                                        <td>{{ $paiement->temps_de_travail_a_payer_fin }}</td>
-                                                        <td>{{ $paiement->salaire_base }}</td>
-                                                        <td>{{ $paiement->deduction }}%</td>
-                                                        <td>{{ $paiement->montant_a_payer }}</td>
-                                                        <td>{{ $paiement->created_at }}</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-primary text-white btn-sm " type="button" id="actionsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    Actions
+                                    <div class="container">
+                                        <h2 class="mb-4">Liste des Avances et Retenues</h2>
+
+                                        <!-- Bouton pour ouvrir le modal d'ajout -->
+
+
+                                        <div class="d-flex g-4" style="gap: 20px">
+                                            <button class="btn btn-info mb-3" data-toggle="modal" data-target="#addAvanceModal">
+                                                Payer un employé en avance
+                                            </button>
+
+                                            <button class="btn btn-success mb-3" data-toggle="modal" data-target="#addRetenuModal">
+                                                Appliquer une retenue pour un employé
+                                            </button>
+                                        </div>
+
+                                        @if(session('success'))
+                                        <div class="alert alert-success mt-3">{{ session('success') }}</div>
+                                        @endif
+
+
+                                        @if(session('error'))
+                                        <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+                                        @endif
+                                        @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        @endif
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Employé</th>
+                                                    <th>Période Fiscale</th>
+                                                    <th>Type</th>
+                                                    <th>Montant</th>
+                                                    <th>Reste à percevoir</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($avancesRetenues as $item)
+                                                <tr>
+                                                    <td>{{ $item->employe->nom }} {{ $item->employe->prenoms }}</td>
+                                                    <td>{{ $item->periodeFiscale->date_debut }} - {{ $item->periodeFiscale->date_fin }}</td>
+                                                    <td>{{ ucfirst($item->type) }}</td>
+                                                    <td>{{ number_format($item->montant, 2) }}</td>
+                                                    <td>{{ number_format($item->reste_a_percevoir, 2) }} </td>
+                                                    <td>
+                                                        <button class="btn btn-info btn-sm" onclick="openEditModal({{ $item->id }}, '{{ $item->montant }}')">Modifier</button>
+                                                        <form action="{{ route('avances_retenues.destroy', $item->id) }}" method="POST" style="display:inline-block;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous vraiment supprimer ?')">Supprimer</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                                <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="editModalLabel">Modifier Avance/Retenue</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                                                                    <li><a class="dropdown-item accept-action" href="#" data-kyc-id="{{ $paiement->id }} ">Modifier</a></li>
-                                                                    <li><a class="dropdown-item reject-action" href="#" data-kyc-id="{{ $paiement->id  }}}">Supprimer</a></li>
-                                                                </ul>
                                                             </div>
-                                                        </td>
+                                                            <form id="editForm" method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-body">
 
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                                                    <div class="form-group">
+                                                                        <label for="employe_id">Employé</label>
+                                                                        <select class="form-control" id="employe_id" name="employe_id" required>
 
+                                                                            <option value="{{ $item->employe->id }}">{{ $item->employe->nom }} {{ $item->employe->prenoms }}</option>
+
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="periode_fiscale_id">Période Fiscale</label>
+                                                                        <select class="form-control" id="periode_fiscale_id" name="periode_fiscale_id" required>
+                                                                            @foreach($periodes as $periode)
+                                                                            <option value="{{ $periode->id }}">{{ $periode->date_debut }} - {{ $periode->date_fin }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <input type="hidden" name="type" value="{{ $item->type }}">
+                                                                    <div class="form-group">
+                                                                        <label for="montant">Montant</label>
+                                                                        <input type="number" class="form-control" id="montant" name="montant" required>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    <!-- Modal d'ajout -->
+                                    <div class="modal fade" id="addAvanceModal" tabindex="-1" aria-labelledby="addAvanceModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addAvanceModalLabel">Payer un employé en avance</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ route('avances_retenues.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="employe_id">Employé</label>
+                                                            <select class="form-control" id="employe_id" name="employe_id" required>
+                                                                @foreach($employees as $employe)
+                                                                <option value="{{ $employe->id }}">{{ $employe->nom }} {{ $employe->prenoms }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="periode_fiscale_id">Période Fiscale</label>
+                                                            <select class="form-control" id="periode_fiscale_id" name="periode_fiscale_id" required>
+                                                                @foreach($periodes as $periode)
+                                                                <option value="{{ $periode->id }}">{{ $periode->date_debut }} - {{ $periode->date_fin }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="text" hidden name="type" value="avance">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="montant">Montant</label>
+                                                            <input type="number" class="form-control" id="montant" name="montant" required>
+                                                        </div>
+                                                        <input type="hidden" name="type" value="avance">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
+
+
+                                    <!-- Modal d'ajout -->
+                                    <div class="modal fade" id="addRetenuModal" tabindex="-1" aria-labelledby="addRetenuModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addRetenuModalLabel">Appliquer une retenue pour un employé</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form action="{{ route('avances_retenues.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="employe_id">Employé</label>
+                                                            <select class="form-control" id="employe_id" name="employe_id" required>
+                                                                @foreach($employees as $employe)
+                                                                <option value="{{ $employe->id }}">{{ $employe->nom }} {{ $employe->prenoms }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="periode_fiscale_id">Période Fiscale</label>
+                                                            <select class="form-control" id="periode_fiscale_id" name="periode_fiscale_id" required>
+                                                                @foreach($periodes as $periode)
+                                                                <option value="{{ $periode->id }}">{{ $periode->date_debut }} - {{ $periode->date_fin }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="montant">Montant</label>
+                                                            <input type="number" class="form-control" id="montant" name="montant" required>
+                                                        </div>
+                                                        <input type="hidden" name="type" value="retenue">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                        <button type="submit" class="btn btn-success">Enregistrer</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal d'édition -->
+
+
+                                    <script>
+                                        function openEditModal(id, montant) {
+                                            document.getElementById('montant').value = montant;
+                                            document.getElementById('editForm').action = `/avances_retenues/${id}`;
+                                            $('#editModal').modal('show');
+                                        }
+                                    </script>
                                 </div>
                             </div>
                             <!-- Social Tab ends -->

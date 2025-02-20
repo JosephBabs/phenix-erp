@@ -22,6 +22,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\TaxeController;
 use App\Http\Controllers\CompanyController;
 
+use App\Http\Controllers\AvanceRetenueController;
 
 
 use App\Http\Controllers\Auth\LoginController;
@@ -33,6 +34,8 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     // Employees
 
+
+    Route::resource('avances_retenues', AvanceRetenueController::class);
 
     Route::prefix('admin')->name('admin.')->group(function () {
         // Payslip Routes
