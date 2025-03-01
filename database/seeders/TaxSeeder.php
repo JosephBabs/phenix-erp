@@ -12,7 +12,7 @@ class TaxSeeder extends Seeder
     public function run()
     {
         Tax::create([
-            'name' => 'Impôt sur le revenu',
+            'name' => 'Impôt sur le traitement des salaires',
             'rate' => 10,
             'base_calculation' => 'gross_salary',
             'is_active' => true,

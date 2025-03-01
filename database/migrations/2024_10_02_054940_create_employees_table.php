@@ -43,6 +43,7 @@ class CreateEmployeesTable extends Migration
             $table->string('num_ifu');
             $table->boolean('retraite')->default(false);
             $table->integer('taxe_appliquee')->default(7);
+            $table->integer('cotisation_appliquee')->nullable();
 
             // Document Uploads
             // nombre_heure_sem_assignee

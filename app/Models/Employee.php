@@ -38,7 +38,7 @@ class Employee extends Model
         'telephone', 'email', 'photo_identite', 'employee_id', 'poste', 'departement',
         'date_embauche', 'type_de_contrat', 'duree_contrat', 'lieu_affectation', 'salaire_base',
         'mode_paiement', 'compte_bancaire', 'nom_banque', 'frequence_paiement',
-        'num_securite_sociale', 'num_ifu', 'retraite', 'taxe_appliquee', 'nombre_heure_sem_assignee', 'nombre_heure_assignee',
+        'num_securite_sociale', 'num_ifu', 'retraite', 'taxe_appliquee', 'cotisation_appliquee', 'nombre_heure_sem_assignee', 'nombre_heure_assignee',
         'contrat_signe', 'carte_identite', 'certificats_diplomes', 'rib',
     ];
     // Define relationships

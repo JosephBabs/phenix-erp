@@ -56,41 +56,6 @@
 
 
     <div class="row">
-        <div class="col-md-6">
-
-            <!-- Memos Table -->
-            <div class="memos mb-4 p-2 card shadow">
-                <h2 class="memo-title">Mémos</h2>
-                <div class="table-wrapper">
-                    <table id="memos-table" class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>S/N</th>
-                                <th>Titre</th>
-                                <th>Envoyé par</th>
-                                <th>Destinataire</th>
-                                <th>État</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($memos->reverse() as $index => $memo)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td class="sender">{{ Str::limit($memo->title, 20) }}</td>
-                                <td>{{ $memo->sender->full_name }}</td>
-                                <td>{{ Str::limit($memo->recipient, 20) }}</td>
-                                <td class="status {{ strtolower($memo->status) }}">
-                                    {{ $memo->status }}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-        </div>
 
         <div class="col-md-6">
 
@@ -123,6 +88,7 @@
             </div>
 
         </div>
+        
     </div>
 
 

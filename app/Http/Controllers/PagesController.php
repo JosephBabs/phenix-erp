@@ -26,6 +26,7 @@ class PagesController extends Controller
             'updated_at' => $updated_at,
             'employees' => Employee::all(),
             'memos' => Memo::all(),
+            'payslips' => Payslip::all(),
             'paymentRequests' => PaymentRequest::all(),
             'staffApplications' => StaffApplication::first(),
         ]);

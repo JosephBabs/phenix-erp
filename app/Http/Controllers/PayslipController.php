@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AvanceRetenue;
 use App\Models\Payslip;
 use App\Models\Employee;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -138,6 +139,44 @@ class PayslipController extends Controller
             'message' => 'Payslip fetched successfully!',
             'data' => $payslip
         ], 201);
+    }
+
+    public function showPDF($id)
+    {
+        $payslip = Payslip::findOrFail($id);
+        $company = Company::first();
+        $employee = Employee::where('id', $payslip->employee_id)->first();
+        $avanceRetenues = AvanceRetenue::where('employe_id', $payslip->employee_id)->first();
+
+        // $data = YourModel::all(); // Fetch data from the database
+
+        // Load the Blade view and pass the data
+        $pdf = Pdf::loadView('admin.views.pages.payslip_pdf', compact('payslip', 'company', 'employee', 'avanceRetenues'))->setPaper('a4', 'portrait');
+        // Enable external styles and remote assets
+        $pdf->getDomPDF()->set_option('isHtml5ParserEnabled', true);
+        $pdf->getDomPDF()->set_option('isRemoteEnabled', true);
+
+        $filename = 'payslip_' . $employee->nom . '_'. $employee->prenoms . now()->format('Y-m-d') . '.pdf';
+        return $pdf->stream('admin.views.pages.payslip_pdf'); // Stream the PDF for viewing
+    }
+
+    public function downloadPDF($id)
+    {
+        $payslip = Payslip::findOrFail($id);
+        $company = Company::first();
+        $employee = Employee::where('id', $payslip->employee_id)->first();
+        $avanceRetenues = AvanceRetenue::where('employe_id', $payslip->employee_id)->first();
+
+        // $data = YourModel::all(); // Fetch data from the database
+
+        // Load the Blade view and pass the data
+        $pdf = Pdf::loadView('admin.views.pages.payslip_pdf', compact('payslip', 'company', 'employee', 'avanceRetenues'))->setPaper('a4', 'portrait');
+        // Enable external styles and remote assets
+        $pdf->getDomPDF()->set_option('isHtml5ParserEnabled', true);
+        $pdf->getDomPDF()->set_option('isRemoteEnabled', true);
+
+        $filename = 'payslip_' . $employee->nom . '_'. $employee->prenoms . now()->format('Y-m-d') . '.pdf';
+        return $pdf->download($filename); // Stream the PDF for viewing
     }
 
     /**

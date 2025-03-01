@@ -23,19 +23,34 @@ class PeriodeExerciceController extends Controller
 
     public function store(Request $request)
     {
-        $currentMonth = $request->input('month', date('m')); // Use a month passed via request or current month
+        $generateAll = $request->input('generate_all', false); // Check if 12 months should be generated
+        $year = $request->input('year', date('Y')); // Default to current year
 
-        // Vérifie si la période d'exercice pour l'année en cours et le mois donné n'existe pas
-        if (!PeriodeExercice::whereYear('date_debut', date('Y'))
-            ->whereMonth('date_debut', $currentMonth)
-            ->exists()) {
+        if ($generateAll) {
+            // Generate for 12 months
+            for ($month = 1; $month <= 12; $month++) {
+                $this->createFiscalPeriod($year, $month);
+            }
+            return redirect()->back()->with('success', 'Les périodes fiscales pour les 12 mois ont été créées.');
+        } else {
+            // Generate for a single month
+            $month = $request->input('month', date('m')); // Use passed month or current month
+            $this->createFiscalPeriod($year, $month);
 
-            PeriodeExercice::generateFiscalPeriod($currentMonth);
-
-            return redirect()->back()->with('success', 'Période d\'exercice fiscal créée automatiquement pour le mois de ' . Carbon::createFromFormat('m', $currentMonth)->format('F') . '.');
+            return redirect()->back()->with('success', 'Période fiscale créée pour ' . Carbon::createFromFormat('m', $month)->format('F') . '.');
         }
+    }
 
-        return redirect()->back()->with('error', 'La période fiscale existe déjà pour ce mois.');
+    // Function to create a fiscal period if it does not exist
+    private function createFiscalPeriod($year, $month)
+    {
+        $exists = PeriodeExercice::whereYear('date_debut', $year)
+            ->whereMonth('date_debut', $month)
+            ->exists();
+
+        if (!$exists) {
+            PeriodeExercice::generateFiscalPeriod($month); // Ensure this method exists in your Model
+        }
     }
 
 

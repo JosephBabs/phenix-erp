@@ -49,12 +49,14 @@ Route::middleware(['auth'])->group(function () {
         Route::put('payslips/{id}', [PayslipController::class, 'update'])->name('payslips.update');
         Route::delete('payslips/{id}', [PayslipController::class, 'destroy'])->name('payslips.destroy');
         Route::resource('conges', CongeController::class);
+        Route::get('/generate-pdf/{id}', [PayslipController::class, 'showPDF']);
+        Route::get('/download-generate-pdf/{id}', [PayslipController::class, 'downloadPDF']);
         Route::post('conges/store', [CongeController::class, 'store'])->name('conges.store');
         Route::post('conges/{conge}/terminer', [CongeController::class, 'changerStatut'])->name('conges.terminer');
     });
 
     Route::post('/periodes/generate', [PeriodeExerciceController::class, 'store'])->name('periodes.generate');
-    Route::post('/periodes/store', [PeriodeExerciceController::class, 'store'])->name('periodes.store');
+    Route::post('/periodes/store', [PeriodeExerciceController::class, 'createFiscalPeriod'])->name('periodes.store');
     Route::put('/periodes/update/{id}', [PeriodeExerciceController::class, 'update'])->name('periodes.update');
     Route::get('/periodes/list', [PeriodeExerciceController::class, 'getPeriodes']);
 
